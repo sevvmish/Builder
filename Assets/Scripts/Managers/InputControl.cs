@@ -26,11 +26,17 @@ public class InputControl : MonoBehaviour
 
     private float level5Koeff = 1;
 
+    private Ray ray;
+    private RaycastHit hit;
+    private Camera _camera;
+    private float cameraRayCast = 50f;
+    
+
     // Start is called before the first frame update
     void Start()
     {
         gm = GameManager.Instance;
-        
+        _camera = gm.GetCamera();
         joystick = GameManager.Instance.GetJoystick();
         cameraControl = GameManager.Instance.GetCameraControl();
         playerControl = gameObject.GetComponent<PlayerControl>();
@@ -72,7 +78,24 @@ public class InputControl : MonoBehaviour
             forPC();
         }
 
-        
+        if (Input.GetMouseButton(0))
+        {
+            ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit, cameraRayCast))
+            {
+                if (hit.collider != null)
+                {
+                    //gm.Texter.text = hit.collider.name + "\n" + Input.mousePosition;
+                    //gm.Marker.position = hit.point;
+                }
+            }
+        }
+
+        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f))
+        {
+            gm.Marker.position = hit.point;
+        }
     }
 
 

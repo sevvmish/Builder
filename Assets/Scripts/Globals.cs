@@ -64,7 +64,7 @@ public class Globals : MonoBehaviour
 
     public const float OFFER_UPDATE = 4f;
 
-    public static readonly Vector3 BasePosition = new Vector3(0, 9f, -6.5f);
+    public static readonly Vector3 BasePosition = new Vector3(0, 9f, -5f);
     public static readonly Vector3 BaseRotation = new Vector3(50, 0, 0);
 
     public static readonly LayerMask ignoreTriggerMask = LayerMask.GetMask(new string[] { "trigger", "player", "ragdoll" });

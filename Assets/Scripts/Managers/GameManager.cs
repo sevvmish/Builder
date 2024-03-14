@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform cameraBody;    
     [SerializeField] private CameraControl cameraControl;
     [SerializeField] private Transform playersLocation;
+    [SerializeField] private TextMeshProUGUI texter;
+    [SerializeField] private Transform marker;
+
     public PlayerControl MainPlayerControl { get; private set; }
 
     public Joystick GetJoystick() => joystick;
@@ -35,6 +38,8 @@ public class GameManager : MonoBehaviour
     private Transform mainPlayer;    
     private float cameraShakeCooldown;
    
+    public TextMeshProUGUI Texter => texter;
+    public Transform Marker => marker;
         
 
     // Start is called before the first frame update
@@ -63,7 +68,7 @@ public class GameManager : MonoBehaviour
 
 
         mainPlayer = AddPlayer(true, Vector3.zero, Vector3.zero).transform;
-        mainPlayer.position = new Vector3(0, 5, 0);
+        mainPlayer.position = new Vector3(0, 0, 0);
         cameraControl.SetData(mainPlayer, cameraBody, _camera.transform);        
         mainPlayer.gameObject.name = "Main Player";
         
