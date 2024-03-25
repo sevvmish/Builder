@@ -17,9 +17,11 @@ public class CameraControl : MonoBehaviour
 
     private float currentZoom;
     private float zoomTimer;
+    private bool isZooming;
 
     private bool isUpdate = true;
     private float _timer;
+    private float _timerCooldown;
     private LayerMask ignoreMask;
     private Ray ray;
     private RaycastHit hit;
@@ -27,9 +29,6 @@ public class CameraControl : MonoBehaviour
     private float xLimitUp = 40;
     private float xLimitDown = 300;
 
-    private bool isPhotoRegime = false;
-    private Transform photoPoint;
-    private GameObject mainCanvas;
 
     private Dictionary<MeshRenderer, Material> changedMeshRenderers = new Dictionary<MeshRenderer, Material>();
     private HashSet<MeshRenderer> renderers = new HashSet<MeshRenderer>();
@@ -37,6 +36,9 @@ public class CameraControl : MonoBehaviour
     private HashSet<MeshRenderer> renderersToReturn = new HashSet<MeshRenderer>();
 
     private GameManager gm;
+
+    private float defaultCameraDistance;
+    private WaitForSeconds fixedDelta = new WaitForSeconds(0.02f);
 
     public void SetData(Transform player, Transform _camera, Transform mainCamTransform)
     {
@@ -55,6 +57,8 @@ public class CameraControl : MonoBehaviour
         Zoom(Globals.MainPlayerData.Zoom);
 
         outerCamera.eulerAngles += new Vector3(-25, 0, 0);
+
+        defaultCameraDistance = (mainPlayerPoint - mainCamTransformForRaycast.position).magnitude;
     }
 
     public void SwapControlBody(Transform newTransform)
@@ -70,7 +74,7 @@ public class CameraControl : MonoBehaviour
         isUpdate = true;
     }
 
-    public void ChangeZoom(float koeff)
+    public void ChangeZoom(float koeff, bool isSaving)
     {
         if (koeff > 0 && Globals.MainPlayerData.Zoom < Globals.ZOOM_LIMIT)
         {
@@ -86,19 +90,26 @@ public class CameraControl : MonoBehaviour
             Globals.MainPlayerData.Zoom += add;
         }
 
-        checkCorrectZoom();
+        if (isSaving)
+        {
+            defaultCameraDistance = (mainPlayerPoint - mainCamTransformForRaycast.position).magnitude;
+        }
+
+        checkCorrectZoom(isSaving);
     }
 
-    private void checkCorrectZoom()
+    private void checkCorrectZoom(bool isSaving)
     {
         if (Globals.MainPlayerData.Zoom > Globals.ZOOM_LIMIT)
         {
             Globals.MainPlayerData.Zoom = Globals.ZOOM_LIMIT;
+            if (isSaving) defaultCameraDistance = (mainPlayerPoint - mainCamTransformForRaycast.position).magnitude;
             Zoom(Globals.MainPlayerData.Zoom);
         }
         else if (Globals.MainPlayerData.Zoom < -Globals.ZOOM_LIMIT)
         {
             Globals.MainPlayerData.Zoom = -Globals.ZOOM_LIMIT;
+            if (isSaving) defaultCameraDistance = (mainPlayerPoint - mainCamTransformForRaycast.position).magnitude;
             Zoom(Globals.MainPlayerData.Zoom);
         }
     }
@@ -145,8 +156,8 @@ public class CameraControl : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        if (zoomTimer > 2)
+    {        
+        if (zoomTimer > 30)
         {
             zoomTimer = 0;
 
@@ -161,75 +172,140 @@ public class CameraControl : MonoBehaviour
             zoomTimer += Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            isPhotoRegime = !isPhotoRegime;
-        }
 
-        if (isPhotoRegime && photoPoint != null)
-        {
-            outerCamera.position = photoPoint.position;
-            outerCamera.eulerAngles = photoPoint.eulerAngles;
-            outerCamera.transform.GetChild(0).localPosition = Vector3.zero;
-            outerCamera.transform.GetChild(0).localEulerAngles = Vector3.zero;
-            mainCanvas.SetActive(false);
-        }
-        else
-        {
-            outerCamera.position = mainPlayer.position;
-            outerCamera.eulerAngles = new Vector3(outerCamera.eulerAngles.x, playerControl.angleYForMobile, outerCamera.eulerAngles.z);
-        }
+        outerCamera.position = mainPlayer.position;
+        outerCamera.eulerAngles = new Vector3(outerCamera.eulerAngles.x, playerControl.angleYForMobile, outerCamera.eulerAngles.z);
 
 
         if (!isUpdate || !gm.IsGameStarted) return;
 
-        if (_timer > 0.1f)
+        if (_timer > _timerCooldown)
         {
+            //oldSystem();
             _timer = 0;
-            renderers.Clear();
-            renderersToReturn.Clear();
+            _timerCooldown = 0.2f;
+            newSystem();
 
-            float distance = (mainPlayer.position + Vector3.up - mainCamTransformForRaycast.position).magnitude;
 
-            if (Physics.Raycast(mainCamTransformForRaycast.position, (mainPlayer.position + Vector3.up - mainCamTransformForRaycast.position).normalized, out hit, distance, ~ignoreMask))
+        }
+        else
+        {
+            _timer += Time.deltaTime;
+        }
+    }
+
+    private Vector3 mainPlayerPoint => mainPlayer.position + Vector3.up * 0.5f;
+
+    private void newSystem()
+    {
+        if (isZooming) return;
+
+        Vector3 playerPoint = mainPlayerPoint;
+        
+
+        if (Physics.Raycast(playerPoint, (mainCamTransformForRaycast.position - playerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask))
+        {            
+            StartCoroutine(playZoom(1));
+        }
+        else
+        {
+            float currentDistance = (playerPoint - mainCamTransformForRaycast.position).magnitude;
+            if ((defaultCameraDistance - currentDistance) > 0.5f)
             {
-                if (hit.collider.TryGetComponent(out MeshRenderer mr) && !hit.collider.gameObject.isStatic)
+                StartCoroutine(playZoom(-1));
+            }
+        }
+
+    }
+    private IEnumerator playZoom(int koeff)
+    {
+        isZooming = true;
+
+        for (int i = 0; i < 100; i++)
+        {
+            ChangeZoom(koeff, false);
+            yield return fixedDelta;
+
+            if (koeff > 0)
+            {
+                if (Physics.Raycast(mainPlayerPoint, (mainCamTransformForRaycast.position - mainPlayerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask))
                 {
-                    renderers.Add(mr);
-
-                    if (!changedMeshRenderers.ContainsKey(mr))
-                    {
-                        changedMeshRenderers.Add(mr, mr.material);
-                        mr.material = shadowedMaterial;
-                    }
+                    //
                 }
-
-                foreach (MeshRenderer item in changedMeshRenderers.Keys)
+                else
                 {
-                    if (!renderers.Contains(item))
-                    {
-                        renderersToReturn.Add(item);
-                    }
+                    break;
                 }
-
-                if (renderersToReturn.Count > 0)
-                {
-                    foreach (var item in renderersToReturn)
-                    {
-                        if (item.material != changedMeshRenderers[item])
-                        {
-                            item.material = changedMeshRenderers[item];
-                        }
-                        renderers.Remove(item);
-                        changedMeshRenderers.Remove(item);
-                    }
-                }
-
             }
             else
             {
-                _timer += Time.deltaTime;
+                float currentDistance = (mainPlayerPoint - mainCamTransformForRaycast.position).magnitude;
+                if ((defaultCameraDistance - currentDistance) <= 0.5f)
+                {
+                    break;
+                }
+
+                if (Physics.Raycast(mainPlayerPoint, (mainCamTransformForRaycast.position - mainPlayerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask))
+                {
+                    break;
+                }                
             }
+            
         }
+
+        isZooming = false;
+        _timerCooldown = 0.5f;
     }
+
+
+    /*
+    private void oldSystem()
+    {
+        _timer = 0;
+
+        renderers.Clear();
+        renderersToReturn.Clear();
+
+        float distance = (mainPlayer.position + Vector3.up - mainCamTransformForRaycast.position).magnitude;
+
+        if (Physics.Raycast(mainCamTransformForRaycast.position, (mainPlayer.position + Vector3.up - mainCamTransformForRaycast.position).normalized, out hit, distance, ~ignoreMask))
+        {
+            if (hit.collider.TryGetComponent(out MeshRenderer mr) && !hit.collider.gameObject.isStatic)
+            {
+                renderers.Add(mr);
+
+                if (!changedMeshRenderers.ContainsKey(mr))
+                {
+                    changedMeshRenderers.Add(mr, mr.material);
+                    mr.material = shadowedMaterial;
+                }
+            }
+
+            foreach (MeshRenderer item in changedMeshRenderers.Keys)
+            {
+                if (!renderers.Contains(item))
+                {
+                    renderersToReturn.Add(item);
+                }
+            }
+
+            if (renderersToReturn.Count > 0)
+            {
+                foreach (var item in renderersToReturn)
+                {
+                    if (item.material != changedMeshRenderers[item])
+                    {
+                        item.material = changedMeshRenderers[item];
+                    }
+                    renderers.Remove(item);
+                    changedMeshRenderers.Remove(item);
+                }
+            }
+
+        }
+        else
+        {
+            _timer += Time.deltaTime;
+        }
+    }*/
 }

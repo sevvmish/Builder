@@ -92,10 +92,11 @@ public class InputControl : MonoBehaviour
             }
         }
 
+        /*
         if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f))
         {
             gm.Marker.position = hit.point;
-        }
+        }*/
     }
 
 
@@ -153,7 +154,7 @@ public class InputControl : MonoBehaviour
     {        
         if (Input.mouseScrollDelta.magnitude > 0)
         {            
-            cameraControl.ChangeZoom(Input.mouseScrollDelta.y);
+            cameraControl.ChangeZoom(Input.mouseScrollDelta.y, true);
         }
 
         

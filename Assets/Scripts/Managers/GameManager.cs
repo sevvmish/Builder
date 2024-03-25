@@ -60,11 +60,24 @@ public class GameManager : MonoBehaviour
         Globals.MainPlayerData = new PlayerData();
         Globals.MainPlayerData.Zoom = 0;
         Globals.IsInitiated = true;
-        Globals.IsMobile = true;
+        Globals.IsMobile = false;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
         Globals.MainRandom = new System.Random(Globals.MainPlayerData.Seed);
+
+        if (Globals.IsMobile)
+        {
+            QualitySettings.antiAliasing = 2;
+            QualitySettings.shadows = ShadowQuality.HardOnly;
+            QualitySettings.shadowResolution = ShadowResolution.Medium;
+        }
+        else
+        {
+            QualitySettings.antiAliasing = 4;
+            QualitySettings.shadows = ShadowQuality.All;
+            QualitySettings.shadowResolution = ShadowResolution.Medium;
+        }
 
 
         mainPlayer = AddPlayer(true, Vector3.zero, Vector3.zero).transform;
