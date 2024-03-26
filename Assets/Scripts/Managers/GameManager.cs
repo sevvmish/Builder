@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform cameraBody;    
     [SerializeField] private CameraControl cameraControl;
     [SerializeField] private Transform playersLocation;
+    [SerializeField] private UIManager UI;
+    [SerializeField] private BlockManager blockManager;
     [SerializeField] private TextMeshProUGUI texter;
     private InputControl playerInput;
 
@@ -31,6 +33,8 @@ public class GameManager : MonoBehaviour
     public Transform GetPlayersLocation() => playersLocation;
     public Transform GetMainPlayerTransform() => mainPlayer;    
     public AssetManager Assets => assetManager;
+    public UIManager GetUI => UI;
+    public float PointerClickedCount;
 
     //GAME START    
     public bool IsGameStarted { get; private set; }
@@ -88,6 +92,7 @@ public class GameManager : MonoBehaviour
         mainPlayer.gameObject.name = "Main Player";
 
         playerInput = mainPlayer.GetComponent<InputControl>();
+
     }
 
     private void Start()
@@ -113,6 +118,8 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (PointerClickedCount > 0) PointerClickedCount -= Time.deltaTime;
+
         if (cameraShakeCooldown > 0) cameraShakeCooldown -= Time.deltaTime;
               
 

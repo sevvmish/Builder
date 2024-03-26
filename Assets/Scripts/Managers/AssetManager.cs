@@ -5,9 +5,15 @@ using UnityEngine;
 
 [Serializable]
 public class AssetManager : MonoBehaviour
-{    
-    [SerializeField] private Identificator[] Assets;
+{
+    [SerializeField] private Transform floorsLocation;
+    [SerializeField] private Transform wallsLocation;
+    
     private Dictionary<int, GameObject> linkIDtoAsset = new Dictionary<int, GameObject>();
+
+    //TYPES
+    private List<int> floorsIDs = new List<int>();
+    private List<int> wallsIDs = new List<int>();
 
     [SerializeField] private GameObject markerExample;
     private GameObject marker;
@@ -15,21 +21,16 @@ public class AssetManager : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < Assets.Length; i++)
-        {
-            if (linkIDtoAsset.ContainsKey(Assets[i].ID))
-            {
-                print("ERROR! more than one IDs!");
-            }
-            else
-            {
-                linkIDtoAsset.Add(Assets[i].ID, Assets[i].gameObject);
-            }
-        }
+        initAssetsLink(floorsLocation);
+        initAssetsLink(wallsLocation);
+
 
         marker = Instantiate(markerExample);
         marker.SetActive(false);
     }
+
+    public int[] GetArrayOfFloorsIds => floorsIDs.ToArray();
+    public int[] GetArrayOfWallsIds => wallsIDs.ToArray();
 
     public GameObject GetGameObjectByID(int ID)
     {
@@ -38,5 +39,36 @@ public class AssetManager : MonoBehaviour
         return g;
     }
 
-    
+    public Block GetBlockDataByID(int ID)
+    {
+        return linkIDtoAsset[ID].GetComponent<Block>();
+    }
+
+    private void initAssetsLink(Transform location)
+    {
+        for (int i = 0; i < location.childCount; i++)
+        {
+            int id = location.GetChild(i).GetComponent<Identificator>().ID;
+
+            if (linkIDtoAsset.ContainsKey(id))
+            {
+                print("ERROR! more than one IDs!");
+            }
+            else
+            {
+                linkIDtoAsset.Add(id, location.GetChild(i).gameObject);
+
+                switch(location.GetChild(i).GetComponent<Block>().BlockType)
+                {
+                    case BlockTypes.floor:
+                        floorsIDs.Add(id);
+                        break;
+
+                    case BlockTypes.wall:
+                        wallsIDs.Add(id);
+                        break;
+                }
+            }
+        }
+    }
 }

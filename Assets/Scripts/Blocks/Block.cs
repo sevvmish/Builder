@@ -5,9 +5,11 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     public BlockTypes BlockType { get => blockType; }
-    public bool IsGood => (prototypeViewGood.activeSelf && !prototypeViewBad.activeSelf);
+    public Sprite BlockIcon { get => blockIcon; }
+    public bool IsGoodToFinalize => (prototypeViewGood.activeSelf && !prototypeViewBad.activeSelf);
 
     [SerializeField] private BlockTypes blockType;
+    [SerializeField] private Sprite blockIcon;
     [SerializeField] private GameObject realView;
     [SerializeField] private GameObject prototypeViewGood;
     [SerializeField] private GameObject prototypeViewBad;
@@ -48,8 +50,8 @@ public class Block : MonoBehaviour
     }
 
     public void SetPosition(Vector3 markerPoint)
-    {        
-        _transform.position = new Vector3(getNearest05(markerPoint.x), getNearest05(markerPoint.y), getNearest05(markerPoint.z));
+    {
+        assessRightPosition(markerPoint);
 
         Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
 
@@ -79,6 +81,17 @@ public class Block : MonoBehaviour
         else
         {
             MakeColorGood();
+        }
+    }
+
+    private void assessRightPosition(Vector3 markerPoint)
+    {
+        switch(BlockType)
+        {
+            case BlockTypes.floor:
+                //_transform.position = new Vector3(getNearest05(markerPoint.x), getNearest05(markerPoint.y), getNearest05(markerPoint.z));
+                _transform.position = new Vector3(Mathf.Round(markerPoint.x), Mathf.Round(markerPoint.y), Mathf.Round(markerPoint.z));
+                break;
         }
     }
 

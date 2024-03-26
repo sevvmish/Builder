@@ -84,7 +84,7 @@ public class InputControl : MonoBehaviour
             forPC();
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && gm.PointerClickedCount <= 0)
         {
             ray = _camera.ScreenPointToRay(Input.mousePosition);
 
@@ -102,6 +102,9 @@ public class InputControl : MonoBehaviour
         {
             if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f))
             {
+                marker = hit.point;
+
+                /*
                 Vector3 hitP = hit.point;
                 float distance = (hitP - playerTransform.position).magnitude;
                 float distanceLimit = 5f;
@@ -115,7 +118,7 @@ public class InputControl : MonoBehaviour
                     Vector3 newp = playerTransform.position + playerTransform.forward * distanceLimit;
                     marker = new Vector3(newp.x, playerTransform.position.y + 1f, newp.z);
                 }
-
+                */
             }            
         }
         
