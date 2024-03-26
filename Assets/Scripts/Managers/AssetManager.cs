@@ -5,59 +5,38 @@ using UnityEngine;
 
 [Serializable]
 public class AssetManager : MonoBehaviour
-{
-    [SerializeField] private GameObject[] Skins;
+{    
+    [SerializeField] private Identificator[] Assets;
+    private Dictionary<int, GameObject> linkIDtoAsset = new Dictionary<int, GameObject>();
 
-    [SerializeField] private GameAsset[] Assets;
-    private Dictionary<int, int> linkIDtoAsset = new Dictionary<int, int>();
+    [SerializeField] private GameObject markerExample;
+    private GameObject marker;
+    public Transform GetMarker => marker.transform;
 
     private void Awake()
     {
         for (int i = 0; i < Assets.Length; i++)
         {
-            if (linkIDtoAsset.ContainsKey(Assets[i].ID)) print("ERROR: asset key allready in use for # - " + Assets[i].ID);
-            linkIDtoAsset.Add(Assets[i].ID, i);
+            if (linkIDtoAsset.ContainsKey(Assets[i].ID))
+            {
+                print("ERROR! more than one IDs!");
+            }
+            else
+            {
+                linkIDtoAsset.Add(Assets[i].ID, Assets[i].gameObject);
+            }
         }
+
+        marker = Instantiate(markerExample);
+        marker.SetActive(false);
     }
 
     public GameObject GetGameObjectByID(int ID)
     {
-        return Assets[linkIDtoAsset[ID]].MainObject;
+        GameObject g = Instantiate(linkIDtoAsset[ID]);
+        g.SetActive(true);
+        return g;
     }
 
-    public AssetTypes GetTypeByID(int ID)
-    {
-        return Assets[linkIDtoAsset[ID]].AssetType;
-    }
-
-    public GameObject GetSkin(int index) => Skins[index];
-}
-
-[Serializable]
-public struct GameAsset
-{
-    public int ID;
-    public string Name;
-    public GameObject MainObject;
-    public AssetTypes AssetType;
-
-    public GameAsset(int iD, string name, GameObject mainObject, AssetTypes a)
-    {
-        ID = iD;
-        Name = name;
-        MainObject = mainObject;
-        AssetType = a;
-    }
-}
-
-[Serializable]
-public enum AssetTypes
-{
-    none,
-    terrain,
-    tree,
-    grass,
-    plant,
-    stone,
-    rock
+    
 }

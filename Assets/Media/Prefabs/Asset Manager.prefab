@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11456af7f1607744380a7130cf9d3294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Skins: []
-  Assets: []
+  Assets:
+  - {fileID: 8891193423026097809, guid: 0c525a04b078a5c4891f41309e8c870c, type: 3}
+  markerExample: {fileID: 4471838291858231836, guid: b7831375996cce249979338458d01984, type: 3}

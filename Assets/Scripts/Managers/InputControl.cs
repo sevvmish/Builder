@@ -30,6 +30,10 @@ public class InputControl : MonoBehaviour
     private RaycastHit hit;
     private Camera _camera;
     private float cameraRayCast = 50f;
+
+    private Vector3 marker;
+    public Vector3 GetMarker => marker;
+    private Transform mainPlayer;
     
 
     // Start is called before the first frame update
@@ -54,6 +58,8 @@ public class InputControl : MonoBehaviour
             jump = GameObject.Find("JumpButton").GetComponent<PointerDownOnly>();
             mover = GameObject.Find("Screen mover").GetComponent<PointerMoveOnly>();            
         }
+
+        mainPlayer = gm.GetMainPlayerTransform();
     }
 
     // Update is called once per frame
@@ -92,11 +98,27 @@ public class InputControl : MonoBehaviour
             }
         }
 
-        /*
-        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f))
+        if (gm.IsBuildMode)
         {
-            gm.Marker.position = hit.point;
-        }*/
+            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f))
+            {
+                Vector3 hitP = hit.point;
+                float distance = (hitP - playerTransform.position).magnitude;
+                float distanceLimit = 5f;
+
+                if (distance <= distanceLimit)
+                {
+                    marker = new Vector3(hitP.x, playerTransform.position.y, hitP.z);
+                }
+                else
+                {
+                    Vector3 newp = playerTransform.position + playerTransform.forward * distanceLimit;
+                    marker = new Vector3(newp.x, playerTransform.position.y + 1f, newp.z);
+                }
+
+            }            
+        }
+        
     }
 
 

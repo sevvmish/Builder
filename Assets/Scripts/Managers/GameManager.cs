@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CameraControl cameraControl;
     [SerializeField] private Transform playersLocation;
     [SerializeField] private TextMeshProUGUI texter;
-    [SerializeField] private Transform marker;
+    private InputControl playerInput;
 
     public PlayerControl MainPlayerControl { get; private set; }
 
@@ -34,13 +34,15 @@ public class GameManager : MonoBehaviour
 
     //GAME START    
     public bool IsGameStarted { get; private set; }
+    public bool IsBuildMode { get; private set; }
 
     private Transform mainPlayer;    
     private float cameraShakeCooldown;
    
     public TextMeshProUGUI Texter => texter;
-    public Transform Marker => marker;
-        
+    public Vector3 pointForMarker => playerInput.GetMarker;
+    
+
 
     // Start is called before the first frame update
     void Awake()
@@ -60,7 +62,7 @@ public class GameManager : MonoBehaviour
         Globals.MainPlayerData = new PlayerData();
         Globals.MainPlayerData.Zoom = 0;
         Globals.IsInitiated = true;
-        Globals.IsMobile = false;
+        Globals.IsMobile = true;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
@@ -84,12 +86,14 @@ public class GameManager : MonoBehaviour
         mainPlayer.position = new Vector3(0, 0, 0);
         cameraControl.SetData(mainPlayer, cameraBody, _camera.transform);        
         mainPlayer.gameObject.name = "Main Player";
-        
+
+        playerInput = mainPlayer.GetComponent<InputControl>();
     }
 
     private void Start()
     {
         IsGameStarted = true;
+        IsBuildMode = true;
     }
 
         
