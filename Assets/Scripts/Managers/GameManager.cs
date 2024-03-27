@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         Globals.MainPlayerData = new PlayerData();
         Globals.MainPlayerData.Zoom = 0;
         Globals.IsInitiated = true;
-        Globals.IsMobile = true;
+        Globals.IsMobile = false;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         if (Globals.IsMobile)
         {
             QualitySettings.antiAliasing = 2;
-            QualitySettings.shadows = ShadowQuality.HardOnly;
+            QualitySettings.shadows = ShadowQuality.Disable;//ShadowQuality.HardOnly;
             QualitySettings.shadowResolution = ShadowResolution.Medium;
         }
         else

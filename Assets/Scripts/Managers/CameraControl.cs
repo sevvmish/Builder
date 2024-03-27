@@ -40,6 +40,9 @@ public class CameraControl : MonoBehaviour
     private float defaultCameraDistance;
     private WaitForSeconds fixedDelta = new WaitForSeconds(0.02f);
 
+    private bool isBuildRegimeCorrected;
+    private bool isNonBuildRegimeCorrected;
+
     public void SetData(Transform player, Transform _camera, Transform mainCamTransform)
     {
         gm = GameManager.Instance;
@@ -156,7 +159,24 @@ public class CameraControl : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {        
+    {   
+        if (gm.IsBuildMode && !isBuildRegimeCorrected)
+        {
+            isBuildRegimeCorrected = true;
+            isNonBuildRegimeCorrected = false;
+
+            mainCamera.localPosition = Globals.BasePosition + new Vector3(2,0,0);
+
+        }
+        else if (!gm.IsBuildMode && !isNonBuildRegimeCorrected)
+        {
+            isBuildRegimeCorrected = false;
+            isNonBuildRegimeCorrected = true;
+
+            mainCamera.localPosition = Globals.BasePosition;
+        }
+        
+
         if (zoomTimer > 30)
         {
             zoomTimer = 0;
@@ -185,8 +205,6 @@ public class CameraControl : MonoBehaviour
             _timer = 0;
             _timerCooldown = 0.2f;
             newSystem();
-
-
         }
         else
         {

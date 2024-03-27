@@ -12,20 +12,12 @@ public class InputControl : MonoBehaviour
     private CameraControl cameraControl;
     private Transform playerTransform;
     private PointerDownOnly jump;
-    private PointerMoveOnly mover;
-    private Vector3 mousePosition;
-    private float koeff;
+    private PointerMoveOnly mover;  
     private readonly float XLimit = 10;
+    
     private GameManager gm;
-    private bool isLockedUsed;
-
-    private bool isTouchZoom;
-    private Vector3 zoom1Finger;
-    private Vector3 zoom2Finger;
-    private float zoomDistance;
-
-    private float level5Koeff = 1;
-
+    private BlockManager blockManager;
+    
     private Ray ray;
     private RaycastHit hit;
     private Camera _camera;
@@ -34,18 +26,22 @@ public class InputControl : MonoBehaviour
     private Vector3 marker;
     public Vector3 GetMarker => marker;
     private Transform mainPlayer;
-    
+
+    private LayerMask ignoreMask;
+
 
     // Start is called before the first frame update
     void Start()
     {
         gm = GameManager.Instance;
+        blockManager = gm.BlockManager;
         _camera = gm.GetCamera();
         joystick = GameManager.Instance.GetJoystick();
         cameraControl = GameManager.Instance.GetCameraControl();
         playerControl = gameObject.GetComponent<PlayerControl>();
         playerTransform = playerControl.transform;
-        
+
+        ignoreMask = LayerMask.GetMask(new string[] { "player" });
 
         if (!Globals.IsMobile)
         {
@@ -64,27 +60,27 @@ public class InputControl : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        if (!gm.IsGameStarted && Input.GetMouseButtonDown(0))
-        {
-            Globals.IsGlobalTouch = true;
-        }
-
+    {        
         if (!gm.IsGameStarted || Globals.IsOptions) return;
-
-        
+            
+        /*
+        if (blockManager.IsBuildingBlocks && blockManager.CurrentBlockToDelete != null)
+        {
+            blockManager.CurrentBlockToDelete.MakeColorBadForDelete(false);
+            blockManager.CurrentBlockToDelete = null;
+        }
+        */
 
         if (Globals.IsMobile)
         {
-            forMobile();
-           
+            forMobile();           
         }
         else
         {
             forPC();
         }
 
-        if (Globals.IsMobile)
+        if (!Globals.IsMobile)
         {
             if (Input.GetMouseButtonDown(0) && gm.PointerClickedCount <= 0)
             {
@@ -104,11 +100,9 @@ public class InputControl : MonoBehaviour
             }
         }
         
-
+        /*
         if (Input.GetMouseButton(0) && gm.PointerClickedCount <= 0)
-        {
-            
-
+        {            
             ray = _camera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit, cameraRayCast))
@@ -119,13 +113,55 @@ public class InputControl : MonoBehaviour
                     //gm.Marker.position = hit.point;
                 }
             }
-        }
+        }*/
 
         if (gm.IsBuildMode)
         {
-            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f))
-            {
-                marker = hit.point;
+            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask))
+            {                
+                if (blockManager.IsBuildingBlocks)
+                {
+                    marker = hit.point;
+                }
+                else if (blockManager.IsDestroingBlocks)
+                {
+                    print(hit.collider.gameObject.name + " = " + hit.collider.TryGetComponent(out Block b1));
+
+                    if (hit.collider.TryGetComponent(out Block b) && b.IsFinalized)
+                    {
+                        
+
+                        if (blockManager.CurrentBlockToDelete != null && blockManager.CurrentBlockToDelete.Equals(b))
+                        {
+                            //
+                        }
+                        else
+                        {
+                            if (blockManager.CurrentBlockToDelete != null)
+                            {
+                                blockManager.CurrentBlockToDelete.MakeColorBadForDelete(false);
+                            }
+
+                            blockManager.CurrentBlockToDelete = b;
+                            b.MakeColorBadForDelete(true);
+                        }
+                    }
+                    else
+                    {
+                        if (blockManager.CurrentBlockToDelete != null)
+                        {
+                            blockManager.CurrentBlockToDelete.MakeColorBadForDelete(false);
+                            blockManager.CurrentBlockToDelete = null;
+                        }
+                    }
+
+                    if (!Globals.IsMobile && Input.GetMouseButton(0) && blockManager.CurrentBlockToDelete != null)
+                    {
+                        blockManager.DeleteCurrentBlock();
+                    }
+                }
+
+                
 
                 /*
                 Vector3 hitP = hit.point;
@@ -183,7 +219,7 @@ public class InputControl : MonoBehaviour
         {
             
             int sign = delta2.x > 0 ? 1 : -1;
-            playerControl.SetRotationAngle(200 * sign * Time.deltaTime * level5Koeff);
+            playerControl.SetRotationAngle(200 * sign * Time.deltaTime * 1);
 
         }
         else if (delta2.x == 0)
@@ -215,7 +251,7 @@ public class InputControl : MonoBehaviour
         }
 
         
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.Space)/* || Input.GetMouseButtonDown(1)*/)
         {
             playerControl.SetJump();
         }

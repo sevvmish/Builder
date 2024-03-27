@@ -6,8 +6,10 @@ using UnityEngine;
 public class BlockManager : MonoBehaviour
 {
     public Block CurrentActiveBlock { get; private set; }
-    
-    public Action OnBuildCurrentBlock;
+    public Block CurrentBlockToDelete { get; set; }
+    public bool IsBuildingBlocks { get; private set; }
+    public bool IsDestroingBlocks { get; private set; }
+        
     public Action<int> OnChangeCurrentBlock;
 
     private GameManager gm;
@@ -21,8 +23,7 @@ public class BlockManager : MonoBehaviour
     private int currentID;
     private Vector3 currentRotation = Vector3.zero;
 
-    private bool isBuildingBlocks;
-    private bool isDestroingBlocks;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -33,8 +34,7 @@ public class BlockManager : MonoBehaviour
         marker = assets.GetMarker;
         markerDestroer = assets.GetMarkerDestroer;
 
-        //actions
-        OnBuildCurrentBlock = buildCurrentBlockCall;
+        //actions        
         OnChangeCurrentBlock = changeCurrentBlockCall;
 
         //=
@@ -51,7 +51,7 @@ public class BlockManager : MonoBehaviour
         {
             _timer = 0;
 
-            if (isBuildingBlocks)
+            if (IsBuildingBlocks)
             {
                 if (CurrentActiveBlock != null)
                 {
@@ -59,7 +59,7 @@ public class BlockManager : MonoBehaviour
                     marker.position = gm.pointForMarker;
                 }
             }
-            else if (isDestroingBlocks)
+            else if (IsDestroingBlocks)
             {
                 markerDestroer.position = gm.pointForMarker;
             }
@@ -78,8 +78,16 @@ public class BlockManager : MonoBehaviour
 
     public void StartBuilding()
     {
-        isBuildingBlocks = true;
-        isDestroingBlocks = false;
+        if (IsBuildingBlocks) return;
+
+        if (CurrentBlockToDelete != null)
+        {
+            CurrentBlockToDelete.MakeColorBadForDelete(false);
+            CurrentBlockToDelete = null;
+        }
+
+        IsBuildingBlocks = true;
+        IsDestroingBlocks = false;
 
         marker.gameObject.SetActive(true);
         markerDestroer.gameObject.SetActive(false);
@@ -89,17 +97,26 @@ public class BlockManager : MonoBehaviour
 
     public void StartDestroying()
     {
-        isBuildingBlocks = false;
-        isDestroingBlocks = true;
+        if (IsDestroingBlocks) return;
+
+        if (CurrentActiveBlock != null)
+        {
+            CurrentActiveBlock.gameObject.SetActive(false);
+            Destroy(CurrentActiveBlock.gameObject);
+            CurrentActiveBlock = null;
+        }
+
+        IsBuildingBlocks = false;
+        IsDestroingBlocks = true;
 
         marker.gameObject.SetActive(false);
         markerDestroer.gameObject.SetActive(true);
     }
 
-    private void buildCurrentBlockCall()
+    public void BuildCurrentBlockCall()
     {
         if (CurrentActiveBlock != null && CurrentActiveBlock.IsGoodToFinalize)
-        {
+        {            
             CurrentActiveBlock.MakeFinalView();
             getNewBlock(currentID);
         }
@@ -107,6 +124,17 @@ public class BlockManager : MonoBehaviour
         {
             SoundUI.Instance.PlayUISound(SoundsUI.error);
         }
+    }
+
+    public void DeleteCurrentBlock()
+    {
+        if (CurrentBlockToDelete != null)
+        {
+            CurrentBlockToDelete.gameObject.SetActive(false);
+            Destroy(CurrentBlockToDelete.gameObject);
+            CurrentBlockToDelete = null;
+        }
+        
     }
 
     private void changeCurrentBlockCall(int val)

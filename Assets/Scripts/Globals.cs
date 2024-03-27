@@ -24,7 +24,6 @@ public class Globals : MonoBehaviour
     public const int MAX_RESPAWN_POINTS = 25;
 
     public static bool IsDontShowIntro;
-    public static bool IsGlobalTouch;
     public static bool IsShowArrowNotificatorOnPlay;
 
     public static bool IsMobile;

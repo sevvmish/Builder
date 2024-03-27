@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
 {
     [Header("Main buttons")]
     [SerializeField] private Button buildCurrentBlockButton;
+    [SerializeField] private Button deleteCurrentBlockButton;
     [SerializeField] private Button rotateCurrentBlockButton;
     [SerializeField] private Button startDestroingBlockButton;
     [SerializeField] private Button startBuildingBlockButton;
@@ -30,7 +31,15 @@ public class UIManager : MonoBehaviour
         assets = gm.Assets;
 
         rotateCurrentBlockButton.gameObject.SetActive(false);
-        buildCurrentBlockButton.onClick.AddListener(BuildCurrentBlock);
+        buildCurrentBlockButton.onClick.AddListener(()=> 
+        {
+            BuildCurrentBlock();
+        });
+
+        deleteCurrentBlockButton.onClick.AddListener(() =>
+        {
+            blockManager.DeleteCurrentBlock();
+        });
 
         rotateCurrentBlockButton.onClick.AddListener(() => 
         {
@@ -67,9 +76,9 @@ public class UIManager : MonoBehaviour
     }
 
     public void BuildCurrentBlock()
-    {
+    {        
         sounds.PlayUISound(SoundsUI.click);
-        blockManager.OnBuildCurrentBlock?.Invoke();
+        blockManager.BuildCurrentBlockCall();
     }
 
     public void PlayerCrossNewBlockError()

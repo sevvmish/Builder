@@ -5,9 +5,11 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     public BlockTypes BlockType { get => blockType; }
+    public Identificator ID { get => id; }
     public Sprite BlockIcon { get => blockIcon; }
     public bool IsRotatable { get => isRotatable; }
     public bool IsGoodToFinalize => (prototypeViewGood.activeSelf && !prototypeViewBad.activeSelf);
+    public bool IsFinalized => realView.activeSelf;
 
     [SerializeField] private BlockTypes blockType;
 
@@ -23,16 +25,18 @@ public class Block : MonoBehaviour
     private Transform _transform;
     private GameManager gm;
     private BlockManager blockManager;
+    private Identificator id;
     
     private void OnEnable()
     {
         _transform = transform;
         gm = GameManager.Instance;
         blockManager = gm.BlockManager;
+        id = GetComponent<Identificator>();
     }
 
     public void MakeColorGood()
-    {
+    {        
         hideAll();
         prototypeViewGood.SetActive(true);
     }
@@ -41,6 +45,11 @@ public class Block : MonoBehaviour
     {
         hideAll();
         prototypeViewBad.SetActive(true);
+    }
+
+    public void MakeColorBadForDelete(bool isActive)
+    {        
+        prototypeViewBad.SetActive(isActive);
     }
 
     public void MakeFinalView()
@@ -67,6 +76,8 @@ public class Block : MonoBehaviour
 
     public void SetPosition(Vector3 markerPoint)
     {
+        if (IsFinalized) return;
+
         assessRightPositionVector(markerPoint);
 
         switch(BlockType)
@@ -138,7 +149,7 @@ public class Block : MonoBehaviour
                     break;
                 }
 
-                if (colliders[i].gameObject.layer == 7)
+                if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && b.blockType == BlockTypes.wall)
                 {
                     isBad = true;
                     break;
