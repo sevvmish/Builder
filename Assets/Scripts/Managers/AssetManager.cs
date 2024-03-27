@@ -14,19 +14,25 @@ public class AssetManager : MonoBehaviour
     //TYPES
     private List<int> floorsIDs = new List<int>();
     private List<int> wallsIDs = new List<int>();
-
+    //=
     [SerializeField] private GameObject markerExample;
     private GameObject marker;
     public Transform GetMarker => marker.transform;
+    //=
+    [SerializeField] private GameObject markerDestroerExample;
+    private GameObject markerDestroer;
+    public Transform GetMarkerDestroer => markerDestroer.transform;
 
     private void Awake()
     {
         initAssetsLink(floorsLocation);
         initAssetsLink(wallsLocation);
 
-
         marker = Instantiate(markerExample);
         marker.SetActive(false);
+
+        markerDestroer = Instantiate(markerDestroerExample);
+        markerDestroer.SetActive(false);
     }
 
     public int[] GetArrayOfFloorsIds => floorsIDs.ToArray();

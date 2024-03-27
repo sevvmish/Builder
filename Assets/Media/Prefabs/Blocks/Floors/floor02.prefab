@@ -598,7 +598,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 0.1, z: 2}
+  m_LocalScale: {x: 2, y: 0.11, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2833966693448919350}
@@ -681,7 +681,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 0.1, z: 2}
+  m_LocalScale: {x: 2, y: 0.12, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4977088469544746934}
@@ -747,6 +747,7 @@ GameObject:
   - component: {fileID: 7868287994990458662}
   - component: {fileID: 3221650683295066972}
   - component: {fileID: 6580139838989160281}
+  - component: {fileID: 1138767577895709717}
   m_Layer: 7
   m_Name: floor02
   m_TagString: Untagged
@@ -804,6 +805,28 @@ MonoBehaviour:
   prototypeViewGood: {fileID: 626024088819893752}
   prototypeViewBad: {fileID: 6172848818708907382}
   buildVFX: {fileID: 4173245102836183400}
+  isRotatable: 0
+--- !u!65 &1138767577895709717
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7386788692417564423}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 0.1, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8000937715266546728
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,9 +29,14 @@ public class BlockPanelUI : MonoBehaviour
 
         iconImage.sprite = block.BlockIcon;
         activateButton.onClick.AddListener(() => 
-        {            
+        {
+            
+            if (bm.CurrentActiveBlock.gameObject.GetComponent<Identificator>().ID == this.id) return;
+
             blockManager.OnChangeCurrentBlock?.Invoke(this.id);
         });
+
+        
     }
         
 }

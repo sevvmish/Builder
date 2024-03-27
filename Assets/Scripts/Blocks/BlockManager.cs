@@ -13,10 +13,16 @@ public class BlockManager : MonoBehaviour
     private GameManager gm;
     private AssetManager assets;
     private Transform playerTransform;
+    
     private Transform marker;
+    private Transform markerDestroer;
 
     private float _timer;
     private int currentID;
+    private Vector3 currentRotation = Vector3.zero;
+
+    private bool isBuildingBlocks;
+    private bool isDestroingBlocks;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +31,7 @@ public class BlockManager : MonoBehaviour
         assets = gm.Assets;
         playerTransform = gm.GetMainPlayerTransform();
         marker = assets.GetMarker;
+        markerDestroer = assets.GetMarkerDestroer;
 
         //actions
         OnBuildCurrentBlock = buildCurrentBlockCall;
@@ -32,8 +39,9 @@ public class BlockManager : MonoBehaviour
 
         //=
         currentID = 1;
-        getNewBlock(currentID);
+        StartBuilding();
     }
+    
     
 
     // Update is called once per frame
@@ -43,16 +51,49 @@ public class BlockManager : MonoBehaviour
         {
             _timer = 0;
 
-            if (CurrentActiveBlock != null)
+            if (isBuildingBlocks)
             {
-                updateCurrentBlockPosition();                                
-                marker.position = gm.pointForMarker;
+                if (CurrentActiveBlock != null)
+                {
+                    updateCurrentBlockPosition();
+                    marker.position = gm.pointForMarker;
+                }
             }
+            else if (isDestroingBlocks)
+            {
+                markerDestroer.position = gm.pointForMarker;
+            }
+            
         }
         else
         {
             _timer += Time.deltaTime;
         }        
+    }
+
+    public void RotationMade(Vector3 newVector)
+    {
+        currentRotation = newVector;
+    }
+
+    public void StartBuilding()
+    {
+        isBuildingBlocks = true;
+        isDestroingBlocks = false;
+
+        marker.gameObject.SetActive(true);
+        markerDestroer.gameObject.SetActive(false);
+
+        getNewBlock(currentID);
+    }
+
+    public void StartDestroying()
+    {
+        isBuildingBlocks = false;
+        isDestroingBlocks = true;
+
+        marker.gameObject.SetActive(false);
+        markerDestroer.gameObject.SetActive(true);
     }
 
     private void buildCurrentBlockCall()
@@ -91,29 +132,39 @@ public class BlockManager : MonoBehaviour
                 case BlockTypes.floor:
                     CurrentActiveBlock.SetPosition(gm.pointForMarker);
                     break;
+
+                case BlockTypes.wall:
+                    CurrentActiveBlock.SetPosition(gm.pointForMarker);
+                    break;
             }
         }
     }
 
-    private void getNewBlock(int id)
-    {
-        /*
-        if (CurrentActiveBlock != null)
-        {
-            print("ERROR! Block is allready in use!");
-            return;
-        }*/
 
+    private void getNewBlock(int id)
+    {        
         GameObject newBlock = assets.GetGameObjectByID(id);
         CurrentActiveBlock = newBlock.GetComponent<Block>();
         CurrentActiveBlock.gameObject.SetActive(true);
         CurrentActiveBlock.transform.position = Vector3.zero;
-        CurrentActiveBlock.transform.eulerAngles = Vector3.zero;
+
+        if (CurrentActiveBlock.IsRotatable)
+        {
+            CurrentActiveBlock.transform.eulerAngles = currentRotation;
+        }
+        else
+        {
+            CurrentActiveBlock.transform.eulerAngles = Vector3.zero;
+            currentRotation = Vector3.zero;
+        }
+        
+        
         CurrentActiveBlock.transform.localScale = Vector3.one;
 
         CurrentActiveBlock.MakeColorBad();
         marker.gameObject.SetActive(true);
         updateCurrentBlockPosition();
+        gm.GetUI.NewBlockChosen();
     }
 
     private Vector3 lowerPlayerPoint => playerTransform.position + playerTransform.forward + Vector3.up * 0.1f;

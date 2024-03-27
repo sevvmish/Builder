@@ -84,8 +84,31 @@ public class InputControl : MonoBehaviour
             forPC();
         }
 
+        if (Globals.IsMobile)
+        {
+            if (Input.GetMouseButtonDown(0) && gm.PointerClickedCount <= 0)
+            {
+                if (gm.IsBuildMode)
+                {
+                    gm.GetUI.BuildCurrentBlock();
+                    gm.PointerClickedCount = 0.1f;
+                }
+            }
+            else if (Input.GetMouseButtonDown(1) && gm.PointerClickedCount <= 0)
+            {
+                if (gm.IsBuildMode)
+                {
+                    gm.GetUI.ShowBlocksPanel();
+                    gm.PointerClickedCount = 0.1f;
+                }
+            }
+        }
+        
+
         if (Input.GetMouseButton(0) && gm.PointerClickedCount <= 0)
         {
+            
+
             ray = _camera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit, cameraRayCast))

@@ -22,8 +22,8 @@ public class BlockMenuUI : MonoBehaviour
     private SoundUI sounds;
     private GameManager gm;
     private AssetManager assets;
-    [SerializeField] private BlockManager blockManager;
 
+    [SerializeField] private BlockManager blockManager;
 
 
     // Start is called before the first frame update
@@ -37,10 +37,7 @@ public class BlockMenuUI : MonoBehaviour
         createBlocksPanel();
         callBlocksButton.onClick.AddListener(() =>
         {
-            sounds.PlayUISound(SoundsUI.click);
-            callBlocksButton.gameObject.SetActive(false);
-            blocksPanel.SetActive(true);
-            showBlocksPanel();
+            ShowBlocksPanel();
         });
 
         floorsFilterButton.onClick.AddListener(() =>
@@ -49,7 +46,7 @@ public class BlockMenuUI : MonoBehaviour
 
             sounds.PlayUISound(SoundsUI.click);
             defaultStartBlock = BlockTypes.floor;
-            showBlocksPanel();
+            filterBlocksPanel();
         });
 
         wallsFilterButton.onClick.AddListener(() =>
@@ -58,7 +55,7 @@ public class BlockMenuUI : MonoBehaviour
 
             sounds.PlayUISound(SoundsUI.click);
             defaultStartBlock = BlockTypes.wall;
-            showBlocksPanel();
+            filterBlocksPanel();
         });
     }
     
@@ -87,7 +84,22 @@ public class BlockMenuUI : MonoBehaviour
         walls.ForEach(p => p.SetActive(false));
     }
 
-    private void showBlocksPanel()
+    public void ShowBlocksPanel()
+    {
+        sounds.PlayUISound(SoundsUI.click);
+
+        if (blocksPanel.activeSelf)
+        {
+            HideAllPanel();
+            return;
+        }
+
+        callBlocksButton.gameObject.SetActive(false);
+        blocksPanel.SetActive(true);
+
+        filterBlocksPanel();
+    }
+    private void filterBlocksPanel()
     {
         hideAll();
 

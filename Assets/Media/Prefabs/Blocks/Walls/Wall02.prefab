@@ -68,6 +68,7 @@ MonoBehaviour:
   prototypeViewGood: {fileID: 4771955563363045173}
   prototypeViewBad: {fileID: 5946987666006565793}
   buildVFX: {fileID: 1788075127247361299}
+  isRotatable: 1
 --- !u!1 &1092164825859743080
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,7 +97,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 0.1}
+  m_LocalScale: {x: 2, y: 2, z: 0.11}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3381186789547581849}
@@ -179,7 +180,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 0.1}
+  m_LocalScale: {x: 2, y: 2, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2214776360092882854}

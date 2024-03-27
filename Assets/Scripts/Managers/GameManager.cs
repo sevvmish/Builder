@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public Transform GetMainPlayerTransform() => mainPlayer;    
     public AssetManager Assets => assetManager;
     public UIManager GetUI => UI;
+    public BlockManager BlockManager => blockManager;
     public float PointerClickedCount;
 
     //GAME START    
@@ -94,6 +95,8 @@ public class GameManager : MonoBehaviour
         playerInput = mainPlayer.GetComponent<InputControl>();
 
     }
+
+    
 
     private void Start()
     {

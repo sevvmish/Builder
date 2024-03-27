@@ -60,7 +60,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 0.1}
+  m_LocalScale: {x: 2, y: 2, z: 0.11}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2308249116036758002}
@@ -143,7 +143,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 0.1}
+  m_LocalScale: {x: 2, y: 2, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5608483037366347912}
@@ -432,6 +432,7 @@ MonoBehaviour:
   prototypeViewGood: {fileID: 322311204993271869}
   prototypeViewBad: {fileID: 6336357466638940393}
   buildVFX: {fileID: 4790249558131412450}
+  isRotatable: 1
 --- !u!1 &4790249558131412450
 GameObject:
   m_ObjectHideFlags: 0

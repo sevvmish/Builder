@@ -115,6 +115,7 @@ MonoBehaviour:
   floorsLocation: {fileID: 5812147534268027454}
   wallsLocation: {fileID: 3441778858488472774}
   markerExample: {fileID: 4471838291858231836, guid: b7831375996cce249979338458d01984, type: 3}
+  markerDestroerExample: {fileID: 439339402189754404, guid: 7a4d88042d99fd842bc46e8ed85c2e93, type: 3}
 --- !u!1001 &104490674498121044
 PrefabInstance:
   m_ObjectHideFlags: 0
