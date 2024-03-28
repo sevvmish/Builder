@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button rotateCurrentBlockButton;
     [SerializeField] private Button startDestroingBlockButton;
     [SerializeField] private Button startBuildingBlockButton;
+    [SerializeField] private Button callBlocksButton;
+    [SerializeField] private Button closeBlocksButton;
 
     [Header("BlocksMenu")]
     [SerializeField] private BlockMenuUI blockMenuUI;
@@ -26,6 +28,8 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        startbuildingPrefs();
+
         sounds = SoundUI.Instance;
         gm = GameManager.Instance;
         assets = gm.Assets;
@@ -33,7 +37,7 @@ public class UIManager : MonoBehaviour
         rotateCurrentBlockButton.gameObject.SetActive(false);
         buildCurrentBlockButton.onClick.AddListener(()=> 
         {
-            BuildCurrentBlock();
+            blockManager.BuildCurrentBlockCall();
         });
 
         deleteCurrentBlockButton.onClick.AddListener(() =>
@@ -42,27 +46,52 @@ public class UIManager : MonoBehaviour
         });
 
         rotateCurrentBlockButton.onClick.AddListener(() => 
-        {
-            sounds.PlayUISound(SoundsUI.click);
-
-            if (blockManager.CurrentActiveBlock != null && blockManager.CurrentActiveBlock.IsRotatable)
-            {
-                blockManager.CurrentActiveBlock.Rotate();
-            }            
+        {            
+            blockManager.Rotate();          
         });
 
-        startDestroingBlockButton.onClick.AddListener(() => { blockManager.StartDestroying(); });
-        startBuildingBlockButton.onClick.AddListener(() => { blockManager.StartBuilding(); });
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
+        startDestroingBlockButton.onClick.AddListener(() => 
         {
-            BuildCurrentBlock();
-        }
+            blockManager.StartDestroying();
+            deleteCurrentBlockButton.gameObject.SetActive(true);
+            buildCurrentBlockButton.gameObject.SetActive(false);
+            startDestroingBlockButton.gameObject.SetActive(false);
+            startBuildingBlockButton.gameObject.SetActive(true);
+        });
+
+        startBuildingBlockButton.onClick.AddListener(() => 
+        {
+            startbuildingPrefs();         
+            
+        });
+
+        callBlocksButton.onClick.AddListener(() =>
+        {
+            ShowBlocksPanel();
+            buildCurrentBlockButton.gameObject.SetActive(false);
+            deleteCurrentBlockButton.gameObject.SetActive(false);
+            startBuildingBlockButton.gameObject.SetActive(false);
+            startDestroingBlockButton.gameObject.SetActive(false);
+        });
+
+        closeBlocksButton.onClick.AddListener(() =>
+        {
+            sounds.PlayUISound(SoundsUI.click);
+            blockMenuUI.HideAllPanel();
+
+            startbuildingPrefs();
+        });
     }
 
+    private void startbuildingPrefs()
+    {
+        blockManager.StartBuilding();
+        buildCurrentBlockButton.gameObject.SetActive(true);
+        deleteCurrentBlockButton.gameObject.SetActive(false);
+        startBuildingBlockButton.gameObject.SetActive(false);
+        startDestroingBlockButton.gameObject.SetActive(true);
+    }
+    
     public void NewBlockChosen()
     {
         if (blockManager.CurrentActiveBlock != null && blockManager.CurrentActiveBlock.IsRotatable)
@@ -75,17 +104,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void BuildCurrentBlock()
-    {        
-        sounds.PlayUISound(SoundsUI.click);
-        blockManager.BuildCurrentBlockCall();
-    }
-
+    
     public void PlayerCrossNewBlockError()
     {
 
     }
 
-    public void HideBlocksPanel() => blockMenuUI.HideAllPanel();
+    public void HideBlocksPanel()
+    {
+        blockMenuUI.HideAllPanel();
+        startbuildingPrefs();
+    }
+        
     public void ShowBlocksPanel() => blockMenuUI.ShowBlocksPanel();
 }

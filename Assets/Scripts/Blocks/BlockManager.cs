@@ -9,15 +9,17 @@ public class BlockManager : MonoBehaviour
     public Block CurrentBlockToDelete { get; set; }
     public bool IsBuildingBlocks { get; private set; }
     public bool IsDestroingBlocks { get; private set; }
-        
+    public bool IsChoosingBlocks { get; private set; }
+
     public Action<int> OnChangeCurrentBlock;
 
     private GameManager gm;
+    private SoundUI sounds;
     private AssetManager assets;
     private Transform playerTransform;
     
-    private Transform marker;
-    private Transform markerDestroer;
+    //private Transform marker;
+    //private Transform markerDestroer;
 
     private float _timer;
     private int currentID;
@@ -29,17 +31,18 @@ public class BlockManager : MonoBehaviour
     void Start()
     {
         gm = GameManager.Instance;
+        sounds = SoundUI.Instance;
         assets = gm.Assets;
         playerTransform = gm.GetMainPlayerTransform();
-        marker = assets.GetMarker;
-        markerDestroer = assets.GetMarkerDestroer;
+        //marker = assets.GetMarker;
+        //markerDestroer = assets.GetMarkerDestroer;
 
         //actions        
         OnChangeCurrentBlock = changeCurrentBlockCall;
 
         //=
         currentID = 1;
-        StartBuilding();
+        //StartBuilding();
     }
     
     
@@ -56,12 +59,12 @@ public class BlockManager : MonoBehaviour
                 if (CurrentActiveBlock != null)
                 {
                     updateCurrentBlockPosition();
-                    marker.position = gm.pointForMarker;
+                    //marker.position = gm.pointForMarker;
                 }
             }
             else if (IsDestroingBlocks)
             {
-                markerDestroer.position = gm.pointForMarker;
+                //markerDestroer.position = gm.pointForMarker;
             }
             
         }
@@ -71,10 +74,28 @@ public class BlockManager : MonoBehaviour
         }        
     }
 
-    public void RotationMade(Vector3 newVector)
+    public void Rotate()
     {
-        currentRotation = newVector;
+        if (CurrentActiveBlock != null && CurrentActiveBlock.IsRotatable)
+        {
+            Vector3 newRotation = currentRotation;
+            bool result = CurrentActiveBlock.Rotate(ref newRotation);
+            if (result)
+            {
+                currentRotation = newRotation;
+                sounds.PlayUISound(SoundsUI.click);
+            }
+            else
+            {
+                sounds.PlayUISound(SoundsUI.error);
+            }
+        }
+        else
+        {
+            sounds.PlayUISound(SoundsUI.error);
+        }
     }
+
 
     public void StartBuilding()
     {
@@ -88,11 +109,33 @@ public class BlockManager : MonoBehaviour
 
         IsBuildingBlocks = true;
         IsDestroingBlocks = false;
+        IsChoosingBlocks = false;
 
-        marker.gameObject.SetActive(true);
-        markerDestroer.gameObject.SetActive(false);
+        //marker.gameObject.SetActive(true);
+        //markerDestroer.gameObject.SetActive(false);
 
         getNewBlock(currentID);
+    }
+
+    public void StartChoosing()
+    {
+        if (IsChoosingBlocks) return;
+
+        if (CurrentBlockToDelete != null)
+        {
+            CurrentBlockToDelete.MakeColorBadForDelete(false);            
+        }
+
+        if (CurrentActiveBlock != null)
+        {
+            CurrentActiveBlock.gameObject.SetActive(false);
+            Destroy(CurrentActiveBlock.gameObject);
+            CurrentActiveBlock = null;
+        }
+
+        IsBuildingBlocks = false;
+        IsDestroingBlocks = false;
+        IsChoosingBlocks = true;
     }
 
     public void StartDestroying()
@@ -108,9 +151,10 @@ public class BlockManager : MonoBehaviour
 
         IsBuildingBlocks = false;
         IsDestroingBlocks = true;
+        IsChoosingBlocks = false;
 
-        marker.gameObject.SetActive(false);
-        markerDestroer.gameObject.SetActive(true);
+        //marker.gameObject.SetActive(false);
+        //markerDestroer.gameObject.SetActive(true);
     }
 
     public void BuildCurrentBlockCall()
@@ -119,17 +163,18 @@ public class BlockManager : MonoBehaviour
         {            
             CurrentActiveBlock.MakeFinalView();
             getNewBlock(currentID);
+            sounds.PlayUISound(SoundsUI.click);
         }
         else
         {
-            SoundUI.Instance.PlayUISound(SoundsUI.error);
+            sounds.PlayUISound(SoundsUI.error);
         }
     }
 
     public void DeleteCurrentBlock()
     {
         if (CurrentBlockToDelete != null)
-        {
+        {            
             CurrentBlockToDelete.gameObject.SetActive(false);
             Destroy(CurrentBlockToDelete.gameObject);
             CurrentBlockToDelete = null;
@@ -141,7 +186,7 @@ public class BlockManager : MonoBehaviour
     {
         if (val == currentID)
         {
-            SoundUI.Instance.PlayUISound(SoundsUI.error);
+            sounds.PlayUISound(SoundsUI.error);
             return;
         }
 
@@ -190,7 +235,7 @@ public class BlockManager : MonoBehaviour
         CurrentActiveBlock.transform.localScale = Vector3.one;
 
         CurrentActiveBlock.MakeColorBad();
-        marker.gameObject.SetActive(true);
+        //marker.gameObject.SetActive(true);
         updateCurrentBlockPosition();
         gm.GetUI.NewBlockChosen();
     }

@@ -165,7 +165,7 @@ public class CameraControl : MonoBehaviour
             isBuildRegimeCorrected = true;
             isNonBuildRegimeCorrected = false;
 
-            mainCamera.localPosition = Globals.BasePosition + new Vector3(2,0,0);
+            mainCamera.localPosition = Globals.BasePosition + new Vector3(1,0,0);
 
         }
         else if (!gm.IsBuildMode && !isNonBuildRegimeCorrected)

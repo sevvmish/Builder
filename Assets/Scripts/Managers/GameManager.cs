@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     private float cameraShakeCooldown;
    
     public TextMeshProUGUI Texter => texter;
-    public Vector3 pointForMarker => playerInput.GetMarker;
+    public Vector3 pointForMarker => playerInput.GetMarkerposition;
     
 
 
@@ -62,16 +62,18 @@ public class GameManager : MonoBehaviour
         }
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
-                
+               
+        /*
         //TODEL
         Globals.MainPlayerData = new PlayerData();
         Globals.MainPlayerData.Zoom = 0;
         Globals.IsInitiated = true;
-        Globals.IsMobile = false;
+        Globals.IsMobile = true;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
         Globals.MainRandom = new System.Random(Globals.MainPlayerData.Seed);
+        */
 
         if (Globals.IsMobile)
         {
@@ -85,7 +87,6 @@ public class GameManager : MonoBehaviour
             QualitySettings.shadows = ShadowQuality.All;
             QualitySettings.shadowResolution = ShadowResolution.Medium;
         }
-
 
         mainPlayer = AddPlayer(true, Vector3.zero, Vector3.zero).transform;
         mainPlayer.position = new Vector3(0, 0, 0);

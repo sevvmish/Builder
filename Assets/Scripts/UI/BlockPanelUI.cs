@@ -31,7 +31,7 @@ public class BlockPanelUI : MonoBehaviour
         activateButton.onClick.AddListener(() => 
         {
             
-            if (bm.CurrentActiveBlock.gameObject.GetComponent<Identificator>().ID == this.id) return;
+            if (bm.CurrentActiveBlock != null && bm.CurrentActiveBlock.gameObject.GetComponent<Identificator>().ID == this.id) return;
 
             blockManager.OnChangeCurrentBlock?.Invoke(this.id);
         });

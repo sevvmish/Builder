@@ -6,6 +6,8 @@ using UnityEngine;
 [Serializable]
 public class AssetManager : MonoBehaviour
 {
+    [SerializeField] private Transform blockLocation;
+
     [SerializeField] private Transform floorsLocation;
     [SerializeField] private Transform wallsLocation;
     
@@ -40,7 +42,7 @@ public class AssetManager : MonoBehaviour
 
     public GameObject GetGameObjectByID(int ID)
     {
-        GameObject g = Instantiate(linkIDtoAsset[ID]);
+        GameObject g = Instantiate(linkIDtoAsset[ID], blockLocation);
         g.SetActive(true);
         return g;
     }

@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class BlockMenuUI : MonoBehaviour
 {    
     [Header("BlocksMenu")]
-    [SerializeField] private Button callBlocksButton;
+    //[SerializeField] private Button callBlocksButton;
+    //[SerializeField] private Button closeBlocksButton;
     [SerializeField] private GameObject blocksPanel;
     [SerializeField] private GameObject blocksPanelExample;
     [SerializeField] private Transform blockMenuContainer;
@@ -35,10 +36,7 @@ public class BlockMenuUI : MonoBehaviour
 
         blocksPanel.SetActive(false);
         createBlocksPanel();
-        callBlocksButton.onClick.AddListener(() =>
-        {
-            ShowBlocksPanel();
-        });
+        
 
         floorsFilterButton.onClick.AddListener(() =>
         {
@@ -57,6 +55,8 @@ public class BlockMenuUI : MonoBehaviour
             defaultStartBlock = BlockTypes.wall;
             filterBlocksPanel();
         });
+
+        
     }
     
     private void createBlocksPanel()
@@ -94,7 +94,15 @@ public class BlockMenuUI : MonoBehaviour
             return;
         }
 
-        callBlocksButton.gameObject.SetActive(false);
+        if (!Globals.IsMobile)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+        }
+        
+
+        blockManager.StartChoosing();
+        
         blocksPanel.SetActive(true);
 
         filterBlocksPanel();
@@ -118,7 +126,14 @@ public class BlockMenuUI : MonoBehaviour
     public void HideAllPanel()
     {
         blocksPanel.SetActive(false);
-        callBlocksButton.gameObject.SetActive(true);
+        blockManager.StartBuilding();
+        
+
+        if (!Globals.IsMobile)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }            
     }
         
 }

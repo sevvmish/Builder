@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,6 +27,8 @@ public class Block : MonoBehaviour
     private GameManager gm;
     private BlockManager blockManager;
     private Identificator id;
+
+    private Vector3 lastMarkerPosition;
     
     private void OnEnable()
     {
@@ -58,12 +61,15 @@ public class Block : MonoBehaviour
         realView.SetActive(true);
     }
 
-    public void Rotate()
+    public bool Rotate(ref Vector3 endRotationVector)
     {
-        if (!IsRotatable) return;
+        if (!IsRotatable) return false;
 
-        _transform.eulerAngles += new Vector3(0, 90, 0);
-        blockManager.RotationMade(_transform.eulerAngles);
+        Vector3 newVector = _transform.eulerAngles + new Vector3(0, 90, 0);
+
+        _transform.DORotate(newVector, 0.1f).SetEase(Ease.Linear);
+        endRotationVector = newVector;
+        return true;
     }
 
     private void hideAll()
@@ -78,6 +84,8 @@ public class Block : MonoBehaviour
     {
         if (IsFinalized) return;
 
+        if (lastMarkerPosition == markerPoint) return;
+
         assessRightPositionVector(markerPoint);
 
         switch(BlockType)
@@ -90,6 +98,8 @@ public class Block : MonoBehaviour
                 assessBlockStatusWall();
                 break;
         }
+
+        lastMarkerPosition = markerPoint;
     }
 
     private void assessBlockStatusFloor()
