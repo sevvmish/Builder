@@ -18,6 +18,7 @@ public class BlockManager : MonoBehaviour
     private AssetManager assets;
     private Transform playerTransform;
     
+    private List<Block> blocksForCancel = new List<Block>();
     //private Transform marker;
     //private Transform markerDestroer;
 
@@ -157,11 +158,27 @@ public class BlockManager : MonoBehaviour
         //markerDestroer.gameObject.SetActive(true);
     }
 
+    public void CancelLastBlock()
+    {
+        if (blocksForCancel.Count == 0)
+        {
+            sounds.PlayUISound(SoundsUI.error);
+            return;
+        }
+
+        sounds.PlayUISound(SoundsUI.pop);
+        Block b = blocksForCancel[blocksForCancel.Count - 1];
+        blocksForCancel.Remove(b);
+        b.gameObject.SetActive(false);
+        Destroy(b);
+    }
+
     public void BuildCurrentBlockCall()
     {
         if (CurrentActiveBlock != null && CurrentActiveBlock.IsGoodToFinalize)
         {            
             CurrentActiveBlock.MakeFinalView();
+            blocksForCancel.Add(CurrentActiveBlock);
             getNewBlock(currentID);
             sounds.PlayUISound(SoundsUI.click);
         }
@@ -174,7 +191,18 @@ public class BlockManager : MonoBehaviour
     public void DeleteCurrentBlock()
     {
         if (CurrentBlockToDelete != null)
-        {            
+        {
+            if (blocksForCancel.Count > 0)
+            {
+                for (int i = 0; i < blocksForCancel.Count; i++)
+                {
+                    if (blocksForCancel[i].Equals(CurrentBlockToDelete))
+                    {
+                        blocksForCancel.Remove(CurrentBlockToDelete);
+                    }
+                }
+            }
+
             CurrentBlockToDelete.gameObject.SetActive(false);
             Destroy(CurrentBlockToDelete.gameObject);
             CurrentBlockToDelete = null;

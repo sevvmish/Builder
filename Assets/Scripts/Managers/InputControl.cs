@@ -297,6 +297,13 @@ public class InputControl : MonoBehaviour
                 }                
             }
         }
+        else if (Input.GetKeyDown(KeyCode.Z))
+        {
+            if (gm.IsBuildMode)
+            {
+                blockManager.CancelLastBlock();
+            }
+        }
 
         if (Input.GetMouseButtonDown(0) && gm.PointerClickedCount <= 0)
         {
