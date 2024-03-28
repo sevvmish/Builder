@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2528946227972746048}
   m_Layer: 0
-  m_Name: MarkerDestroer
+  m_Name: MarkerDestroyer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,14 +41,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4088057926052193402}
-  - component: {fileID: 1036877472154359351}
+  - component: {fileID: 7870788414021384597}
   m_Layer: 0
   m_Name: visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4088057926052193402
 Transform:
   m_ObjectHideFlags: 0
@@ -65,7 +65,7 @@ Transform:
   - {fileID: 8100033263834257681}
   m_Father: {fileID: 2528946227972746048}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1036877472154359351
+--- !u!114 &7870788414021384597
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,10 +74,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5116077457324988124}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1018961664bc0914b80664256882b925, type: 3}
+  m_Script: {fileID: 11500000, guid: ef83488e38d043944926bfee588673f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: 0.5
+  speedTime: 2
+  axisX: 0
+  axisY: 1
+  axisZ: 0
 --- !u!1001 &8100033263834645393
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -92,15 +95,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bf06239010b87d54f86a392fdd4d87d9, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bf06239010b87d54f86a392fdd4d87d9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bf06239010b87d54f86a392fdd4d87d9, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bf06239010b87d54f86a392fdd4d87d9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -108,7 +111,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bf06239010b87d54f86a392fdd4d87d9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bf06239010b87d54f86a392fdd4d87d9, type: 3}
       propertyPath: m_LocalPosition.z

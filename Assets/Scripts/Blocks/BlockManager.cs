@@ -20,7 +20,7 @@ public class BlockManager : MonoBehaviour
     
     private List<Block> blocksForCancel = new List<Block>();
     //private Transform marker;
-    //private Transform markerDestroer;
+    private Transform markerDestroyer;
 
     private float _timer;
     private int currentID;
@@ -36,7 +36,7 @@ public class BlockManager : MonoBehaviour
         assets = gm.Assets;
         playerTransform = gm.GetMainPlayerTransform();
         //marker = assets.GetMarker;
-        //markerDestroer = assets.GetMarkerDestroer;
+        markerDestroyer = assets.GetMarkerDestroyer;
 
         //actions        
         OnChangeCurrentBlock = changeCurrentBlockCall;
@@ -65,7 +65,16 @@ public class BlockManager : MonoBehaviour
             }
             else if (IsDestroingBlocks)
             {
-                //markerDestroer.position = gm.pointForMarker;
+                if (!markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(true);
+
+                if (CurrentBlockToDelete == null)
+                {                    
+                    markerDestroyer.position = gm.pointForMarker;
+                }
+                else
+                {
+                    markerDestroyer.position = CurrentBlockToDelete.gameObject.transform.position;
+                }
             }
             
         }
@@ -114,6 +123,7 @@ public class BlockManager : MonoBehaviour
 
         //marker.gameObject.SetActive(true);
         //markerDestroer.gameObject.SetActive(false);
+        if (markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(false);
 
         getNewBlock(currentID);
     }
@@ -133,6 +143,8 @@ public class BlockManager : MonoBehaviour
             Destroy(CurrentActiveBlock.gameObject);
             CurrentActiveBlock = null;
         }
+
+        if (markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(false);
 
         IsBuildingBlocks = false;
         IsDestroingBlocks = false;

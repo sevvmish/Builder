@@ -119,16 +119,7 @@ public class InputControl : MonoBehaviour
                             blockManager.CurrentBlockToDelete = b;
                             b.MakeColorBadForDelete(true);
                         }
-                    }
-                    /*
-                    else
-                    {
-                        if (blockManager.CurrentBlockToDelete != null)
-                        {
-                            blockManager.CurrentBlockToDelete.MakeColorBadForDelete(false);
-                            blockManager.CurrentBlockToDelete = null;
-                        }
-                    }*/
+                    }                    
                 }
                 else
                 {
@@ -136,6 +127,11 @@ public class InputControl : MonoBehaviour
                     {
                         blockManager.CurrentBlockToDelete.MakeColorBadForDelete(false);
                         blockManager.CurrentBlockToDelete = null;
+                    }
+
+                    if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore))
+                    {
+                        markerPosition = hit.point;
                     }
                 }
             

@@ -30,7 +30,7 @@ public class MainMenuUI : MonoBehaviour
             Globals.CurrentLanguage = YandexGame.EnvironmentData.language;
             print("language set to: " + Globals.CurrentLanguage);
 
-            Globals.IsMobile = YandexGame.EnvironmentData.isMobile;
+            Globals.IsMobile = true;//YandexGame.EnvironmentData.isMobile;
             print("platform mobile: " + Globals.IsMobile);
 
             if (Globals.MainPlayerData.S == 1)

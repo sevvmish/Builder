@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [Header("Main buttons")]
     [SerializeField] private Button buildCurrentBlockButton;
     [SerializeField] private Button deleteCurrentBlockButton;
+    [SerializeField] private Button cancelLastBlockButton;
     [SerializeField] private Button rotateCurrentBlockButton;
     [SerializeField] private Button startDestroingBlockButton;
     [SerializeField] private Button startBuildingBlockButton;
@@ -53,6 +54,7 @@ public class UIManager : MonoBehaviour
         startDestroingBlockButton.onClick.AddListener(() => 
         {
             blockManager.StartDestroying();
+            cancelLastBlockButton.gameObject.SetActive(false);
             deleteCurrentBlockButton.gameObject.SetActive(true);
             buildCurrentBlockButton.gameObject.SetActive(false);
             startDestroingBlockButton.gameObject.SetActive(false);
@@ -68,6 +70,7 @@ public class UIManager : MonoBehaviour
         callBlocksButton.onClick.AddListener(() =>
         {
             ShowBlocksPanel();
+            cancelLastBlockButton.gameObject.SetActive(false);
             buildCurrentBlockButton.gameObject.SetActive(false);
             deleteCurrentBlockButton.gameObject.SetActive(false);
             startBuildingBlockButton.gameObject.SetActive(false);
@@ -81,11 +84,18 @@ public class UIManager : MonoBehaviour
 
             startbuildingPrefs();
         });
+
+        cancelLastBlockButton.onClick.AddListener(() =>
+        {
+            sounds.PlayUISound(SoundsUI.click);            
+            blockManager.CancelLastBlock();
+        });
     }
 
     private void startbuildingPrefs()
     {
         blockManager.StartBuilding();
+        cancelLastBlockButton.gameObject.SetActive(true);
         buildCurrentBlockButton.gameObject.SetActive(true);
         deleteCurrentBlockButton.gameObject.SetActive(false);
         startBuildingBlockButton.gameObject.SetActive(false);

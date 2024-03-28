@@ -21,9 +21,9 @@ public class AssetManager : MonoBehaviour
     private GameObject marker;
     public Transform GetMarker => marker.transform;
     //=
-    [SerializeField] private GameObject markerDestroerExample;
-    private GameObject markerDestroer;
-    public Transform GetMarkerDestroer => markerDestroer.transform;
+    [SerializeField] private GameObject markerDestroyerExample;
+    private GameObject markerDestroyer;
+    public Transform GetMarkerDestroyer => markerDestroyer.transform;
 
     private void Awake()
     {
@@ -33,8 +33,8 @@ public class AssetManager : MonoBehaviour
         marker = Instantiate(markerExample);
         marker.SetActive(false);
 
-        markerDestroer = Instantiate(markerDestroerExample);
-        markerDestroer.SetActive(false);
+        markerDestroyer = Instantiate(markerDestroyerExample);
+        markerDestroyer.SetActive(false);
     }
 
     public int[] GetArrayOfFloorsIds => floorsIDs.ToArray();
