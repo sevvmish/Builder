@@ -1,2 +1,2 @@
-Build path: D:/NONandroid/Builder/profiling
-Build number: 31
+Build path: D:/NONandroid/Builder/test_build
+Build number: 34

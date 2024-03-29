@@ -64,21 +64,28 @@ public class GameManager : MonoBehaviour
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
                
         /*
-        //TODEL
-        Globals.MainPlayerData = new PlayerData();
-        Globals.MainPlayerData.Zoom = 0;
+        //TODEL======================
+        Globals.MainPlayerData = new PlayerData();        
         Globals.IsInitiated = true;
-        Globals.IsMobile = true;
+        Globals.IsMobile = false;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
         Globals.MainRandom = new System.Random(Globals.MainPlayerData.Seed);
-        */
+        if (Globals.IsMobile)
+        {
+            Globals.MainPlayerData.Zoom = 45;
+        }
+        else
+        {
+            Globals.MainPlayerData.Zoom = 55;
+        }*/
+        //===========================
 
         if (Globals.IsMobile)
         {
             QualitySettings.antiAliasing = 2;
-            QualitySettings.shadows = ShadowQuality.Disable;//ShadowQuality.HardOnly;
+            QualitySettings.shadows = ShadowQuality.HardOnly;
             QualitySettings.shadowResolution = ShadowResolution.Medium;
         }
         else
@@ -127,11 +134,6 @@ public class GameManager : MonoBehaviour
         if (cameraShakeCooldown > 0) cameraShakeCooldown -= Time.deltaTime;
               
 
-        /*
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            AddPlayerFinished(MainPlayerControl);
-        }*/        
     }
 
 

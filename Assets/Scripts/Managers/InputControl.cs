@@ -74,22 +74,7 @@ public class InputControl : MonoBehaviour
             forPC();
         }
         
-        
-        /*
-        if (Input.GetMouseButton(0) && gm.PointerClickedCount <= 0)
-        {            
-            ray = _camera.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit, cameraRayCast))
-            {
-                if (hit.collider != null)
-                {
-                    //gm.Texter.text = hit.collider.name + "\n" + Input.mousePosition;
-                    //gm.Marker.position = hit.point;
-                }
-            }
-        }*/
-
+       
         if (gm.IsBuildMode)
         {
             if (blockManager.IsBuildingBlocks)
@@ -136,61 +121,6 @@ public class InputControl : MonoBehaviour
                 }
             
 
-                /*
-
-                if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore))
-            {                
-                if (blockManager.IsBuildingBlocks)
-                {
-                    markerPosition = hit.point;
-                }
-                else if (blockManager.IsDestroingBlocks)
-                {                    
-                    if (hit.collider.TryGetComponent(out Block b) && b.IsFinalized)
-                    {                        
-
-                        if (blockManager.CurrentBlockToDelete != null && blockManager.CurrentBlockToDelete.Equals(b))
-                        {
-                            //
-                        }
-                        else
-                        {
-                            if (blockManager.CurrentBlockToDelete != null)
-                            {
-                                blockManager.CurrentBlockToDelete.MakeColorBadForDelete(false);
-                            }
-
-                            blockManager.CurrentBlockToDelete = b;
-                            b.MakeColorBadForDelete(true);
-                        }
-                    }
-                    else
-                    {
-                        if (blockManager.CurrentBlockToDelete != null)
-                        {
-                            blockManager.CurrentBlockToDelete.MakeColorBadForDelete(false);
-                            blockManager.CurrentBlockToDelete = null;
-                        }
-                    }                                        
-                }
-                */
-                
-
-                /*
-                Vector3 hitP = hit.point;
-                float distance = (hitP - playerTransform.position).magnitude;
-                float distanceLimit = 5f;
-
-                if (distance <= distanceLimit)
-                {
-                    marker = new Vector3(hitP.x, playerTransform.position.y, hitP.z);
-                }
-                else
-                {
-                    Vector3 newp = playerTransform.position + playerTransform.forward * distanceLimit;
-                    marker = new Vector3(newp.x, playerTransform.position.y + 1f, newp.z);
-                }
-                */
             }            
         }
         
@@ -251,7 +181,7 @@ public class InputControl : MonoBehaviour
     {        
         if (Input.mouseScrollDelta.magnitude > 0)
         {            
-            cameraControl.ChangeZoom(Input.mouseScrollDelta.y, true);
+            cameraControl.ChangeZoom(Input.mouseScrollDelta.y);
         }
 
         

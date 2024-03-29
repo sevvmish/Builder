@@ -54,7 +54,6 @@ public class PlayerControl : MonoBehaviour
     private CapsuleCollider mainCollider;
     private Transform _transform;
     private GameManager gm;
-    private CameraControl cc;
 
     private float jumpCooldown;
     private float howLongNonGrounded;
@@ -69,7 +68,6 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         gm = GameManager.Instance;
-        cc = GameManager.Instance.GetCameraControl();
         playerLocation = gm.GetPlayersLocation();
 
         ignoreMask = LayerMask.GetMask(new string[] { "trigger", "player"});
@@ -408,51 +406,6 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.gameObject.layer == 10)
-        {
-            isGroundConnected = true;
-        }
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if (!isGroundConnected && collision.collider.gameObject.layer == 10)
-        {
-            isGroundConnected = true;
-        }
-    }
-
-    
-    private void OnCollisionExit(Collision collision)
-    {        
-        if (collision.collider.gameObject.layer == 10)
-        {
-            isGroundConnected = false;
-        }
-    }
-    */
-
-    public void SetPlayerDirection(float y)
-    {
-       
-            cc.ResetCameraOnRespawn(new Vector3(0, y, 0));
-            angleYForMobile = y;
-        
-    }
-
-    public void FirstRespawn(Vector3 pos, Vector3 rot)
-    {
-        _transform.position = pos;
-        _transform.eulerAngles = new Vector3(0, rot.y, 0);
-
-        
-            cc.ResetCameraOnRespawn(new Vector3(0, rot.y, 0));
-            angleYForMobile = rot.y;
-        
-    }
 
     public void Respawn(Vector3 pos, Vector3 rot)
     {
@@ -476,14 +429,9 @@ public class PlayerControl : MonoBehaviour
         IsCanWalk = true;
 
         _rigidbody.velocity = Vector3.zero;
-        //_animator.StopPlayback();
-        
-            cc.ResetCameraOnRespawn(new Vector3(0, rot.y, 0));
-            //angleYForMobile = 0;
-
+      
             angleYForMobile = rot.y;
-        
-
+      
         _transform.position = pos;
         _transform.eulerAngles = new Vector3(0, rot.y, 0);
         

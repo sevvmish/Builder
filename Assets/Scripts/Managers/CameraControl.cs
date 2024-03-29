@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +14,9 @@ public class CameraControl : MonoBehaviour
     private Transform mainCamera;
     private Transform mainCamTransformForRaycast;
     private Transform outerCamera;
+    private Camera _camera;
     private Vector3 outerCameraShiftVector = Vector3.zero;
+    private Vector3 baseCameraBodyPosition = Vector3.zero;
 
     private float currentZoom;
     private float zoomTimer;
@@ -27,7 +30,9 @@ public class CameraControl : MonoBehaviour
     private RaycastHit hit;
 
     private float xLimitUp = 40;
-    private float xLimitDown = 300;
+    private float xLimitDown = 270;
+
+    private bool isCameraIn;
 
 
     private Dictionary<MeshRenderer, Material> changedMeshRenderers = new Dictionary<MeshRenderer, Material>();
@@ -38,21 +43,24 @@ public class CameraControl : MonoBehaviour
     private GameManager gm;
 
     private float defaultCameraDistance;
+    private float currentCameraDistance;
     private WaitForSeconds fixedDelta = new WaitForSeconds(0.02f);
 
     private bool isBuildRegimeCorrected;
     private bool isNonBuildRegimeCorrected;
 
-    public void SetData(Transform player, Transform _camera, Transform mainCamTransform)
+    public void SetData(Transform player, Transform cam, Transform mainCamTransform)
     {
         gm = GameManager.Instance;
         mainCamTransformForRaycast = mainCamTransform;
+        _camera = mainCamTransform.GetComponent<Camera>();
         mainPlayer = player;
         playerControl = mainPlayer.GetComponent<PlayerControl>();
-        mainCamera = _camera;
+        mainCamera = cam;
         outerCamera = mainCamera.parent;
         mainCamera.localPosition = Globals.BasePosition;
         mainCamera.localEulerAngles = Globals.BaseRotation;
+        baseCameraBodyPosition = Globals.BasePosition;
 
         ignoreMask = LayerMask.GetMask(new string[] { "trigger", "player", "ragdoll", "danger" });
 
@@ -60,7 +68,6 @@ public class CameraControl : MonoBehaviour
         Zoom(Globals.MainPlayerData.Zoom);
 
         outerCamera.eulerAngles += new Vector3(-25, 0, 0);
-
         defaultCameraDistance = (mainPlayerPoint - mainCamTransformForRaycast.position).magnitude;
     }
 
@@ -77,50 +84,41 @@ public class CameraControl : MonoBehaviour
         isUpdate = true;
     }
 
-    public void ChangeZoom(float koeff, bool isSaving)
+    public void ChangeZoom(float koeff)
     {
-        if (koeff > 0 && Globals.MainPlayerData.Zoom < Globals.ZOOM_LIMIT)
+        if (koeff < 0 && Globals.MainPlayerData.Zoom <= Globals.ZOOM_LIMIT_HIGH)
         {
-            float add = Globals.ZOOM_DELTA;
-            mainCamera.position += mainCamera.forward * add;
-            Globals.MainPlayerData.Zoom += add;
-
+            Globals.MainPlayerData.Zoom += Globals.ZOOM_DELTA;
         }
-        else if (koeff < 0 && Globals.MainPlayerData.Zoom > -Globals.ZOOM_LIMIT)
+        else if (koeff > 0 && Globals.MainPlayerData.Zoom > -Globals.ZOOM_LIMIT_LOW)
         {
-            float add = -Globals.ZOOM_DELTA;
-            mainCamera.position += mainCamera.forward * add;
-            Globals.MainPlayerData.Zoom += add;
+            Globals.MainPlayerData.Zoom -= Globals.ZOOM_DELTA;
         }
 
-        if (isSaving)
-        {
-            defaultCameraDistance = (mainPlayerPoint - mainCamTransformForRaycast.position).magnitude;
-        }
-
-        checkCorrectZoom(isSaving);
+        checkCorrectZoom();
     }
 
-    private void checkCorrectZoom(bool isSaving)
+    private void checkCorrectZoom()
     {
-        if (Globals.MainPlayerData.Zoom > Globals.ZOOM_LIMIT)
+        if (Globals.MainPlayerData.Zoom > Globals.ZOOM_LIMIT_HIGH)
         {
-            Globals.MainPlayerData.Zoom = Globals.ZOOM_LIMIT;
-            if (isSaving) defaultCameraDistance = (mainPlayerPoint - mainCamTransformForRaycast.position).magnitude;
+            Globals.MainPlayerData.Zoom = Globals.ZOOM_LIMIT_HIGH;
             Zoom(Globals.MainPlayerData.Zoom);
         }
-        else if (Globals.MainPlayerData.Zoom < -Globals.ZOOM_LIMIT)
+        else if (Globals.MainPlayerData.Zoom < Globals.ZOOM_LIMIT_LOW)
         {
-            Globals.MainPlayerData.Zoom = -Globals.ZOOM_LIMIT;
-            if (isSaving) defaultCameraDistance = (mainPlayerPoint - mainCamTransformForRaycast.position).magnitude;
+            Globals.MainPlayerData.Zoom = Globals.ZOOM_LIMIT_LOW;
+            Zoom(Globals.MainPlayerData.Zoom);
+        }
+        else
+        {
             Zoom(Globals.MainPlayerData.Zoom);
         }
     }
 
     public void Zoom(float koeff)
     {
-        mainCamera.localPosition = Globals.BasePosition;
-        mainCamera.position += mainCamera.forward * koeff;
+        _camera.fieldOfView = koeff;
     }
 
     public void RotateCameraOnVector(Vector3 vec, float _time)
@@ -157,15 +155,48 @@ public class CameraControl : MonoBehaviour
 
     }
 
+    private void changeCurrentCameraDistance(float val)        
+    {
+        currentCameraDistance += val;
+        if (currentCameraDistance > 0.9f)
+        {
+            currentCameraDistance = 1;
+        }
+        else if (currentCameraDistance < 0)
+        {
+            currentCameraDistance = 0;
+        }
+
+        mainCamera.localPosition = Vector3.Lerp(baseCameraBodyPosition, new Vector3(0, 1f, 0.7f), currentCameraDistance);
+    }
+
+    private void setCurrentCameraDistance(float val)
+    {
+        currentCameraDistance = val;
+        if (currentCameraDistance > 1)
+        {
+            currentCameraDistance = 1;
+        }
+        else if (currentCameraDistance <= 0.1f)
+        {
+            currentCameraDistance = 0;
+        }
+
+        Vector3 newVector = Vector3.Lerp(new Vector3(0, 1f, 0.7f), baseCameraBodyPosition, currentCameraDistance);
+        mainCamera.DOLocalMove(newVector, 0.15f).SetEase(Ease.Linear);
+    }
+
     // Update is called once per frame
     void Update()
     {   
+        
         if (gm.IsBuildMode && !isBuildRegimeCorrected)
         {
             isBuildRegimeCorrected = true;
             isNonBuildRegimeCorrected = false;
 
             mainCamera.localPosition = Globals.BasePosition + new Vector3(1,0,0);
+            baseCameraBodyPosition = Globals.BasePosition + new Vector3(1, 0, 0);
 
         }
         else if (!gm.IsBuildMode && !isNonBuildRegimeCorrected)
@@ -174,10 +205,11 @@ public class CameraControl : MonoBehaviour
             isNonBuildRegimeCorrected = true;
 
             mainCamera.localPosition = Globals.BasePosition;
+            baseCameraBodyPosition = Globals.BasePosition;
         }
         
 
-        if (zoomTimer > 30)
+        if (zoomTimer > 10)
         {
             zoomTimer = 0;
 
@@ -199,11 +231,26 @@ public class CameraControl : MonoBehaviour
 
         if (!isUpdate || !gm.IsGameStarted) return;
 
-        if (_timer > _timerCooldown)
+        if (Input.GetKeyDown(KeyCode.T))
         {
-            //oldSystem();
+            changeCurrentCameraDistance(0.075f);
+            print(currentCameraDistance);
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            changeCurrentCameraDistance(-0.075f);
+            print(currentCameraDistance);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        
+        if (_timer > _timerCooldown)
+        {            
             _timer = 0;
-            _timerCooldown = 0.2f;
+            _timerCooldown = 0.15f;
             newSystem();
         }
         else
@@ -212,26 +259,30 @@ public class CameraControl : MonoBehaviour
         }
     }
 
-    private Vector3 mainPlayerPoint => mainPlayer.position + Vector3.up * 0.5f;
+    private Vector3 mainPlayerPoint => mainPlayer.position + Vector3.up * 1.2f;
+
 
     private void newSystem()
     {
         if (isZooming) return;
 
         Vector3 playerPoint = mainPlayerPoint;
-        
 
-        if (Physics.Raycast(playerPoint, (mainCamTransformForRaycast.position - playerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask))
-        {            
-            StartCoroutine(playZoom(1));
+        if (Physics.Raycast(playerPoint, (mainCamTransformForRaycast.position - playerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask, QueryTriggerInteraction.Ignore))
+        {
+            float distToBarrier = (playerPoint - hit.point).magnitude;
+
+            if (distToBarrier < defaultCameraDistance * 0.9f) distToBarrier *= 0.9f;
+
+            float distKoeff = distToBarrier / defaultCameraDistance;
+
+            if ((currentCameraDistance <= 0.1f && distKoeff <= 0.1f) || (currentCameraDistance - distKoeff) < -0.1f) return;
+            
+            setCurrentCameraDistance(distKoeff);            
         }
         else
         {
-            float currentDistance = (playerPoint - mainCamTransformForRaycast.position).magnitude;
-            if ((defaultCameraDistance - currentDistance) > 0.5f)
-            {
-                StartCoroutine(playZoom(-1));
-            }
+            if (currentCameraDistance < 1) setCurrentCameraDistance(1);
         }
 
     }
@@ -239,14 +290,14 @@ public class CameraControl : MonoBehaviour
     {
         isZooming = true;
 
-        for (int i = 0; i < 100; i++)
-        {
-            ChangeZoom(koeff, false);
+        for (int i = 0; i < 200; i++)
+        {            
+            ChangeZoom(koeff);
             yield return fixedDelta;
 
             if (koeff > 0)
             {
-                if (Physics.Raycast(mainPlayerPoint, (mainCamTransformForRaycast.position - mainPlayerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask))
+                if (Physics.Raycast(mainPlayerPoint, (mainCamTransformForRaycast.position - mainPlayerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask, QueryTriggerInteraction.Ignore))
                 {
                     //
                 }
@@ -263,12 +314,11 @@ public class CameraControl : MonoBehaviour
                     break;
                 }
 
-                if (Physics.Raycast(mainPlayerPoint, (mainCamTransformForRaycast.position - mainPlayerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask))
+                if (Physics.Raycast(mainPlayerPoint, (mainCamTransformForRaycast.position - mainPlayerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask, QueryTriggerInteraction.Ignore))
                 {
                     break;
                 }                
             }
-            
         }
 
         isZooming = false;

@@ -30,7 +30,8 @@ public class MainMenuUI : MonoBehaviour
             Globals.CurrentLanguage = YandexGame.EnvironmentData.language;
             print("language set to: " + Globals.CurrentLanguage);
 
-            Globals.IsMobile = true;//YandexGame.EnvironmentData.isMobile;
+            Globals.IsMobile = YandexGame.EnvironmentData.isMobile;
+                        
             print("platform mobile: " + Globals.IsMobile);
 
             if (Globals.MainPlayerData.S == 1)
@@ -72,6 +73,21 @@ public class MainMenuUI : MonoBehaviour
 
     private void playWhenInitialized()
     {
+        if (!Globals.MainPlayerData.IsZoomCorrected)
+        {
+            if (Globals.IsMobile)
+            {
+                Globals.MainPlayerData.Zoom = 45;
+            }
+            else
+            {
+                Globals.MainPlayerData.Zoom = 55;
+            }
+            Globals.MainPlayerData.IsZoomCorrected = true;
+            SaveLoadManager.Save();
+        }
+        
+
         StartCoroutine(playStartLevel());
     }
     private IEnumerator playStartLevel()

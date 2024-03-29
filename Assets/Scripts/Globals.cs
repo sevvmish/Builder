@@ -54,8 +54,9 @@ public class Globals : MonoBehaviour
     public const int LAYER_DANGER = 7;
     public const int LAYER_PLAYER = 9;
 
-    public const float ZOOM_DELTA = 1f;//0.3f;
-    public const float ZOOM_LIMIT = 8f;
+    public const float ZOOM_DELTA = 0.5f;//0.3f;
+    public const float ZOOM_LIMIT_LOW = 30f;
+    public const float ZOOM_LIMIT_HIGH = 70f;
 
     public const float SCREEN_SAVER_AWAIT = 1f;
 
