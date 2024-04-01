@@ -6,7 +6,14 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("Main buttons")]
+    [Header("Main buttons for interface")]
+    public GameObject JumpMain;
+    public GameObject JumpUP;
+    public GameObject JumpDOWN;
+    public GameObject Mover;
+    
+
+    [Header("Main buttons for building mode")]
     [SerializeField] private Button buildCurrentBlockButton;
     [SerializeField] private Button deleteCurrentBlockButton;
     [SerializeField] private Button cancelLastBlockButton;
@@ -24,7 +31,7 @@ public class UIManager : MonoBehaviour
     private AssetManager assets;
     [SerializeField] private BlockManager blockManager;
 
-    
+    private bool isSetupOnMode;
 
     // Start is called before the first frame update
     void Start()
@@ -90,6 +97,41 @@ public class UIManager : MonoBehaviour
             sounds.PlayUISound(SoundsUI.click);            
             blockManager.CancelLastBlock();
         });
+
+        isSetupOnMode = !gm.IsBuildMode;
+    }
+
+    private void Update()
+    {
+        if (gm.IsBuildMode != isSetupOnMode)
+        {
+            isSetupOnMode = gm.IsBuildMode;
+
+            if (Globals.IsMobile)
+            {
+                if (gm.IsBuildMode)
+                {
+                    JumpMain.SetActive(false);
+                    JumpUP.SetActive(true);
+                    JumpDOWN.SetActive(true);
+
+                }
+                else
+                {
+                    JumpMain.SetActive(true);
+                    JumpUP.SetActive(false);
+                    JumpDOWN.SetActive(false);
+                }
+            }
+            else
+            {
+                JumpMain.SetActive(false);
+                JumpUP.SetActive(false);
+                JumpDOWN.SetActive(false);
+            }
+            
+            
+        }
     }
 
     private void startbuildingPrefs()

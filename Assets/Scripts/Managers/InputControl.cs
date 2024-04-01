@@ -12,6 +12,8 @@ public class InputControl : MonoBehaviour
     private CameraControl cameraControl;
     private Transform playerTransform;
     private PointerDownOnly jump;
+    private PointerDownOnly jumpUp;
+    private PointerDownOnly jumpDown;
     private PointerMoveOnly mover;  
     private readonly float XLimit = 10;
     
@@ -49,12 +51,14 @@ public class InputControl : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;       
             Cursor.visible = false;
-            GameObject.Find("Screen mover").SetActive(false);
+            gm.GetUI.Mover.SetActive(false);
         }
         else
         {
-            jump = GameObject.Find("JumpButton").GetComponent<PointerDownOnly>();
-            mover = GameObject.Find("Screen mover").GetComponent<PointerMoveOnly>();            
+            jump = gm.GetUI.JumpMain.GetComponent<PointerDownOnly>();
+            jumpUp = gm.GetUI.JumpUP.GetComponent<PointerDownOnly>();
+            jumpDown = gm.GetUI.JumpDOWN.GetComponent<PointerDownOnly>();
+            mover = gm.GetUI.Mover.GetComponent<PointerMoveOnly>();            
         }
 
         mainPlayer = gm.GetMainPlayerTransform();
@@ -153,7 +157,17 @@ public class InputControl : MonoBehaviour
         {
             playerControl.SetJump();
         }
-        
+
+        if (jumpUp.IsPressed)
+        {
+            playerControl.SetJumpUP();
+        }
+
+        if (jumpDown.IsPressed)
+        {
+            playerControl.SetJumpDOWN();
+        }
+
         Vector2 delta2 = mover.DeltaPosition;
         Vector2 delta = delta2.normalized;
 

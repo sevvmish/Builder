@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
     //GAME START    
     public bool IsGameStarted { get; private set; }
     public bool IsBuildMode { get; private set; }
+    public bool IsCustomGame { get; private set; }
+    public bool IsWalkthroughGame { get; private set; }
 
     private Transform mainPlayer;    
     private float cameraShakeCooldown;
@@ -63,11 +65,11 @@ public class GameManager : MonoBehaviour
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
                
-        /*
+        
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
         Globals.IsInitiated = true;
-        Globals.IsMobile = false;
+        Globals.IsMobile = true;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
@@ -79,7 +81,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Globals.MainPlayerData.Zoom = 55;
-        }*/
+        }
         //===========================
 
         if (Globals.IsMobile)

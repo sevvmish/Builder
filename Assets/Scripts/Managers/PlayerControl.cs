@@ -18,15 +18,18 @@ public class PlayerControl : MonoBehaviour
     public void SetVertical(float ver) => vertical = ver;
     public void SetRotationAngle(float ang) => angleY = ang;
     public void SetJump() => isJump = true;
+    public void SetJumpUP() => isJumpUp = true;
+    public void SetJumpDOWN() => isJumpDown = true;
     public Rigidbody GetRigidbody => _rigidbody;
     public void SetForward(bool isOk) => isForward = isOk;
     private float horizontal;
     private float vertical;
     private float angleY;
     
-    private bool isJump;    
+    private bool isJump;
+    private bool isJumpUp;
+    private bool isJumpDown;
     private bool isForward;
-    private bool isGroundConnected;
 
 
     //SPEED
@@ -223,14 +226,75 @@ public class PlayerControl : MonoBehaviour
         }
 
         if (isJump) makeJump();
+        if (isJumpUp) makeJumpUp();
+        if (isJumpDown) makeJumpDown();
     }
 
-    
+    private void makeJumpUp()
+    {
+        isJumpUp = false;
+        if (!IsCanAct) return;
+
+        if (gm.IsBuildMode)
+        {
+            if (jumpCooldown <= 0)
+            {
+                _rigidbody.velocity = Vector3.zero;
+                effectsControl.MakeJumpFX();
+                animationControl.JumpStart();
+
+                _transform.position += Vector3.up * 1.5f;
+                IsJumping = true;
+                //jumpCooldown = 0.2f;
+            }
+            return;
+        }
+    }
+
+    private void makeJumpDown()
+    {
+        isJumpDown = false;
+
+        if (IsGrounded) return;
+
+        if (!IsCanAct) return;
+
+        if (gm.IsBuildMode)
+        {
+            if (jumpCooldown <= 0)
+            {
+                _rigidbody.velocity = Vector3.zero;
+                effectsControl.MakeJumpFX();
+                animationControl.JumpStart();
+
+                _transform.position += Vector3.down * 1.5f;
+                IsJumping = true;
+                //jumpCooldown = 0.2f;
+            }
+            return;
+        }
+    }
+
     private void makeJump()
     {        
         isJump = false;
         if (!IsCanAct) return;
         
+        if (gm.IsBuildMode)
+        {
+            if (jumpCooldown <= 0)
+            {                
+                _rigidbody.velocity = Vector3.zero;
+                effectsControl.MakeJumpFX();
+                animationControl.JumpStart();
+                                
+                _transform.position += Vector3.up * 2;
+                IsJumping = true;
+                jumpCooldown = 0.2f;
+            }
+            return;
+        }
+
         if (IsGrounded && jumpCooldown <= 0 && !IsJumping && IsCanJump)
         {
             float addKoef = 1;
@@ -239,7 +303,7 @@ public class PlayerControl : MonoBehaviour
             effectsControl.MakeJumpFX();
             animationControl.JumpStart();
 
-            _rigidbody.AddRelativeForce(Vector3.up * Globals.JUMP_POWER * addKoef, ForceMode.Impulse);
+            _rigidbody.AddRelativeForce(Vector3.up * Globals.JUMP_POWER * addKoef, ForceMode.Impulse);            
             IsJumping = true;
             jumpCooldown = 0.2f;
         }
@@ -248,17 +312,6 @@ public class PlayerControl : MonoBehaviour
     private bool checkGround()
     {
         bool result = Physics.CheckBox(_transform.position + Vector3.down * 0f, new Vector3(0.25f, 0.05f, 0.25f), _transform.rotation, ~ignoreMask, QueryTriggerInteraction.Ignore);
-
-        /*
-        bool result = IsGrounded;
-        
-        result = isGroundConnected;
-
-        if (!result)
-        {
-            result = Physics.CheckBox(_transform.position + Vector3.down * 0.2f, new Vector3(0.25f, 0.05f, 0.25f), _transform.rotation, 3, QueryTriggerInteraction.Ignore);
-        }
-        */
 
         if (!IsGrounded && result)
         {
@@ -357,7 +410,7 @@ public class PlayerControl : MonoBehaviour
 
                 koeff = koeff > 0 ? koeff : 0;
 
-                _rigidbody.velocity += _transform.forward * koeff;
+                _rigidbody.velocity += (_transform.forward) * koeff;
 
             }
 
@@ -382,8 +435,14 @@ public class PlayerControl : MonoBehaviour
 
     private void GravityScale(Rigidbody r)
     {
+        if (gm.IsBuildMode)
+        {
+            r.useGravity = false;
+            return;
+        }       
+
+
         float fallingKoeff = 1;
-        //if (r.drag != 2) r.drag = 2;
 
         if (r.velocity.y >= 0)
         {
@@ -403,7 +462,8 @@ public class PlayerControl : MonoBehaviour
                 r.AddRelativeForce(Vector3.forward * 20, ForceMode.Force);
                 r.AddForce(Physics.gravity * r.mass * Globals.GRAVITY_KOEFF * 0.1f);
             }            
-        }
+        }                
+        
     }
 
 
