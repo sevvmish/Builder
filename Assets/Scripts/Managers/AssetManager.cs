@@ -10,12 +10,14 @@ public class AssetManager : MonoBehaviour
 
     [SerializeField] private Transform floorsLocation;
     [SerializeField] private Transform wallsLocation;
-    
+    [SerializeField] private Transform roofsLocation;
+
     private Dictionary<int, GameObject> linkIDtoAsset = new Dictionary<int, GameObject>();
 
     //TYPES
     private List<int> floorsIDs = new List<int>();
     private List<int> wallsIDs = new List<int>();
+    private List<int> roofsIDs = new List<int>();
     //=
     [SerializeField] private GameObject markerExample;
     private GameObject marker;
@@ -29,6 +31,7 @@ public class AssetManager : MonoBehaviour
     {
         initAssetsLink(floorsLocation);
         initAssetsLink(wallsLocation);
+        initAssetsLink(roofsLocation);
 
         marker = Instantiate(markerExample);
         marker.SetActive(false);
@@ -39,6 +42,7 @@ public class AssetManager : MonoBehaviour
 
     public int[] GetArrayOfFloorsIds => floorsIDs.ToArray();
     public int[] GetArrayOfWallsIds => wallsIDs.ToArray();
+    public int[] GetArrayOfRoofsIds => roofsIDs.ToArray();
 
     public GameObject GetGameObjectByID(int ID)
     {
@@ -74,6 +78,10 @@ public class AssetManager : MonoBehaviour
 
                     case BlockTypes.wall:
                         wallsIDs.Add(id);
+                        break;
+
+                    case BlockTypes.roof:
+                        roofsIDs.Add(id);
                         break;
                 }
             }

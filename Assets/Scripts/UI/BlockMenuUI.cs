@@ -14,11 +14,13 @@ public class BlockMenuUI : MonoBehaviour
 
     [SerializeField] private Button floorsFilterButton;
     [SerializeField] private Button wallsFilterButton;
+    [SerializeField] private Button roofsFilterButton;
 
     private BlockTypes defaultStartBlock = BlockTypes.floor;
     
     private List<GameObject> floors = new List<GameObject>();
     private List<GameObject> walls = new List<GameObject>();
+    private List<GameObject> roofs = new List<GameObject>();
 
     private SoundUI sounds;
     private GameManager gm;
@@ -56,14 +58,24 @@ public class BlockMenuUI : MonoBehaviour
             filterBlocksPanel();
         });
 
-        
+        roofsFilterButton.onClick.AddListener(() =>
+        {
+            if (defaultStartBlock == BlockTypes.roof) return;
+
+            sounds.PlayUISound(SoundsUI.click);
+            defaultStartBlock = BlockTypes.roof;
+            filterBlocksPanel();
+        });
+
+
     }
     
     private void createBlocksPanel()
     {
         create(assets.GetArrayOfFloorsIds, ref floors);
         create(assets.GetArrayOfWallsIds, ref walls);
-        
+        create(assets.GetArrayOfRoofsIds, ref roofs);
+
     }
     private void create(int[] sourceIDs, ref List<GameObject> sourceGameobjects)
     {        
@@ -82,6 +94,7 @@ public class BlockMenuUI : MonoBehaviour
     {
         floors.ForEach(p => p.SetActive(false));
         walls.ForEach(p => p.SetActive(false));
+        roofs.ForEach(p => p.SetActive(false));
     }
 
     public void ShowBlocksPanel()
@@ -119,6 +132,10 @@ public class BlockMenuUI : MonoBehaviour
 
             case BlockTypes.wall:
                 walls.ForEach(p => p.SetActive(true));
+                break;
+
+            case BlockTypes.roof:
+                roofs.ForEach(p => p.SetActive(true));
                 break;
         }
     }

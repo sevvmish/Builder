@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
         Globals.IsInitiated = true;
-        Globals.IsMobile = true;
+        Globals.IsMobile = false;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();

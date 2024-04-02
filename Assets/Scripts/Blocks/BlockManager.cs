@@ -249,6 +249,10 @@ public class BlockManager : MonoBehaviour
                 case BlockTypes.wall:
                     CurrentActiveBlock.SetPosition(gm.pointForMarker);
                     break;
+
+                case BlockTypes.roof:
+                    CurrentActiveBlock.SetPosition(gm.pointForMarker);
+                    break;
             }
         }
     }

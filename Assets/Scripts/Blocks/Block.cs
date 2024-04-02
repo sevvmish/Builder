@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Block : MonoBehaviour
@@ -13,6 +14,7 @@ public class Block : MonoBehaviour
     public bool IsFinalized => realView.activeSelf;
     public DeltaDimentions DeltaStep { get => deltaStep; }
     public float RotationAngle { get => rotationAngle; }
+    public Anchors Anchors { get => anchors; }
 
     [SerializeField] private BlockTypes blockType;
 
@@ -21,15 +23,19 @@ public class Block : MonoBehaviour
     [SerializeField] private GameObject prototypeViewGood;
     [SerializeField] private GameObject prototypeViewBad;
     [SerializeField] private GameObject buildVFX;
+    [SerializeField] private Vector3 sizeCheker = Vector3.one;
 
     [SerializeField] private DeltaDimentions deltaStep = DeltaDimentions.all_1;
     [SerializeField] private float rotationAngle = 90;
     [SerializeField] private bool isRotatable;
+    [SerializeField] private BoxCollider[] colliders;
 
     private Transform _transform;
     private GameManager gm;
     private BlockManager blockManager;
-    private Identificator id;
+    private Identificator id;    
+    private Anchors anchors;
+    private LayerMask anchorMask;
 
     private Vector3 lastMarkerPosition;
     
@@ -39,17 +45,33 @@ public class Block : MonoBehaviour
         gm = GameManager.Instance;
         blockManager = gm.BlockManager;
         id = GetComponent<Identificator>();
+        SetColliders(true);
+        anchors = GetComponent<Anchors>();
+        anchorMask = LayerMask.GetMask(new string[] { "anchor" });
+    }
+
+    private void SetColliders(bool isActive)
+    {
+        if (colliders.Length > 0)
+        {
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].enabled != isActive) colliders[i].enabled = isActive;
+            }
+        }
     }
 
     public void MakeColorGood()
     {        
         hideAll();
+        SetColliders(false);
         prototypeViewGood.SetActive(true);
     }
 
     public void MakeColorBad()
     {
         hideAll();
+        SetColliders(false);
         prototypeViewBad.SetActive(true);
     }
 
@@ -62,6 +84,7 @@ public class Block : MonoBehaviour
     {        
         hideAll();
         realView.SetActive(true);
+        SetColliders(true);
     }
 
     public bool Rotate(ref Vector3 endRotationVector)
@@ -91,7 +114,7 @@ public class Block : MonoBehaviour
 
         assessRightPositionVector(markerPoint);
 
-        switch(BlockType)
+        switch (BlockType)
         {
             case BlockTypes.floor:
                 assessBlockStatusFloor();
@@ -100,21 +123,61 @@ public class Block : MonoBehaviour
             case BlockTypes.wall:
                 assessBlockStatusWall();
                 break;
+
+            case BlockTypes.roof:
+                assessBlockStatusRoof();
+                break;
         }
 
         lastMarkerPosition = markerPoint;
     }
 
+    private void chechAnchors()
+    {        
+        float minDist = 1000;
+        Transform anotherAnchor = default;
+        Transform myAnchor = default;
+
+        for (int t = 0; t < anchors.AnchorsPoints.Length; t++)
+        {
+            Collider[] colliders = Physics.OverlapSphere(anchors.AnchorsPoints[t].position, 2, anchorMask);
+
+            if (colliders.Length > 0)
+            {                
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (anchors.AnchorsPoints.Contains(colliders[i].transform)) continue;
+
+                    float distance = (anchors.AnchorsPoints[t].position - colliders[i].transform.position).magnitude;
+                    if (distance <= 1.5f && distance < minDist)
+                    {
+                        myAnchor = anchors.AnchorsPoints[t];
+                        minDist = distance;
+                        anotherAnchor = colliders[i].transform;
+                    }                    
+                }
+
+                if (anotherAnchor != null)
+                {
+                    _transform.position = anotherAnchor.position + (_transform.position - myAnchor.position);
+                }
+            }
+        }        
+    }
+
     private void assessBlockStatusFloor()
     {
+        //chechAnchors();
+
         Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
 
         bool isBad = false;
 
         if (colliders.Length > 0)
-        {
+        {            
             for (int i = 0; i < colliders.Length; i++)
-            {                
+            {
+                
                 if (colliders[i].gameObject.layer == 3)
                 {
                     isBad = true;
@@ -122,12 +185,30 @@ public class Block : MonoBehaviour
                     break;
                 }
 
-                if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && b.blockType == BlockTypes.floor)
-                {
-                    isBad = true;
-                    break;
-                }
+                if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) )
+                {                    
+                    if (b.blockType != BlockTypes.wall)
+                    {
+                        isBad = true;
+                        break;
+                    }
+                    else if (b.blockType == BlockTypes.floor && !b.Equals(this))
+                    {
+                        bool result = pushBlockToGoodPlace(b);
+
+                        if (result)
+                        {
+
+                        }
+                        else
+                        {
+                            isBad = true;
+                            break;
+                        }
+                    }
+                }                                
             }
+            
         }
         else
         {
@@ -140,11 +221,123 @@ public class Block : MonoBehaviour
         }
         else
         {
+            MakeColorGood();            
+        }
+    }
+        
+    private bool pushBlockToGoodPlace(Block b)
+    {
+        Vector3 initPos = _transform.position;
+                
+        if (Mathf.Abs(_transform.position.x - b.transform.position.x) > Mathf.Abs(_transform.position.z - b.transform.position.z))
+        {
+            int sign = (_transform.position.x - b.transform.position.x) > 0 ? 1 : -1;
+
+            for (int i = 0; i < 5; i++)
+            {
+                _transform.position += new Vector3(sign, 0, 0);
+
+                Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+
+                bool isIn = false;
+
+                for (int j = 0; j < colliders.Length; j++)
+                {
+                    if (colliders[j].gameObject.Equals(b.gameObject))
+                    {
+                        isIn = true;
+                        break;
+                    }
+                }
+
+                if (!isIn)
+                {                    
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            int sign = (_transform.position.z - b.transform.position.z) > 0 ? 1 : -1;
+
+            for (int i = 0; i < 5; i++)
+            {
+                _transform.position += new Vector3(0, 0, sign);
+
+                Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+
+                bool isIn = false;
+
+                for (int j = 0; j < colliders.Length; j++)
+                {
+                    if (colliders[j].gameObject.Equals(b.gameObject))
+                    {
+                        isIn = true;
+                        break;
+                    }
+                }
+
+                if (!isIn)
+                {                    
+                    return true;
+                }
+            }
+        }
+
+        _transform.position = initPos;
+        return false;
+    }
+
+    private void assessBlockStatusWall()
+    {
+        Collider[] colliders = Physics.OverlapBox(_transform.position + Vector3.up*2, getBoxForBlockCheck(), _transform.rotation);
+
+        bool isBad = false;
+
+        if (colliders.Length > 0)
+        {
+            for (int i = 0; i < colliders.Length; i++)
+            {
+
+                if (colliders[i].gameObject.layer == 3)
+                {
+                    isBad = true;
+                    gm.GetUI.PlayerCrossNewBlockError();
+                    break;
+                }
+
+                if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && b.blockType == BlockTypes.wall)
+                {
+                    bool result = pushBlockToGoodPlace(b);
+
+                    if (result)
+                    {
+
+                    }
+                    else
+                    {
+                        isBad = true;
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            isBad = false;
+        }
+
+        if (isBad)
+        {
+            MakeColorBad();
+        }
+        else
+        {
             MakeColorGood();
         }
     }
 
-    private void assessBlockStatusWall()
+    private void assessBlockStatusRoof()
     {
         Collider[] colliders = Physics.OverlapBox(_transform.position + Vector3.up, getBoxForBlockCheck(), _transform.rotation);
 
@@ -162,7 +355,7 @@ public class Block : MonoBehaviour
                     break;
                 }
 
-                if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && b.blockType == BlockTypes.wall)
+                if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && b.blockType == BlockTypes.roof)
                 {
                     isBad = true;
                     break;
@@ -222,18 +415,8 @@ public class Block : MonoBehaviour
     }
 
     private Vector3 getBoxForBlockCheck()
-    {
-        switch (BlockType)
-        {
-            case BlockTypes.floor:
-                return new Vector3(1.5f, 0.1f, 1.5f) / 2f;
-
-            case BlockTypes.wall:
-                return new Vector3(1.5f, 1.5f, 0.2f) / 2f;
-
-        }
-
-        return Vector3.zero;
+    {        
+        return sizeCheker / 2f;
     }
 
     private float getNearest05(float val)

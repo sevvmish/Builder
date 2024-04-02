@@ -84,7 +84,7 @@ public class InputControl : MonoBehaviour
             if (blockManager.IsBuildingBlocks)
             {
                 if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore))
-                {
+                {                    
                     markerPosition = hit.point;
                 }
             }
@@ -92,6 +92,8 @@ public class InputControl : MonoBehaviour
             {
                 if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask))
                 {
+                    print(hit.collider.gameObject.name);
+
                     if (hit.collider.TryGetComponent(out Block b) && b.IsFinalized)
                     {
                         if (blockManager.CurrentBlockToDelete != null && blockManager.CurrentBlockToDelete.Equals(b))
