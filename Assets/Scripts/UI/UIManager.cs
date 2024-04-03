@@ -42,7 +42,6 @@ public class UIManager : MonoBehaviour
         gm = GameManager.Instance;
         assets = gm.Assets;
 
-        rotateCurrentBlockButton.gameObject.SetActive(false);
         buildCurrentBlockButton.onClick.AddListener(()=> 
         {
             blockManager.BuildCurrentBlockCall();
@@ -145,6 +144,7 @@ public class UIManager : MonoBehaviour
             deleteCurrentBlockButton.gameObject.SetActive(false);
             startBuildingBlockButton.gameObject.SetActive(false);
             startDestroingBlockButton.gameObject.SetActive(true);
+            rotateCurrentBlockButton.gameObject.SetActive(true);
         }
         else
         {
@@ -154,6 +154,7 @@ public class UIManager : MonoBehaviour
             startBuildingBlockButton.gameObject.SetActive(false);
             startDestroingBlockButton.gameObject.SetActive(false);
             callBlocksButton.gameObject.SetActive(false);
+            rotateCurrentBlockButton.gameObject.SetActive(false);
         }        
     }
     
@@ -161,7 +162,7 @@ public class UIManager : MonoBehaviour
     {
         if (blockManager.CurrentActiveBlock != null && blockManager.CurrentActiveBlock.IsRotatable)
         {
-            rotateCurrentBlockButton.gameObject.SetActive(true);
+            if (Globals.IsMobile) rotateCurrentBlockButton.gameObject.SetActive(true);
         }
         else
         {
