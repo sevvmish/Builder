@@ -16,6 +16,9 @@ public class Block : MonoBehaviour
     public float RotationAngle { get => rotationAngle; }
     public Anchors Anchors { get => anchors; }
 
+    public BlockSizes BlockSize { get => blockSize; }
+    public MaterialTypes MaterialType { get => materialType; }
+
     [SerializeField] private BlockTypes blockType;
 
     [SerializeField] private Sprite blockIcon;
@@ -29,6 +32,9 @@ public class Block : MonoBehaviour
     [SerializeField] private float rotationAngle = 90;
     [SerializeField] private bool isRotatable;
     [SerializeField] private BoxCollider[] colliders;
+
+    [SerializeField] private BlockSizes blockSize;
+    [SerializeField] private MaterialTypes materialType;
 
     private Transform _transform;
     private GameManager gm;
@@ -127,9 +133,138 @@ public class Block : MonoBehaviour
             case BlockTypes.roof:
                 assessBlockStatusRoof();
                 break;
+
+            case BlockTypes.stair:
+                assessBlockStatusStair();
+                break;
+
+            case BlockTypes.fence:
+                assessBlockStatusFence();
+                break;
+
+            case BlockTypes.beam:
+                assessBlockStatusBeam();
+                break;
         }
 
         lastMarkerPosition = markerPoint;
+    }
+
+    private void assessBlockStatusBeam()
+    {
+        Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+
+        bool isBad = false;
+
+        if (colliders.Length > 0)
+        {
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].gameObject.layer == 3)
+                {
+                    isBad = true;
+                    gm.GetUI.PlayerCrossNewBlockError();
+                    break;
+                }
+                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && BlockType == b.blockType)
+                {
+                    isBad = true;
+                    break;
+                }
+            }
+
+        }
+        else
+        {
+            isBad = true;
+        }
+
+        if (isBad)
+        {
+            MakeColorBad();
+        }
+        else
+        {
+            MakeColorGood();
+        }
+    }
+
+    private void assessBlockStatusFence()
+    {
+        Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+
+        bool isBad = false;
+
+        if (colliders.Length > 0)
+        {
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].gameObject.layer == 3)
+                {
+                    isBad = true;
+                    gm.GetUI.PlayerCrossNewBlockError();
+                    break;
+                }
+                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && BlockType == b.blockType)
+                {
+                    isBad = true;
+                    break;
+                }
+            }
+
+        }
+        else
+        {
+            isBad = true;
+        }
+
+        if (isBad)
+        {
+            MakeColorBad();
+        }
+        else
+        {
+            MakeColorGood();
+        }
+    }
+
+    private void assessBlockStatusStair()
+    {
+        Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+
+        bool isBad = false;
+
+        if (colliders.Length > 0)
+        {
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].gameObject.layer == 3)
+                {
+                    isBad = true;
+                    gm.GetUI.PlayerCrossNewBlockError();
+                    break;
+                }
+                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && BlockType == b.blockType)
+                {
+                    isBad = true;
+                    break;
+                }
+            }
+
+        }
+        else
+        {
+            isBad = true;
+        }
+
+        if (isBad)
+        {
+            MakeColorBad();
+        }
+        else
+        {
+            MakeColorGood();
+        }
     }
 
     private void chechAnchors()
@@ -166,9 +301,7 @@ public class Block : MonoBehaviour
     }
 
     private void assessBlockStatusFloor()
-    {
-        //chechAnchors();
-
+    {        
         Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
 
         bool isBad = false;
@@ -186,18 +319,7 @@ public class Block : MonoBehaviour
                 else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) )
                 {                    
                     if (b.blockType == BlockTypes.wall)
-                    {
-                        /*
-                        if (Mathf.Abs(_transform.position.y - b.transform.position.y) < Mathf.Abs(_transform.position.y - b.transform.position.y * 4))
-                        {
-                            _transform.position = new Vector3(_transform.position.x, b.transform.position.y, _transform.position.z);
-                        }
-                        else
-                        {
-                            _transform.position = new Vector3(_transform.position.x, b.transform.position.y * 4, _transform.position.z);
-                        }
-                        */
-
+                    {                        
                         Vector3 dir = Vector3.zero;
                         int sign = 0;
 
@@ -218,7 +340,13 @@ public class Block : MonoBehaviour
                         if (result)
                         {
                             colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
-                            if (colliders.Length == 0) break;
+                            
+                            if (colliders.Length == 0)
+                            {
+                                isBad = false;
+                                break;
+                            }
+                                
                         }
                         else
                         {
@@ -336,9 +464,92 @@ public class Block : MonoBehaviour
                 }
 
                 if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && b.blockType == BlockTypes.wall)
-                {                    
-                    isBad = true;
-                    break;
+                {
+                    Vector3 dir = Vector3.zero;
+                    int sign = 0;
+                                        
+
+                    if (b.transform.eulerAngles.y == 0 || b.transform.eulerAngles.y == 180 || b.transform.eulerAngles.y == 360)
+                    {
+                        
+
+                        if (Mathf.Abs(_transform.position.y - b.transform.position.y) > Mathf.Abs(_transform.position.x - b.transform.position.x))
+                        {
+                            _transform.position = new Vector3(_transform.position.x, b.transform.position.y + 4, _transform.position.z);
+                            colliders = Physics.OverlapBox(_transform.position + Vector3.up*2, getBoxForBlockCheck(), _transform.rotation);
+                            if (!isCertainBlockTypeInArray(colliders, BlockTypes.wall))
+                            {
+                                isBad = false;
+                                break;
+                            }
+                            else
+                            {
+                                isBad = true;
+                                break;
+                            }
+                        }
+                        else if (_transform.position.x > b.transform.position.x)
+                        {
+                            dir = new Vector3(1, 0, 0);
+                            sign = 1;
+                        }
+                        else if (_transform.position.x <= b.transform.position.x)
+                        {
+                            dir = new Vector3(1, 0, 0);
+                            sign = -1;
+                        }
+                    }
+                    else
+                    {
+                        if (Mathf.Abs(_transform.position.y - b.transform.position.y) > Mathf.Abs(_transform.position.z - b.transform.position.z))
+                        {
+                            _transform.position = new Vector3(_transform.position.x, b.transform.position.y + 4, _transform.position.z);
+                            colliders = Physics.OverlapBox(_transform.position + Vector3.up*2, getBoxForBlockCheck(), _transform.rotation);
+                            if (!isCertainBlockTypeInArray(colliders, BlockTypes.wall))
+                            {
+                                isBad = false;
+                                break;
+                            }
+                            else
+                            {
+                                isBad = true;
+                                break;
+                            }
+
+                        }
+                        else if (_transform.position.z > b.transform.position.z)
+                        {
+                            dir = new Vector3(0, 0, 1);
+                            sign = 1;
+                        }
+                        else if (_transform.position.z <= b.transform.position.z)
+                        {
+                            dir = new Vector3(0, 0, 1);
+                            sign = -1;
+                        }
+                    }
+
+                    bool result = pushBlockToGoodPlace(b, dir, sign);
+
+                    if (result)
+                    {
+                        colliders = Physics.OverlapBox(_transform.position + Vector3.up*2, getBoxForBlockCheck(), _transform.rotation);
+                        if (!isCertainBlockTypeInArray(colliders, BlockTypes.wall))
+                        {
+                            isBad = false;
+                            break;
+                        }
+                        else
+                        {
+                            isBad = true;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        isBad = true;
+                        break;
+                    }
                 }
             }
         }
@@ -355,6 +566,26 @@ public class Block : MonoBehaviour
         {
             MakeColorGood();
         }
+    }
+
+    private bool isCertainBlockTypeInArray(Collider[] colliders, BlockTypes _type)
+    {
+        if (colliders.Length == 0)
+        {
+            return false;
+        }
+        else
+        {
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].TryGetComponent(out Block b) && b.BlockType == _type)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void assessBlockStatusRoof()
@@ -375,10 +606,108 @@ public class Block : MonoBehaviour
                     break;
                 }
 
-                if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && b.blockType == BlockTypes.roof)
+                if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this))
                 {
-                    isBad = true;
-                    break;
+                    if (b.blockType == BlockTypes.roof)
+                    {
+                        Vector3 dir = Vector3.zero;
+                        int sign = 0;
+
+                        if (b.transform.eulerAngles.y == 0 || b.transform.eulerAngles.y == 180 || b.transform.eulerAngles.y == 360)
+                        {
+                            dir = new Vector3(1, 0, 0);
+
+                            if (_transform.position.x > b.transform.position.x)
+                            {
+                                sign = 1;
+                            }
+                            else
+                            {
+                                sign = -1;
+                            }
+                        }
+                        else
+                        {
+                            dir = new Vector3(0, 0, 1);
+
+                            if (_transform.position.z > b.transform.position.z)
+                            {
+                                sign = 1;
+                            }
+                            else
+                            {
+                                sign = -1;
+                            }
+                        }
+
+                        bool result = pushBlockToGoodPlace(b, dir, sign);
+
+                        if (result)
+                        {
+                            colliders = Physics.OverlapBox(_transform.position + Vector3.up, getBoxForBlockCheck(), _transform.rotation);
+                            if (colliders.Length == 0)
+                            {
+                                isBad = false;
+                                break;
+                            }
+                            else
+                            {
+                                isBad = true;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            isBad = true;
+                            break;
+                        }
+
+                        /*
+                        if (Mathf.Abs(_transform.position.x - b.transform.position.x) > Mathf.Abs(_transform.position.z - b.transform.position.z))
+                        {
+                            dir = new Vector3(1, 0, 0);
+                            sign = (_transform.position.x - b.transform.position.x) > 0 ? 1 : -1;
+                        }
+                        else
+                        {
+                            dir = new Vector3(0, 0, 1);
+                            sign = (_transform.position.z - b.transform.position.z) > 0 ? 1 : -1;
+                        }
+
+
+                        bool result = pushBlockToGoodPlace(b, dir, sign);
+
+                        if (result)
+                        {
+
+                        }
+                        else
+                        {
+                            isBad = true;
+                            break;
+                        }*/
+                    }
+                    else if (b.blockType == BlockTypes.wall)
+                    {
+                        Vector3 shift = Vector3.zero;
+
+                        print(b.gameObject.name + " = ");
+                        
+                        _transform.position = new Vector3(_transform.position.x, b.transform.position.y + 4, _transform.position.z);
+                        colliders = Physics.OverlapBox(_transform.position + Vector3.up, getBoxForBlockCheck(), _transform.rotation);
+                        if (colliders.Length == 0)
+                        {
+                            isBad = false;
+                            break;
+                        }
+                        else
+                        {
+                            isBad = true;
+                            break;
+                        }
+                    }
+
+                    
                 }
             }
         }
@@ -508,5 +837,25 @@ public enum BlockTypes
     none,
     floor,
     wall,
-    roof
+    roof,
+    beam,
+    stair,
+    fence
 }
+
+public enum BlockSizes
+{    
+    small,
+    medium,
+    large
+}
+
+public enum MaterialTypes
+{
+    none,
+    wood,
+    stone,
+    concrete
+}
+
+

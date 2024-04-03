@@ -20,8 +20,8 @@ public class SoundUI : MonoBehaviour
     [SerializeField] private AudioClip Success2;
     [SerializeField] private AudioClip Success3;
     [SerializeField] private AudioClip Cash;
-    [SerializeField] private AudioClip BuildBlock;
-    [SerializeField] private AudioClip DestroyBlock;
+    [SerializeField] private AudioClip WoodBuild;
+    [SerializeField] private AudioClip WoodDestroy;
 
     // Start is called before the first frame update
     void Awake()
@@ -36,6 +36,44 @@ public class SoundUI : MonoBehaviour
         }
 
         _audio = GetComponent<AudioSource>();
+    }
+
+    public void PlayBuild(Block b)
+    {
+        switch(b.MaterialType)
+        {
+            case MaterialTypes.wood:
+                _audio.clip = WoodBuild;
+                break;
+
+            default:
+                _audio.clip = WoodBuild;
+                break;
+        }
+
+        _audio.Stop();
+        _audio.pitch = 1;
+
+        _audio.Play();
+    }
+
+    public void PlayDestroy(Block b)
+    {
+        switch (b.MaterialType)
+        {
+            case MaterialTypes.wood:
+                _audio.clip = WoodDestroy;
+                break;
+
+            default:
+                _audio.clip = WoodDestroy;
+                break;
+        }
+
+        _audio.Stop();
+        _audio.pitch = 1;
+
+        _audio.Play();
     }
 
     public void PlayUISound(SoundsUI _type)
@@ -130,13 +168,13 @@ public class SoundUI : MonoBehaviour
 
             case SoundsUI.build:
                 _audio.Stop();
-                _audio.clip = BuildBlock;
+                _audio.clip = WoodBuild;
                 _audio.Play();
                 break;
 
             case SoundsUI.destroy:
                 _audio.Stop();
-                _audio.clip = DestroyBlock;
+                _audio.clip = WoodDestroy;
                 _audio.Play();
                 break;
 

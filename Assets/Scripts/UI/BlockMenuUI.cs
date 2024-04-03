@@ -15,12 +15,18 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private Button floorsFilterButton;
     [SerializeField] private Button wallsFilterButton;
     [SerializeField] private Button roofsFilterButton;
+    [SerializeField] private Button stairsFilterButton;
+    [SerializeField] private Button beamsFilterButton;
+    [SerializeField] private Button fencesFilterButton;
 
     private BlockTypes defaultStartBlock = BlockTypes.floor;
     
     private List<GameObject> floors = new List<GameObject>();
     private List<GameObject> walls = new List<GameObject>();
     private List<GameObject> roofs = new List<GameObject>();
+    private List<GameObject> beams = new List<GameObject>();
+    private List<GameObject> fences = new List<GameObject>();
+    private List<GameObject> stairs = new List<GameObject>();
 
     private SoundUI sounds;
     private GameManager gm;
@@ -67,6 +73,32 @@ public class BlockMenuUI : MonoBehaviour
             filterBlocksPanel();
         });
 
+        stairsFilterButton.onClick.AddListener(() =>
+        {
+            if (defaultStartBlock == BlockTypes.stair) return;
+
+            sounds.PlayUISound(SoundsUI.click);
+            defaultStartBlock = BlockTypes.stair;
+            filterBlocksPanel();
+        });
+
+        beamsFilterButton.onClick.AddListener(() =>
+        {
+            if (defaultStartBlock == BlockTypes.beam) return;
+
+            sounds.PlayUISound(SoundsUI.click);
+            defaultStartBlock = BlockTypes.beam;
+            filterBlocksPanel();
+        });
+
+        fencesFilterButton.onClick.AddListener(() =>
+        {
+            if (defaultStartBlock == BlockTypes.fence) return;
+
+            sounds.PlayUISound(SoundsUI.click);
+            defaultStartBlock = BlockTypes.fence;
+            filterBlocksPanel();
+        });
 
     }
     
@@ -75,6 +107,9 @@ public class BlockMenuUI : MonoBehaviour
         create(assets.GetArrayOfFloorsIds, ref floors);
         create(assets.GetArrayOfWallsIds, ref walls);
         create(assets.GetArrayOfRoofsIds, ref roofs);
+        create(assets.GetArrayOfBeamsIds, ref beams);
+        create(assets.GetArrayOfFencesIds, ref fences);
+        create(assets.GetArrayOfStairsIds, ref stairs);
 
     }
     private void create(int[] sourceIDs, ref List<GameObject> sourceGameobjects)
@@ -95,6 +130,9 @@ public class BlockMenuUI : MonoBehaviour
         floors.ForEach(p => p.SetActive(false));
         walls.ForEach(p => p.SetActive(false));
         roofs.ForEach(p => p.SetActive(false));
+        stairs.ForEach(p => p.SetActive(false));
+        beams.ForEach(p => p.SetActive(false));
+        fences.ForEach(p => p.SetActive(false));
     }
 
     public void ShowBlocksPanel()
@@ -136,6 +174,18 @@ public class BlockMenuUI : MonoBehaviour
 
             case BlockTypes.roof:
                 roofs.ForEach(p => p.SetActive(true));
+                break;
+
+            case BlockTypes.stair:
+                stairs.ForEach(p => p.SetActive(true));
+                break;
+
+            case BlockTypes.beam:
+                beams.ForEach(p => p.SetActive(true));
+                break;
+
+            case BlockTypes.fence:
+                fences.ForEach(p => p.SetActive(true));
                 break;
         }
     }

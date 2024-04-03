@@ -141,6 +141,8 @@ MonoBehaviour:
   isRotatable: 1
   colliders:
   - {fileID: 1253923714650486711}
+  blockSize: 2
+  materialType: 1
 --- !u!65 &1253923714650486711
 BoxCollider:
   m_ObjectHideFlags: 0

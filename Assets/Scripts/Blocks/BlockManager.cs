@@ -177,9 +177,9 @@ public class BlockManager : MonoBehaviour
             sounds.PlayUISound(SoundsUI.error);
             return;
         }
-
-        sounds.PlayUISound(SoundsUI.pop);
+                
         Block b = blocksForCancel[blocksForCancel.Count - 1];
+        sounds.PlayDestroy(b);
         blocksForCancel.Remove(b);
         b.gameObject.SetActive(false);
         Destroy(b);
@@ -188,11 +188,11 @@ public class BlockManager : MonoBehaviour
     public void BuildCurrentBlockCall()
     {
         if (CurrentActiveBlock != null && CurrentActiveBlock.IsGoodToFinalize)
-        {            
+        {
+            sounds.PlayBuild(CurrentActiveBlock);
             CurrentActiveBlock.MakeFinalView();
             blocksForCancel.Add(CurrentActiveBlock);
-            getNewBlock(currentID);
-            sounds.PlayUISound(SoundsUI.click);
+            getNewBlock(currentID);            
         }
         else
         {
@@ -215,6 +215,7 @@ public class BlockManager : MonoBehaviour
                 }
             }
 
+            sounds.PlayDestroy(CurrentBlockToDelete);
             CurrentBlockToDelete.gameObject.SetActive(false);
             Destroy(CurrentBlockToDelete.gameObject);
             CurrentBlockToDelete = null;
@@ -240,6 +241,9 @@ public class BlockManager : MonoBehaviour
     {
         if (CurrentActiveBlock != null)
         {
+            CurrentActiveBlock.SetPosition(gm.pointForMarker);
+
+            /*
             switch (CurrentActiveBlock.BlockType)
             {
                 case BlockTypes.floor:
@@ -253,7 +257,7 @@ public class BlockManager : MonoBehaviour
                 case BlockTypes.roof:
                     CurrentActiveBlock.SetPosition(gm.pointForMarker);
                     break;
-            }
+            }*/
         }
     }
 
