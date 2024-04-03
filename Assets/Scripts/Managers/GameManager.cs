@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using YG;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(-2)]
 public class GameManager : MonoBehaviour
@@ -65,23 +66,23 @@ public class GameManager : MonoBehaviour
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
                
-        
+        /*
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
         Globals.IsInitiated = true;
-        Globals.IsMobile = false;
+        Globals.IsMobile = true;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
         Globals.MainRandom = new System.Random(Globals.MainPlayerData.Seed);
         if (Globals.IsMobile)
         {
-            Globals.MainPlayerData.Zoom = 45;
+            Globals.MainPlayerData.Zoom = 50;
         }
         else
         {
-            Globals.MainPlayerData.Zoom = 55;
-        }
+            Globals.MainPlayerData.Zoom = 60;
+        }*/
         //===========================
 
         if (Globals.IsMobile)
@@ -135,7 +136,12 @@ public class GameManager : MonoBehaviour
 
         if (cameraShakeCooldown > 0) cameraShakeCooldown -= Time.deltaTime;
               
-
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Globals.MainPlayerData = new PlayerData();
+            SaveLoadManager.Save();
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
 

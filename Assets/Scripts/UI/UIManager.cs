@@ -137,11 +137,24 @@ public class UIManager : MonoBehaviour
     private void startbuildingPrefs()
     {
         blockManager.StartBuilding();
-        cancelLastBlockButton.gameObject.SetActive(true);
-        buildCurrentBlockButton.gameObject.SetActive(true);
-        deleteCurrentBlockButton.gameObject.SetActive(false);
-        startBuildingBlockButton.gameObject.SetActive(false);
-        startDestroingBlockButton.gameObject.SetActive(true);
+
+        if (Globals.IsMobile)
+        {
+            cancelLastBlockButton.gameObject.SetActive(true);
+            buildCurrentBlockButton.gameObject.SetActive(true);
+            deleteCurrentBlockButton.gameObject.SetActive(false);
+            startBuildingBlockButton.gameObject.SetActive(false);
+            startDestroingBlockButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            cancelLastBlockButton.gameObject.SetActive(false);
+            buildCurrentBlockButton.gameObject.SetActive(false);
+            deleteCurrentBlockButton.gameObject.SetActive(false);
+            startBuildingBlockButton.gameObject.SetActive(false);
+            startDestroingBlockButton.gameObject.SetActive(false);
+            callBlocksButton.gameObject.SetActive(false);
+        }        
     }
     
     public void NewBlockChosen()

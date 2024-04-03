@@ -77,11 +77,11 @@ public class MainMenuUI : MonoBehaviour
         {
             if (Globals.IsMobile)
             {
-                Globals.MainPlayerData.Zoom = 45;
+                Globals.MainPlayerData.Zoom = 50;
             }
             else
             {
-                Globals.MainPlayerData.Zoom = 55;
+                Globals.MainPlayerData.Zoom = 60;
             }
             Globals.MainPlayerData.IsZoomCorrected = true;
             SaveLoadManager.Save();

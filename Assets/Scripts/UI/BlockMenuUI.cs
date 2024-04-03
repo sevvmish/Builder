@@ -11,13 +11,29 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private GameObject blocksPanel;
     [SerializeField] private GameObject blocksPanelExample;
     [SerializeField] private Transform blockMenuContainer;
+    [SerializeField] private GridLayoutGroup gridLayoutGroup;
+    [SerializeField] private PointerDownOnly backCkick;
 
+    [Header("Buttons")]
     [SerializeField] private Button floorsFilterButton;
     [SerializeField] private Button wallsFilterButton;
     [SerializeField] private Button roofsFilterButton;
     [SerializeField] private Button stairsFilterButton;
     [SerializeField] private Button beamsFilterButton;
     [SerializeField] private Button fencesFilterButton;
+
+    [Header("FOR PC")]
+    [SerializeField] private int leftPC = 30;
+    [SerializeField] private int topPC = 50;
+    [SerializeField] private Vector2 cellSizePC = new Vector2(160, 230);
+    [SerializeField] private Vector2 spacingPC = new Vector2(50, 50);
+
+    [Header("FOR Mob")]
+    [SerializeField] private int leftM = 60;
+    [SerializeField] private int topM = 70;
+    [SerializeField] private Vector2 cellSizeM = new Vector2(192, 276);
+    [SerializeField] private Vector2 spacingM = new Vector2(80, 120);
+
 
     private BlockTypes defaultStartBlock = BlockTypes.floor;
     
@@ -44,6 +60,23 @@ public class BlockMenuUI : MonoBehaviour
 
         blocksPanel.SetActive(false);
         createBlocksPanel();
+
+        if (Globals.IsMobile)
+        {
+            gridLayoutGroup.padding.left = leftM;
+            gridLayoutGroup.padding.top = topM;
+
+            gridLayoutGroup.cellSize = cellSizeM;
+            gridLayoutGroup.spacing = spacingM;
+        }
+        else
+        {
+            gridLayoutGroup.padding.left = leftPC;
+            gridLayoutGroup.padding.top = topPC;
+
+            gridLayoutGroup.cellSize = cellSizePC;
+            gridLayoutGroup.spacing = spacingPC;
+        }
         
 
         floorsFilterButton.onClick.AddListener(() =>
@@ -101,7 +134,15 @@ public class BlockMenuUI : MonoBehaviour
         });
 
     }
-    
+
+    private void Update()
+    {
+        if (backCkick.IsPressed)
+        {
+            gm.GetUI.HideBlocksPanel();
+        }
+    }
+
     private void createBlocksPanel()
     {
         create(assets.GetArrayOfFloorsIds, ref floors);
@@ -119,6 +160,12 @@ public class BlockMenuUI : MonoBehaviour
             for (int i = 0; i < sourceIDs.Length; i++)
             {
                 GameObject g = Instantiate(blocksPanelExample, blockMenuContainer);
+
+                if (Globals.IsMobile)
+                {
+                    g.transform.localScale = Vector3.one * 1.4f;
+                }
+
                 g.GetComponent<BlockPanelUI>().SetData(sourceIDs[i], blockManager);
                 sourceGameobjects.Add(g);
             }
