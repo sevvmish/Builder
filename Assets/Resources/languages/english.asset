@@ -27,3 +27,9 @@ MonoBehaviour:
   BlockArrow: right mouse button
   BuildRegimeArrow: TURN ON/OFF      button "B"
   OptionsArrow: button "ESC"
+  SetBlockHelper: 'BUILD BLOCK:       left mouse button'
+  RotateBlockHelper: 'ROTATE BLOCK:    button "R"'
+  CancelBlockHelper: 'CANCEL LAST BLOCK:              button "Z"'
+  HowToDelHelper: 'TO DELETE BLOCKS:       button "Q"'
+  DelBlockHelper: 'DELETE BLOCK:      left mouse button'
+  HowToBuildHelper: 'TO BUILD BLOCKS:       button "Q"'

@@ -22,13 +22,26 @@ public class UIHelperPCButtons : MonoBehaviour
     [SerializeField] private TextMeshProUGUI buildRegimeArrowText;
     [SerializeField] private TextMeshProUGUI optionsArrowText;
 
+    [SerializeField] private GameObject buildingBlocks;
+    [SerializeField] private TextMeshProUGUI setBlockText;
+    [SerializeField] private TextMeshProUGUI rotateBlockText;
+    [SerializeField] private TextMeshProUGUI cancelBlockText;
+    [SerializeField] private TextMeshProUGUI howToDelBlocksText;
+
+    [SerializeField] private GameObject deletingBlocks;
+    [SerializeField] private TextMeshProUGUI delBlockText;
+    [SerializeField] private TextMeshProUGUI howToBuildBlocksText;
+
     private bool isBuildMode;
+    private bool isBuildingInBuilding;
     private GameManager gm;
+    private BlockManager bm;
 
     // Start is called before the first frame update
     void Start()
     {
         gm = GameManager.Instance;
+        bm = gm.BlockManager;
 
         if (!Globals.IsMobile)
         {
@@ -44,18 +57,45 @@ public class UIHelperPCButtons : MonoBehaviour
             movementHelper.SetActive(true);
             jumpHelper.SetActive(true);
 
+            blockArrowText.gameObject.SetActive(true);
+            buildRegimeArrowText.gameObject.SetActive(true);
+            optionsArrowText.gameObject.SetActive(true);
             blockArrowText.text = Globals.Language.BlockArrow;
             buildRegimeArrowText.text = Globals.Language.BuildRegimeArrow;
             optionsArrowText.text = Globals.Language.OptionsArrow;
 
+            buildingBlocks.SetActive(true);
+            setBlockText.gameObject.SetActive(true);
+            rotateBlockText.gameObject.SetActive(true);
+            cancelBlockText.gameObject.SetActive(true);
+            howToDelBlocksText.gameObject.SetActive(true);
+            setBlockText.text = Globals.Language.SetBlockHelper;
+            rotateBlockText.text = Globals.Language.RotateBlockHelper;
+            cancelBlockText.text = Globals.Language.CancelBlockHelper;
+            howToDelBlocksText.text = Globals.Language.HowToDelHelper;
+
+            deletingBlocks.SetActive(false);
+            delBlockText.text= Globals.Language.DelBlockHelper;
+            howToBuildBlocksText.text = Globals.Language.HowToBuildHelper;
         }
         else
         {
+            blockArrowText.gameObject.SetActive(false);
+            buildRegimeArrowText.gameObject.SetActive(false);
+            optionsArrowText.gameObject.SetActive(false);
+
+            setBlockText.gameObject.SetActive(false);
+            rotateBlockText.gameObject.SetActive(false);
+            cancelBlockText.gameObject.SetActive(false);
+
             movementHelper.SetActive(false);
             jumpHelper.SetActive(false);
+            buildingBlocks.SetActive(false);
+            deletingBlocks.SetActive(false);
         }
 
         isBuildMode = !gm.IsBuildMode;
+        isBuildingInBuilding = !bm.IsBuildingBlocks;
     }
 
     private void Update()
@@ -71,14 +111,38 @@ public class UIHelperPCButtons : MonoBehaviour
                 jumpText.gameObject.SetActive(false);
                 jumpUpText.gameObject.SetActive(true);
                 jumpDownText.gameObject.SetActive(true);
+                buildingBlocks.SetActive(true);
+                deletingBlocks.SetActive(false);
             }
             else if(!isBuildMode)
             {
                 jumpText.gameObject.SetActive(true);
                 jumpUpText.gameObject.SetActive(false);
                 jumpDownText.gameObject.SetActive(false);
+                buildingBlocks.SetActive(false);
+                deletingBlocks.SetActive(false);
             }
         }
+
+        if (gm.IsBuildMode)
+        {
+            if (isBuildingInBuilding != bm.IsBuildingBlocks)
+            {
+                isBuildingInBuilding = bm.IsBuildingBlocks;
+
+                if (isBuildingInBuilding)
+                {
+                    buildingBlocks.SetActive(true);
+                    deletingBlocks.SetActive(false);
+                }
+                else
+                {
+                    buildingBlocks.SetActive(false);
+                    deletingBlocks.SetActive(true);
+                }
+        }
+        }
+        
     }
 
 }

@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
     public GameObject JumpDOWN;
     public GameObject Mover;
     public GameObject Joystick;
-    public Button BuildingModeButton;
+    
 
     [Header("Signs")]
     [SerializeField] private TextMeshProUGUI blockText;
@@ -35,6 +35,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button startBuildingBlockButton;
     [SerializeField] private Button callBlocksButton;
     [SerializeField] private Button closeBlocksButton;
+    [SerializeField] private Button BuildingModeButton;
+    [SerializeField] private GameObject BuildingModeCloseSign;
+
 
     [Header("Options")]
     [SerializeField] private Button optionsButton;
@@ -70,9 +73,9 @@ public class UIManager : MonoBehaviour
 
         if (!Globals.IsMobile)
         {
-            optionsButton.transform.localScale = Vector3.one * 0.8f;
-            callBlocksButton.transform.localScale = Vector3.one * 0.8f;
-            BuildingModeButton.transform.localScale = Vector3.one * 0.8f;
+            optionsButton.transform.localScale = Vector3.one * 0.7f;
+            callBlocksButton.transform.localScale = Vector3.one * 0.7f;
+            BuildingModeButton.transform.localScale = Vector3.one * 0.7f;
         }
 
         sounds = SoundUI.Instance;
@@ -167,6 +170,7 @@ public class UIManager : MonoBehaviour
         if (gm.IsBuildMode != isSetupOnMode)
         {
             isSetupOnMode = gm.IsBuildMode;
+            BuildingModeCloseSign.SetActive(gm.IsBuildMode);
 
             if (Globals.IsMobile)
             {
@@ -206,18 +210,22 @@ public class UIManager : MonoBehaviour
         }
     }
 
+
+
     private void startbuildingPrefs()
-    {        
+    {
+        BuildingModeButton.gameObject.SetActive(true);
+        callBlocksButton.gameObject.SetActive(true);
+
         if (Globals.IsMobile)
         {
-            callBlocksButton.gameObject.SetActive(true);
             cancelLastBlockButton.gameObject.SetActive(true);
             buildCurrentBlockButton.gameObject.SetActive(true);
             deleteCurrentBlockButton.gameObject.SetActive(false);
             startBuildingBlockButton.gameObject.SetActive(false);
             startDestroingBlockButton.gameObject.SetActive(true);
             rotateCurrentBlockButton.gameObject.SetActive(true);
-            //BuildingModeButton.gameObject.SetActive(false);
+            
         }
         else
         {
@@ -226,9 +234,7 @@ public class UIManager : MonoBehaviour
             deleteCurrentBlockButton.gameObject.SetActive(false);
             startBuildingBlockButton.gameObject.SetActive(false);
             startDestroingBlockButton.gameObject.SetActive(false);
-            callBlocksButton.gameObject.SetActive(false);
             rotateCurrentBlockButton.gameObject.SetActive(false);
-            BuildingModeButton.gameObject.SetActive(false);
         }        
     }
 
@@ -242,7 +248,7 @@ public class UIManager : MonoBehaviour
         rotateCurrentBlockButton.gameObject.SetActive(false);
         callBlocksButton.gameObject.SetActive(false);
 
-        BuildingModeButton.gameObject.SetActive(Globals.IsMobile);
+        BuildingModeButton.gameObject.SetActive(true);
     }
 
     public void NewBlockChosen()
@@ -278,12 +284,18 @@ public class UIManager : MonoBehaviour
         regimeText.gameObject.SetActive(true);
         regimeText.color = new Color(1, 1, 0, 1);
         regimeText.text = newText;
+        regimeText.transform.localScale = Vector3.zero;
+        regimeText.transform.DOScale(Vector3.one, 0.15f).SetEase(Ease.Linear);
+        yield return new WaitForSeconds(0.15f);
         regimeText.transform.DOShakeScale(0.2f, 1, 30).SetEase(Ease.InOutBounce);
 
-        yield return new WaitForSeconds(3f);
-        regimeText.color = new Color(1, 1, 0, 0.5f);
+        yield return new WaitForSeconds(2f);
+        regimeText.color = new Color(1, 1, 0, 0.66f);
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
+        regimeText.color = new Color(1, 1, 0, 0.33f);
+
+        yield return new WaitForSeconds(2f);
         regimeText.gameObject.SetActive(false);
     }
 }

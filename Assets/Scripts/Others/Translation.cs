@@ -25,5 +25,13 @@ public class Translation : ScriptableObject
     public string BuildRegimeArrow;
     public string OptionsArrow;
 
+    public string SetBlockHelper;
+    public string RotateBlockHelper;
+    public string CancelBlockHelper;
+    public string HowToDelHelper;
+
+    public string DelBlockHelper;
+    public string HowToBuildHelper;
+
     public Translation() { }
 }
