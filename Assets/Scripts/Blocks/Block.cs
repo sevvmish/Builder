@@ -340,12 +340,25 @@ public class Block : MonoBehaviour
                         if (result)
                         {
                             colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+                            if (!isCertainBlockTypeInArray(colliders, BlockTypes.wall) && !isCertainBlockTypeInArray(colliders, BlockTypes.floor))
+                            {
+                                isBad = false;
+                                break;
+                            }
+                            else
+                            {
+                                isBad = true;
+                                break;
+                            }
+
+                            /*
+                            colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
                             
                             if (colliders.Length == 0)
                             {
                                 isBad = false;
                                 break;
-                            }
+                            }*/
                                 
                         }
                         else
@@ -353,9 +366,6 @@ public class Block : MonoBehaviour
                             isBad = true;
                             break;
                         }
-
-                        isBad = true;
-                        break;
                     }
                     else if (b.blockType == BlockTypes.floor && !b.Equals(this))
                     {
@@ -378,7 +388,19 @@ public class Block : MonoBehaviour
 
                         if (result)
                         {
-
+                            
+                            colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+                            if (!isCertainBlockTypeInArray(colliders, BlockTypes.wall) 
+                                && !isCertainBlockTypeInArray(colliders, BlockTypes.floor))
+                            {
+                                isBad = false;
+                                break;
+                            }
+                            else
+                            {
+                                isBad = true;
+                                break;
+                            }
                         }
                         else
                         {
@@ -662,37 +684,11 @@ public class Block : MonoBehaviour
                             break;
                         }
 
-                        /*
-                        if (Mathf.Abs(_transform.position.x - b.transform.position.x) > Mathf.Abs(_transform.position.z - b.transform.position.z))
-                        {
-                            dir = new Vector3(1, 0, 0);
-                            sign = (_transform.position.x - b.transform.position.x) > 0 ? 1 : -1;
-                        }
-                        else
-                        {
-                            dir = new Vector3(0, 0, 1);
-                            sign = (_transform.position.z - b.transform.position.z) > 0 ? 1 : -1;
-                        }
-
-
-                        bool result = pushBlockToGoodPlace(b, dir, sign);
-
-                        if (result)
-                        {
-
-                        }
-                        else
-                        {
-                            isBad = true;
-                            break;
-                        }*/
                     }
                     else if (b.blockType == BlockTypes.wall)
                     {
                         Vector3 shift = Vector3.zero;
-
-                        print(b.gameObject.name + " = ");
-                        
+                                                                        
                         _transform.position = new Vector3(_transform.position.x, b.transform.position.y + 4, _transform.position.z);
                         colliders = Physics.OverlapBox(_transform.position + Vector3.up, getBoxForBlockCheck(), _transform.rotation);
                         if (colliders.Length == 0)

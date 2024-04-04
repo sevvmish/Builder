@@ -11,9 +11,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [Header("Controls")]
-    [SerializeField] private Joystick joystick;
-
     [Header("Others")]
     [SerializeField] private AssetManager assetManager;
     [SerializeField] private Camera _camera;
@@ -26,8 +23,7 @@ public class GameManager : MonoBehaviour
     private InputControl playerInput;
 
     public PlayerControl MainPlayerControl { get; private set; }
-
-    public Joystick GetJoystick() => joystick;
+        
     public Camera GetCamera() => _camera;
     public Transform GetCameraBody() => cameraBody;
     public CameraControl GetCameraControl() => cameraControl;
@@ -66,14 +62,14 @@ public class GameManager : MonoBehaviour
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
                
-        /*
+        
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
         Globals.IsInitiated = true;
         Globals.IsMobile = true;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
-        Globals.Language = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
+        Globals.Language = Localization.GetInstanse("ru").GetCurrentTranslation();
         Globals.MainRandom = new System.Random(Globals.MainPlayerData.Seed);
         if (Globals.IsMobile)
         {
@@ -82,7 +78,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Globals.MainPlayerData.Zoom = 60;
-        }*/
+        }
         //===========================
 
         if (Globals.IsMobile)
@@ -90,6 +86,7 @@ public class GameManager : MonoBehaviour
             QualitySettings.antiAliasing = 2;
             QualitySettings.shadows = ShadowQuality.HardOnly;
             QualitySettings.shadowResolution = ShadowResolution.Medium;
+
         }
         else
         {
@@ -104,15 +101,23 @@ public class GameManager : MonoBehaviour
         mainPlayer.gameObject.name = "Main Player";
 
         playerInput = mainPlayer.GetComponent<InputControl>();
-
+        //IsBuildMode = true;
+        IsGameStarted = true;
     }
 
-    
-
-    private void Start()
+    public void SetBuildingMode(bool isActive)
     {
-        IsGameStarted = true;
-        IsBuildMode = true;
+        IsBuildMode = isActive;
+        SoundUI.Instance.PlayUISound(SoundsUI.success2);
+
+        if (isActive)
+        {
+            blockManager.StartBuilding();
+        }
+        else
+        {
+            blockManager.StopBuilding();
+        }
     }
 
         

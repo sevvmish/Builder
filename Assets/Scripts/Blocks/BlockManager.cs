@@ -97,15 +97,36 @@ public class BlockManager : MonoBehaviour
             }
             else
             {
-                sounds.PlayUISound(SoundsUI.error);
+                sounds.PlayUISound(SoundsUI.error1);
             }
         }
         else
         {
-            sounds.PlayUISound(SoundsUI.error);
+            sounds.PlayUISound(SoundsUI.error1);
         }
     }
 
+    public void StopBuilding()
+    {
+        IsBuildingBlocks = false;
+        IsDestroingBlocks = false;
+        IsChoosingBlocks = false;
+
+        if (CurrentBlockToDelete != null)
+        {
+            CurrentBlockToDelete.MakeColorBadForDelete(false);
+            CurrentBlockToDelete = null;
+        }
+
+        if (CurrentActiveBlock != null)
+        {
+            CurrentActiveBlock.gameObject.SetActive(false);
+            Destroy(CurrentActiveBlock.gameObject);
+            CurrentActiveBlock = null;
+        }
+
+        if (markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(false);
+    }
 
     public void StartBuilding()
     {
@@ -174,7 +195,7 @@ public class BlockManager : MonoBehaviour
     {
         if (blocksForCancel.Count == 0)
         {
-            sounds.PlayUISound(SoundsUI.error);
+            sounds.PlayUISound(SoundsUI.error1);
             return;
         }
                 
@@ -196,7 +217,7 @@ public class BlockManager : MonoBehaviour
         }
         else
         {
-            sounds.PlayUISound(SoundsUI.error);
+            sounds.PlayUISound(SoundsUI.error1);
         }
     }
 
@@ -227,7 +248,7 @@ public class BlockManager : MonoBehaviour
     {
         if (val == currentID)
         {
-            sounds.PlayUISound(SoundsUI.error);
+            sounds.PlayUISound(SoundsUI.error1);
             return;
         }
 

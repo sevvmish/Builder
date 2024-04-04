@@ -30,6 +30,7 @@ public class Globals : MonoBehaviour
     public static bool IsDevelopmentBuild = false;
     public static bool IsOptions;
     public static bool IsAllRestarter;
+    public static bool IsLowFPS;
 
 
     public const float BASE_SPEED = 7f;
@@ -57,6 +58,8 @@ public class Globals : MonoBehaviour
     public const float ZOOM_DELTA = 0.5f;//0.3f;
     public const float ZOOM_LIMIT_LOW = 30f;
     public const float ZOOM_LIMIT_HIGH = 70f;
+
+
 
     public const float SCREEN_SAVER_AWAIT = 1f;
 

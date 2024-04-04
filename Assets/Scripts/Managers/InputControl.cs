@@ -39,7 +39,7 @@ public class InputControl : MonoBehaviour
         gm = GameManager.Instance;
         blockManager = gm.BlockManager;
         _camera = gm.GetCamera();
-        joystick = GameManager.Instance.GetJoystick();
+        
         cameraControl = GameManager.Instance.GetCameraControl();
         playerControl = gameObject.GetComponent<PlayerControl>();
         playerTransform = playerControl.transform;
@@ -55,6 +55,7 @@ public class InputControl : MonoBehaviour
         }
         else
         {
+            joystick = gm.GetUI.Joystick.GetComponent<Joystick>();
             jump = gm.GetUI.JumpMain.GetComponent<PointerDownOnly>();
             jumpUp = gm.GetUI.JumpUP.GetComponent<PointerDownOnly>();
             jumpDown = gm.GetUI.JumpDOWN.GetComponent<PointerDownOnly>();
@@ -146,13 +147,20 @@ public class InputControl : MonoBehaviour
             playerControl.SetHorizontal(horizontal);
             playerControl.SetVertical(vertical);
         }
-        
-        
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            playerControl.SetJump();
+            if (gm.IsBuildMode)
+            {
+                playerControl.SetJumpUP();
+            }
+            else
+            {
+                playerControl.SetJump();
+            }
+
         }
-        
+
         if (jump.IsPressed)
         {
             playerControl.SetJump();
@@ -208,12 +216,27 @@ public class InputControl : MonoBehaviour
         }
 
         
-        if (Input.GetKeyDown(KeyCode.Space)/* || Input.GetMouseButtonDown(1)*/)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            playerControl.SetJump();
+            if (gm.IsBuildMode)
+            {
+                playerControl.SetJumpUP();
+            }
+            else
+            {
+                playerControl.SetJump();
+            }
+            
         }
-
-        if (Input.GetKeyDown(KeyCode.Q))
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            playerControl.SetJumpDOWN();
+        }
+        else if (Input.GetKeyDown(KeyCode.B))
+        {
+            gm.SetBuildingMode(!gm.IsBuildMode);
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
         {
             if (gm.IsBuildMode)
             {

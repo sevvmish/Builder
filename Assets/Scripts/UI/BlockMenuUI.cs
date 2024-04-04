@@ -68,6 +68,8 @@ public class BlockMenuUI : MonoBehaviour
 
             gridLayoutGroup.cellSize = cellSizeM;
             gridLayoutGroup.spacing = spacingM;
+
+            blocksPanel.transform.localScale = Vector3.one * 0.8f;
         }
         else
         {
@@ -76,6 +78,8 @@ public class BlockMenuUI : MonoBehaviour
 
             gridLayoutGroup.cellSize = cellSizePC;
             gridLayoutGroup.spacing = spacingPC;
+
+            blocksPanel.transform.localScale = Vector3.one * 0.9f;
         }
         
 

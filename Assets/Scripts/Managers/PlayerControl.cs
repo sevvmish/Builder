@@ -243,7 +243,8 @@ public class PlayerControl : MonoBehaviour
                 effectsControl.MakeJumpFX();
                 animationControl.JumpStart();
 
-                _transform.position += Vector3.up * 1.5f;
+                //_transform.position += Vector3.up * 1.5f;
+                _rigidbody.AddForce(Vector3.up * 20, ForceMode.Impulse);
                 IsJumping = true;
                 //jumpCooldown = 0.2f;
             }
@@ -267,7 +268,8 @@ public class PlayerControl : MonoBehaviour
                 effectsControl.MakeJumpFX();
                 animationControl.JumpStart();
 
-                _transform.position += Vector3.down * 1.5f;
+                //_transform.position += Vector3.down * 1.5f;
+                _rigidbody.AddForce(Vector3.down * 20, ForceMode.Impulse);
                 IsJumping = true;
                 //jumpCooldown = 0.2f;
             }
@@ -439,8 +441,13 @@ public class PlayerControl : MonoBehaviour
         {
             r.useGravity = false;
             return;
-        }       
+        }
+        else if (!r.useGravity)
+        {
+            r.useGravity = true;
+        }
 
+        
 
         float fallingKoeff = 1;
 

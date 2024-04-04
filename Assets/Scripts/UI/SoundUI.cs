@@ -7,18 +7,12 @@ public class SoundUI : MonoBehaviour
     public static SoundUI Instance { get; private set; }
     private AudioSource _audio;
 
-    [SerializeField] private AudioClip ErrorClip;
-    [SerializeField] private AudioClip Win;
-    [SerializeField] private AudioClip Lose;
+    [SerializeField] private AudioClip Error1;
+    [SerializeField] private AudioClip Error2;    
     [SerializeField] private AudioClip Click;
-    [SerializeField] private AudioClip positiveSoundClip;
-    [SerializeField] private AudioClip Tick;
     [SerializeField] private AudioClip Pop;
-    [SerializeField] private AudioClip BeepTick;
-    [SerializeField] private AudioClip BeepOut;
-    [SerializeField] private AudioClip Success;
+    [SerializeField] private AudioClip Success1;
     [SerializeField] private AudioClip Success2;
-    [SerializeField] private AudioClip Success3;
     [SerializeField] private AudioClip Cash;
     [SerializeField] private AudioClip WoodBuild;
     [SerializeField] private AudioClip WoodDestroy;
@@ -53,7 +47,6 @@ public class SoundUI : MonoBehaviour
 
         _audio.Stop();
         _audio.pitch = 1;
-
         _audio.Play();
     }
 
@@ -72,7 +65,6 @@ public class SoundUI : MonoBehaviour
 
         _audio.Stop();
         _audio.pitch = 1;
-
         _audio.Play();
     }
 
@@ -81,16 +73,16 @@ public class SoundUI : MonoBehaviour
         _audio.pitch = 1;
 
         switch (_type)
-        {
-            case SoundsUI.tick:
+        {            
+            case SoundsUI.error1:
                 _audio.Stop();
-                _audio.clip = Tick;
+                _audio.clip = Error1;
                 _audio.Play();
                 break;
 
-            case SoundsUI.error:
+            case SoundsUI.error2:
                 _audio.Stop();
-                _audio.clip = ErrorClip;
+                _audio.clip = Error2;
                 _audio.Play();
                 break;
 
@@ -106,42 +98,11 @@ public class SoundUI : MonoBehaviour
                 _audio.Play();
                 break;
 
-            case SoundsUI.positive:
-                _audio.Stop();
-                _audio.clip = positiveSoundClip;
-                _audio.Play();
-                break;
-
-            case SoundsUI.win:
-                _audio.Stop();
-                _audio.clip = Win;
-                _audio.Play();
-                break;
-
-            case SoundsUI.lose:
-                _audio.Stop();
-                _audio.clip = Lose;
-                _audio.Play();
-                break;
-
-            case SoundsUI.beep_tick:
-                _audio.Stop();   
-                _audio.pitch = 1.5f;
-                _audio.clip = BeepTick;
-                _audio.Play();
-                break;
-
-            case SoundsUI.beep_out:
-                _audio.Stop();
-                _audio.pitch = 0.8f;
-                _audio.clip = BeepOut;
-                _audio.Play();
-                break;
-
-            case SoundsUI.success:
+            
+            case SoundsUI.success1:
                 _audio.Stop();
                 _audio.pitch = 1f;
-                _audio.clip = Success;
+                _audio.clip = Success1;
                 _audio.Play();
                 break;
 
@@ -152,32 +113,12 @@ public class SoundUI : MonoBehaviour
                 _audio.Play();
                 break;
 
-            case SoundsUI.success3:
-                _audio.Stop();
-                _audio.pitch = 1f;
-                _audio.clip = Success3;
-                _audio.Play();
-                break;
-
             case SoundsUI.cash:
                 _audio.Stop();
                 _audio.pitch = 1f;
                 _audio.clip = Cash;
                 _audio.Play();
                 break;
-
-            case SoundsUI.build:
-                _audio.Stop();
-                _audio.clip = WoodBuild;
-                _audio.Play();
-                break;
-
-            case SoundsUI.destroy:
-                _audio.Stop();
-                _audio.clip = WoodDestroy;
-                _audio.Play();
-                break;
-
 
         }
     }
@@ -186,19 +127,11 @@ public class SoundUI : MonoBehaviour
 public enum SoundsUI
 {
     none,
-    error,
-    positive, 
-    tick,
+    error1,
+    error2,    
     pop,
     click,
-    win,
-    lose,
-    beep_tick,
-    beep_out, 
-    success,
-    cash,
+    success1,
     success2,
-    success3,
-    build,
-    destroy
+    cash
 }

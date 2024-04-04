@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f9a1b84cd93ba4e81d51bd0cd84ea6, type: 3}
+  m_Name: english
+  m_EditorClassIdentifier: 
+  UpArrowLetter: W
+  DownArrowLetter: S
+  LeftArrowLetter: A
+  RightArrowLetter: D
+  JumpLetter: jump - SPACE
+  JumpUpLetter: fly up - SPACE
+  JumpDownLetter: fly down - C
+  RegimeSpectator: SPECTATOR MODE
+  RegimeBuilder: BUILDING MODE
+  RegimeBuilderDeleter: DESTRUCTION MODE
+  Blocks: BLOCKS
+  Build: BUILDING
+  BlockArrow: right mouse button
+  BuildRegimeArrow: TURN ON/OFF      button "B"
+  OptionsArrow: button "ESC"
