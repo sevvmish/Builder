@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
                
-        /*
+        
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
         Globals.IsInitiated = true;
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Globals.MainPlayerData.Zoom = 60;
-        }*/
+        }
         //===========================
 
         if (Globals.IsMobile)
