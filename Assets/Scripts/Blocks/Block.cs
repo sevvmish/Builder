@@ -27,6 +27,7 @@ public class Block : MonoBehaviour
     [SerializeField] private GameObject prototypeViewBad;
     [SerializeField] private GameObject buildVFX;
     [SerializeField] private Vector3 sizeCheker = Vector3.one;
+    [SerializeField] private Vector3 deltaCheker = Vector3.zero;
 
     [SerializeField] private DeltaDimentions deltaStep = DeltaDimentions.all_1;
     [SerializeField] private float rotationAngle = 90;
@@ -152,7 +153,7 @@ public class Block : MonoBehaviour
 
     private void assessBlockStatusBeam()
     {
-        Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+        Collider[] colliders = Physics.OverlapBox(_transform.position + Vector3.up * 2 + deltaCheker, getBoxForBlockCheck(), _transform.rotation);
 
         bool isBad = false;
 
@@ -176,7 +177,7 @@ public class Block : MonoBehaviour
         }
         else
         {
-            isBad = true;
+            isBad = false;
         }
 
         if (isBad)
