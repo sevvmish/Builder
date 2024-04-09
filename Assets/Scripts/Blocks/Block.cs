@@ -736,7 +736,7 @@ public class Block : MonoBehaviour
                 break;
 
             case DeltaDimentions.all_15:
-                _transform.position = new Vector3(getNearest15(markerPoint.x), getNearest15(markerPoint.y), getNearest15(markerPoint.z));
+                _transform.position = new Vector3(getNearest15(markerPoint.x), getNearest2(markerPoint.y)/*getNearest15(markerPoint.y)*/, getNearest15(markerPoint.z));
                 break;
 
             case DeltaDimentions.all_2:

@@ -252,6 +252,7 @@ MonoBehaviour:
   prototypeViewBad: {fileID: 4050355646980534166}
   buildVFX: {fileID: 4905792211078044656}
   sizeCheker: {x: 5.5, y: 0.1, z: 5.5}
+  deltaCheker: {x: 0, y: 0, z: 0}
   deltaStep: 1
   rotationAngle: 90
   isRotatable: 1
