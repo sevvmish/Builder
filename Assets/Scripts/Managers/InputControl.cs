@@ -72,7 +72,7 @@ public class InputControl : MonoBehaviour
        
         if (Globals.IsMobile)
         {
-            forMobile();           
+            forMobile();
         }
         else
         {
@@ -84,7 +84,7 @@ public class InputControl : MonoBehaviour
         {
             if (blockManager.IsBuildingBlocks)
             {
-                if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(mainPlayer.position + Vector3.up, (_camera.transform.forward * 50 + _camera.transform.right - mainPlayer.position).normalized, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
                 {                    
                     markerPosition = hit.point;
                 }

@@ -137,6 +137,7 @@ public class BlockMenuUI : MonoBehaviour
             filterBlocksPanel();
         });
 
+
     }
 
     private void Update()

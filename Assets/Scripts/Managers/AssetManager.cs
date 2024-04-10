@@ -33,6 +33,8 @@ public class AssetManager : MonoBehaviour
     private GameObject markerDestroyer;
     public Transform GetMarkerDestroyer => markerDestroyer.transform;
 
+    private int indexBuilder = 0;
+
     private void Awake()
     {
         initAssetsLink(floorsLocation);
@@ -47,6 +49,7 @@ public class AssetManager : MonoBehaviour
 
         markerDestroyer = Instantiate(markerDestroyerExample);
         markerDestroyer.SetActive(false);
+
     }
 
     public int[] GetArrayOfFloorsIds => floorsIDs.ToArray();
@@ -59,6 +62,8 @@ public class AssetManager : MonoBehaviour
     public GameObject GetGameObjectByID(int ID)
     {
         GameObject g = Instantiate(linkIDtoAsset[ID], blockLocation);
+        g.gameObject.name += "-" + indexBuilder.ToString();
+        indexBuilder++;
         g.SetActive(true);
         return g;
     }

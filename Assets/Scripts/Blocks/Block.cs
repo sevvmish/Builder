@@ -14,7 +14,7 @@ public class Block : MonoBehaviour
     public bool IsFinalized => realView.activeSelf;
     public DeltaDimentions DeltaStep { get => deltaStep; }
     public float RotationAngle { get => rotationAngle; }
-    public Anchors Anchors { get => anchors; }
+    public Vector3 Volume { get => volume; }
 
     public BlockSizes BlockSize { get => blockSize; }
     public MaterialTypes MaterialType { get => materialType; }
@@ -36,6 +36,8 @@ public class Block : MonoBehaviour
 
     [SerializeField] private BlockSizes blockSize;
     [SerializeField] private MaterialTypes materialType;
+    [SerializeField] private Vector3 volume = Vector3.one;
+
 
     private Transform _transform;
     private GameManager gm;
@@ -231,31 +233,30 @@ public class Block : MonoBehaviour
 
     private void assessBlockStatusStair()
     {
-        Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+        Collider[] colliders = Physics.OverlapBox(_transform.position + deltaCheker - _transform.right, getBoxForBlockCheck(), _transform.rotation);
 
         bool isBad = false;
 
         if (colliders.Length > 0)
-        {
+        {   
             for (int i = 0; i < colliders.Length; i++)
-            {
+            {                                
                 if (colliders[i].gameObject.layer == 3)
                 {
                     isBad = true;
                     gm.GetUI.PlayerCrossNewBlockError();
                     break;
                 }
-                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && BlockType == b.blockType)
+                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) )
                 {
                     isBad = true;
                     break;
                 }
             }
-
         }
         else
         {
-            isBad = true;
+            isBad = false;
         }
 
         if (isBad)
@@ -310,29 +311,32 @@ public class Block : MonoBehaviour
         if (colliders.Length > 0)
         {            
             for (int i = 0; i < colliders.Length; i++)
-            {                
+            {     
+                /*
                 if (colliders[i].gameObject.layer == 3)
                 {
                     isBad = true;
                     gm.GetUI.PlayerCrossNewBlockError();
                     break;
                 }
-                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) )
-                {                    
+                else */if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) )
+                {
+                    
                     if (b.blockType == BlockTypes.wall)
                     {                        
                         Vector3 dir = Vector3.zero;
                         int sign = 0;
+                        int Yangle = (int)Mathf.Abs(b.transform.eulerAngles.y);
 
-                        if (b.transform.eulerAngles.y == 0 || b.transform.eulerAngles.y == 180 || b.transform.eulerAngles.y == 360)
+                        if (Yangle == 0 || Yangle == 180 || Yangle == 360)
                         {
                             dir = new Vector3(0, 0, 1);
-                            sign = (gm.GetMainPlayerTransform().position.z - _transform.position.z) > 0 ? 1 : -1;
+                            sign = (gm.GetMainPlayerTransform().position.z - b.transform.position.z/*_transform.position.z*/) > 0 ? 1 : -1;                            
                         }
                         else
                         {
                             dir = new Vector3(1, 0, 0);
-                            sign = (gm.GetMainPlayerTransform().position.x - _transform.position.x) > 0 ? 1 : -1;
+                            sign = (gm.GetMainPlayerTransform().position.x - b.transform.position.z/*_transform.position.z*/) > 0 ? 1 : -1;
                         }
 
 
@@ -403,6 +407,72 @@ public class Block : MonoBehaviour
                                 break;
                             }
                         }
+
+                        else
+                        {
+                            isBad = true;
+                            break;
+                        }
+
+                    }
+                    else if (b.blockType == BlockTypes.stair)
+                    {
+                        Vector3 dir = Vector3.zero;
+                        int sign = 0;
+                        float xVolume = b.Volume.x;
+                        int Yangle = (int)Mathf.Abs(b.transform.eulerAngles.y);
+
+                        
+
+                        if (Yangle == 0 || Yangle == 180 || Yangle == 360)
+                        {
+                            if (_transform.position.x > b.transform.position.x + xVolume / 2f)
+                            {
+                                dir = new Vector3(1, 0, 0);
+                                sign = 1;
+                                _transform.position = new Vector3(_transform.position.x, b.transform.position.y + b.Volume.y, _transform.position.z);
+                            }
+                            else
+                            {
+                                dir = new Vector3(1, 0, 0);
+                                sign = -1;
+                                _transform.position = new Vector3(_transform.position.x, b.transform.position.y + b.Volume.y, _transform.position.z);
+                            }
+                        }
+                        else
+                        {
+                            if (_transform.position.z > b.transform.position.z + xVolume / 2f)
+                            {
+                                dir = new Vector3(0, 0, 1);
+                                sign = 1;
+                                _transform.position = new Vector3(_transform.position.x, b.transform.position.y + b.Volume.y, _transform.position.z);
+                            }
+                            else
+                            {
+                                dir = new Vector3(0, 0, 1);
+                                sign = -1;
+                                _transform.position = new Vector3(_transform.position.x, b.transform.position.y + b.Volume.y, _transform.position.z);
+                            }
+                        }
+
+                        bool result = pushBlockToGoodPlace(b, dir, sign);
+
+                        if (result)
+                        {
+
+                            colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+                            if (colliders.Length == 0)
+                            {
+                                isBad = false;
+                                break;
+                            }
+                            else
+                            {
+                                isBad = true;
+                                break;
+                            }
+                        }
+
                         else
                         {
                             isBad = true;
@@ -490,11 +560,10 @@ public class Block : MonoBehaviour
                 {
                     Vector3 dir = Vector3.zero;
                     int sign = 0;
-                                        
+                    int Yangle = (int)Mathf.Abs(b.transform.eulerAngles.y);
 
-                    if (b.transform.eulerAngles.y == 0 || b.transform.eulerAngles.y == 180 || b.transform.eulerAngles.y == 360)
-                    {
-                        
+                    if (Yangle == 0 || Yangle == 180 || Yangle == 360)
+                    {                        
 
                         if (Mathf.Abs(_transform.position.y - b.transform.position.y) > Mathf.Abs(_transform.position.x - b.transform.position.x))
                         {
@@ -620,8 +689,7 @@ public class Block : MonoBehaviour
         if (colliders.Length > 0)
         {
             for (int i = 0; i < colliders.Length; i++)
-            {
-
+            {                
                 if (colliders[i].gameObject.layer == 3)
                 {
                     isBad = true;
@@ -635,8 +703,9 @@ public class Block : MonoBehaviour
                     {
                         Vector3 dir = Vector3.zero;
                         int sign = 0;
+                        int Yangle = (int)Mathf.Abs(b.transform.eulerAngles.y);
 
-                        if (b.transform.eulerAngles.y == 0 || b.transform.eulerAngles.y == 180 || b.transform.eulerAngles.y == 360)
+                        if (Yangle == 0 || Yangle == 180 || Yangle == 360)
                         {
                             dir = new Vector3(1, 0, 0);
 

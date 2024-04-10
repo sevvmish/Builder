@@ -40,7 +40,7 @@ public class PlayerControl : MonoBehaviour
     public float PlayerVerticalVelocity { get; private set; }
 
     //CONDITIONS
-    public bool IsGrounded { get; private set; }
+    public bool IsGrounded { get; private set; } = true;
     public bool IsCanJump { get; private set; }
     public bool IsCanWalk { get; private set; }
     public bool IsSpeedChanged { get; private set; }
