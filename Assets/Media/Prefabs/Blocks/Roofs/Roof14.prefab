@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockType: 3
-  blockIcon: {fileID: 21300000, guid: 097782735540f2d4db5606eae04ae6a7, type: 3}
+  blockIcon: {fileID: 21300000, guid: 54ea0dc672f9ebd4d8cb3c82ebdf5ae0, type: 3}
   realView: {fileID: 7215515801087719063}
   prototypeViewGood: {fileID: 7583924143130088252}
   prototypeViewBad: {fileID: 5619824200015634396}
@@ -248,6 +248,13 @@ MonoBehaviour:
   blockSize: 1
   materialType: 1
   volume: {x: 1, y: 1, z: 1}
+  visualRenderers:
+  - {fileID: 8298094926952250265}
+  - {fileID: 1715148773923946680}
+  - {fileID: 2307176611066014690}
+  - {fileID: 6432640690121465606}
+  - {fileID: 3615909972607432661}
+  visualMaterial: {fileID: 0}
 --- !u!65 &6193265187519493006
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -13,14 +13,16 @@ public class BlockManager : MonoBehaviour
 
     public Action<int> OnChangeCurrentBlock;
 
+    [SerializeField] private LineRenderer liner;
+
     private GameManager gm;
     private SoundUI sounds;
     private AssetManager assets;
     private Transform playerTransform;
     
-    private List<Block> blocksForCancel = new List<Block>();
-    //private Transform marker;
-    private Transform markerDestroyer;
+    public List<Block> ReadyBlocks { get; private set; }
+    private Transform marker;
+    //private Transform markerDestroyer;
 
     private float _timer;
     private int currentID;
@@ -35,8 +37,10 @@ public class BlockManager : MonoBehaviour
         sounds = SoundUI.Instance;
         assets = gm.Assets;
         playerTransform = gm.GetMainPlayerTransform();
-        //marker = assets.GetMarker;
-        markerDestroyer = assets.GetMarkerDestroyer;
+        marker = assets.GetMarker;
+        //markerDestroyer = assets.GetMarkerDestroyer;
+
+        ReadyBlocks = new List<Block>();
 
         //actions        
         OnChangeCurrentBlock = changeCurrentBlockCall;
@@ -44,6 +48,19 @@ public class BlockManager : MonoBehaviour
         //=
         currentID = 1;
         //StartBuilding();
+
+        if (Globals.IsMobile)
+        {
+            liner.startWidth = 1;
+            liner.endWidth = 1;
+            liner.textureScale = new Vector2 (0.3f, 1);
+        }
+        else
+        {
+            liner.startWidth = 0.5f;
+            liner.endWidth = 0.5f;
+            liner.textureScale = new Vector2(0.5f, 1);
+        }
     }
     
     
@@ -55,33 +72,50 @@ public class BlockManager : MonoBehaviour
         {
             _timer = 0;
 
+            
             if (IsBuildingBlocks)
             {
                 if (CurrentActiveBlock != null)
                 {
                     updateCurrentBlockPosition();
-                    //marker.position = gm.pointForMarker;
+                    marker.position = gm.pointForMarker;
                 }
             }
             else if (IsDestroingBlocks)
-            {
-                if (!markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(true);
-
+            {                
                 if (CurrentBlockToDelete == null)
-                {                    
-                    markerDestroyer.position = gm.pointForMarker;
+                {
+                    marker.position = gm.pointForMarker;
                 }
                 else
                 {
-                    markerDestroyer.position = CurrentBlockToDelete.gameObject.transform.position;
+                    marker.position = CurrentBlockToDelete.gameObject.transform.position;
                 }
             }
+                        
             
         }
         else
         {
             _timer += Time.deltaTime;
         }        
+
+        if (IsBuildingBlocks || IsDestroingBlocks)
+        {
+            liner.SetPosition(0, playerTransform.position + Vector3.up);
+            liner.SetPosition(1, marker.position);
+
+            /*
+            if (IsBuildingBlocks)
+            {
+                liner.SetPosition(1, marker.position);
+            }
+            else if (IsDestroingBlocks)
+            {
+                liner.SetPosition(1, markerDestroyer.position);
+            }
+            */
+        }
     }
 
     public void Rotate()
@@ -125,7 +159,9 @@ public class BlockManager : MonoBehaviour
             CurrentActiveBlock = null;
         }
 
-        if (markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(false);
+        //if (markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(false);
+        if (marker.gameObject.activeSelf) marker.gameObject.SetActive(false);
+        if (liner.gameObject.activeSelf) liner.gameObject.SetActive(false);
     }
 
     public void StartBuilding()
@@ -142,11 +178,13 @@ public class BlockManager : MonoBehaviour
         IsDestroingBlocks = false;
         IsChoosingBlocks = false;
 
-        //marker.gameObject.SetActive(true);
-        //markerDestroer.gameObject.SetActive(false);
-        if (markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(false);
+        if (!marker.gameObject.activeSelf) marker.gameObject.SetActive(true);
+        //if (markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(false);
 
         getNewBlock(currentID);
+        if (!liner.gameObject.activeSelf) liner.gameObject.SetActive(true);
+        liner.startColor = Color.yellow;
+        liner.endColor = Color.yellow;
     }
 
     public void StartChoosing()
@@ -165,7 +203,8 @@ public class BlockManager : MonoBehaviour
             CurrentActiveBlock = null;
         }
 
-        if (markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(false);
+        //if (markerDestroyer.gameObject.activeSelf) markerDestroyer.gameObject.SetActive(false);
+        //marker.gameObject.SetActive(false);
 
         IsBuildingBlocks = false;
         IsDestroingBlocks = false;
@@ -187,21 +226,23 @@ public class BlockManager : MonoBehaviour
         IsDestroingBlocks = true;
         IsChoosingBlocks = false;
 
-        //marker.gameObject.SetActive(false);
-        //markerDestroer.gameObject.SetActive(true);
+        if (!marker.gameObject.activeSelf) marker.gameObject.SetActive(true);
+        //if (!liner.gameObject.activeSelf) liner.gameObject.SetActive(true);
+        liner.startColor = Color.red;
+        liner.endColor = Color.red;
     }
 
     public void CancelLastBlock()
     {
-        if (blocksForCancel.Count == 0)
+        if (ReadyBlocks.Count == 0)
         {
             sounds.PlayUISound(SoundsUI.error1);
             return;
         }
                 
-        Block b = blocksForCancel[blocksForCancel.Count - 1];
+        Block b = ReadyBlocks[ReadyBlocks.Count - 1];
         sounds.PlayDestroy(b);
-        blocksForCancel.Remove(b);
+        ReadyBlocks.Remove(b);
         b.gameObject.SetActive(false);
         Destroy(b);
     }
@@ -212,7 +253,7 @@ public class BlockManager : MonoBehaviour
         {
             sounds.PlayBuild(CurrentActiveBlock);
             CurrentActiveBlock.MakeFinalView();
-            blocksForCancel.Add(CurrentActiveBlock);
+            ReadyBlocks.Add(CurrentActiveBlock);
             getNewBlock(currentID);            
         }
         else
@@ -225,13 +266,13 @@ public class BlockManager : MonoBehaviour
     {
         if (CurrentBlockToDelete != null)
         {
-            if (blocksForCancel.Count > 0)
+            if (ReadyBlocks.Count > 0)
             {
-                for (int i = 0; i < blocksForCancel.Count; i++)
+                for (int i = 0; i < ReadyBlocks.Count; i++)
                 {
-                    if (blocksForCancel[i].Equals(CurrentBlockToDelete))
+                    if (ReadyBlocks[i].Equals(CurrentBlockToDelete))
                     {
-                        blocksForCancel.Remove(CurrentBlockToDelete);
+                        ReadyBlocks.Remove(CurrentBlockToDelete);
                     }
                 }
             }
@@ -248,7 +289,7 @@ public class BlockManager : MonoBehaviour
     {
         if (val == currentID)
         {
-            sounds.PlayUISound(SoundsUI.error1);
+            gm.GetUI.HideBlocksPanel();
             return;
         }
 

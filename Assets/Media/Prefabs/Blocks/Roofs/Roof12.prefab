@@ -841,7 +841,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockType: 3
-  blockIcon: {fileID: 21300000, guid: 097782735540f2d4db5606eae04ae6a7, type: 3}
+  blockIcon: {fileID: 21300000, guid: 2bff20ec2064b0a41a117ea5ca04fd9e, type: 3}
   realView: {fileID: 594632574408901088}
   prototypeViewGood: {fileID: 7004291298800090999}
   prototypeViewBad: {fileID: 8718058569814870671}
@@ -856,6 +856,16 @@ MonoBehaviour:
   - {fileID: 3163341303001205830}
   blockSize: 1
   materialType: 1
+  volume: {x: 1, y: 1, z: 1}
+  visualRenderers:
+  - {fileID: 7171445837946282500}
+  - {fileID: 94143614599543514}
+  - {fileID: 3547329504765871952}
+  - {fileID: 5550698990864210819}
+  - {fileID: 2668493646630328948}
+  - {fileID: 7520147794991058742}
+  - {fileID: 9054099560299359697}
+  visualMaterial: {fileID: 0}
 --- !u!65 &8973261322738688921
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -987,6 +997,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7de107e9af25e644b8697daa1929a2d2, type: 3}
   m_PrefabInstance: {fileID: 7667108115620000085}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &9054099560299359697 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 7de107e9af25e644b8697daa1929a2d2, type: 3}
+  m_PrefabInstance: {fileID: 7667108115620000085}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9195641471662003122
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1060,6 +1075,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7de107e9af25e644b8697daa1929a2d2, type: 3}
+--- !u!23 &7520147794991058742 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 7de107e9af25e644b8697daa1929a2d2, type: 3}
+  m_PrefabInstance: {fileID: 9195641471662003122}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8653598857180935257 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7de107e9af25e644b8697daa1929a2d2, type: 3}

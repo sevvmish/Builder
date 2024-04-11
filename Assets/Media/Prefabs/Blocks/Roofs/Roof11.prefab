@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockType: 3
-  blockIcon: {fileID: 21300000, guid: 097782735540f2d4db5606eae04ae6a7, type: 3}
+  blockIcon: {fileID: 21300000, guid: dd172bbbf2d6f2d4aadc517725364586, type: 3}
   realView: {fileID: 2849647319195735584}
   prototypeViewGood: {fileID: 4817710625990383447}
   prototypeViewBad: {fileID: 924301062186166787}
@@ -314,6 +314,14 @@ MonoBehaviour:
   - {fileID: 3247253498855519794}
   blockSize: 0
   materialType: 1
+  volume: {x: 1, y: 1, z: 1}
+  visualRenderers:
+  - {fileID: 7540805209093639763}
+  - {fileID: 3143766731975012377}
+  - {fileID: 2383404156024269947}
+  - {fileID: 8983312518666824528}
+  - {fileID: 6028183585199065773}
+  visualMaterial: {fileID: 0}
 --- !u!65 &5984493074099626230
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -745,7 +753,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6129180612160293182
 Transform:
   m_ObjectHideFlags: 0
@@ -881,6 +889,10 @@ PrefabInstance:
       value: 180
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 7de107e9af25e644b8697daa1929a2d2, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 7de107e9af25e644b8697daa1929a2d2, type: 3}
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
@@ -900,5 +912,10 @@ PrefabInstance:
 --- !u!4 &4891830399652491714 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7de107e9af25e644b8697daa1929a2d2, type: 3}
+  m_PrefabInstance: {fileID: 4929749073772353065}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6028183585199065773 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 7de107e9af25e644b8697daa1929a2d2, type: 3}
   m_PrefabInstance: {fileID: 4929749073772353065}
   m_PrefabAsset: {fileID: 0}

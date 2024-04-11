@@ -149,7 +149,9 @@ public class UIManager : MonoBehaviour
     
 
     private void Update()
-    {        
+    {
+        
+
         if (!gm.IsBuildMode && currentRegime != 1)
         {
             currentRegime = 1;

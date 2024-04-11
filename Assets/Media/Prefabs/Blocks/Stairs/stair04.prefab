@@ -600,7 +600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockType: 5
-  blockIcon: {fileID: 21300000, guid: ab6db91373811284caeba2e9472fa9c2, type: 3}
+  blockIcon: {fileID: 21300000, guid: c513cf996da1a6043a51e528ab62449f, type: 3}
   realView: {fileID: 657849935423587925}
   prototypeViewGood: {fileID: 203178383401355390}
   prototypeViewBad: {fileID: 3071292679817256485}
@@ -618,6 +618,9 @@ MonoBehaviour:
   blockSize: 1
   materialType: 1
   volume: {x: 3, y: 2, z: 2}
+  visualRenderers:
+  - {fileID: 6900131842601746180}
+  visualMaterial: {fileID: 0}
 --- !u!65 &6012712245825781493
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -777,5 +780,10 @@ PrefabInstance:
 --- !u!4 &5731144464747758699 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1ae6918cec482d04baf7a882a581a92e, type: 3}
+  m_PrefabInstance: {fileID: 5189172597480350592}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6900131842601746180 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 1ae6918cec482d04baf7a882a581a92e, type: 3}
   m_PrefabInstance: {fileID: 5189172597480350592}
   m_PrefabAsset: {fileID: 0}

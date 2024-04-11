@@ -24,12 +24,12 @@ MonoBehaviour:
   RegimeBuilderDeleter: DESTRUCTION MODE
   Blocks: BLOCKS
   Build: BUILDING
-  BlockArrow: right mouse button
+  BlockArrow: button "TAB"
   BuildRegimeArrow: TURN ON/OFF      button "B"
   OptionsArrow: button "ESC"
   SetBlockHelper: 'BUILD BLOCK:       left mouse button'
   RotateBlockHelper: 'ROTATE BLOCK:    button "R"'
-  CancelBlockHelper: 'CANCEL LAST BLOCK:              button "Z"'
+  CancelBlockHelper: 'CANCEL BLOCK:         right mouse button'
   HowToDelHelper: 'TO DELETE BLOCKS:       button "Q"'
   DelBlockHelper: 'DELETE BLOCK:      left mouse button'
   HowToBuildHelper: 'TO BUILD BLOCKS:       button "Q"'

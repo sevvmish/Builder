@@ -65,7 +65,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockType: 5
-  blockIcon: {fileID: 21300000, guid: ab6db91373811284caeba2e9472fa9c2, type: 3}
+  blockIcon: {fileID: 21300000, guid: 20dee2b9b35d24840927307e4fa28093, type: 3}
   realView: {fileID: 5154867212848346242}
   prototypeViewGood: {fileID: 4852789662586654517}
   prototypeViewBad: {fileID: 4181709596535762431}
@@ -81,6 +81,9 @@ MonoBehaviour:
   blockSize: 0
   materialType: 1
   volume: {x: 2, y: 1, z: 2}
+  visualRenderers:
+  - {fileID: 2695054701904486764}
+  visualMaterial: {fileID: 0}
 --- !u!65 &5676181875353602395
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -646,6 +649,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64be13875d35fc94f928b0fb9489a179, type: 3}
+--- !u!23 &2695054701904486764 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 64be13875d35fc94f928b0fb9489a179, type: 3}
+  m_PrefabInstance: {fileID: 3649978765307674088}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3831979597933353475 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 64be13875d35fc94f928b0fb9489a179, type: 3}

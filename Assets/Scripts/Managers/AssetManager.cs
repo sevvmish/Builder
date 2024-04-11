@@ -6,14 +6,17 @@ using UnityEngine;
 [Serializable]
 public class AssetManager : MonoBehaviour
 {
+    public Material VisualizationMaterial { get => visualizationMaterial; }
+
     [SerializeField] private Transform blockLocation;
 
     [SerializeField] private Transform floorsLocation;
     [SerializeField] private Transform wallsLocation;
     [SerializeField] private Transform roofsLocation;
-    [SerializeField] private Transform beamsLocation;
-    [SerializeField] private Transform stairsLocation;
-    [SerializeField] private Transform fencesLocation;
+    [SerializeField] private Transform partsLocation;
+    [SerializeField] private Transform othersLocation;
+
+    [SerializeField] private Material visualizationMaterial;
 
     private Dictionary<int, GameObject> linkIDtoAsset = new Dictionary<int, GameObject>();
 
@@ -21,9 +24,9 @@ public class AssetManager : MonoBehaviour
     private List<int> floorsIDs = new List<int>();
     private List<int> wallsIDs = new List<int>();
     private List<int> roofsIDs = new List<int>();
-    private List<int> beamsIDs = new List<int>();
-    private List<int> fencesIDs = new List<int>();
-    private List<int> stairsIDs = new List<int>();
+    private List<int> partsIDs = new List<int>();
+    private List<int> othersIDs = new List<int>();
+
     //=
     [SerializeField] private GameObject markerExample;
     private GameObject marker;
@@ -40,9 +43,8 @@ public class AssetManager : MonoBehaviour
         initAssetsLink(floorsLocation);
         initAssetsLink(wallsLocation);
         initAssetsLink(roofsLocation);
-        initAssetsLink(stairsLocation);
-        initAssetsLink(fencesLocation);
-        initAssetsLink(beamsLocation);
+        initAssetsLink(partsLocation);
+        initAssetsLink(othersLocation);
 
         marker = Instantiate(markerExample);
         marker.SetActive(false);
@@ -55,9 +57,8 @@ public class AssetManager : MonoBehaviour
     public int[] GetArrayOfFloorsIds => floorsIDs.ToArray();
     public int[] GetArrayOfWallsIds => wallsIDs.ToArray();
     public int[] GetArrayOfRoofsIds => roofsIDs.ToArray();
-    public int[] GetArrayOfBeamsIds => beamsIDs.ToArray();
-    public int[] GetArrayOfFencesIds => fencesIDs.ToArray();
-    public int[] GetArrayOfStairsIds => stairsIDs.ToArray();
+    public int[] GetArrayOfPartsIds => partsIDs.ToArray();
+    public int[] GetArrayOfOthersIds => othersIDs.ToArray();
 
     public GameObject GetGameObjectByID(int ID)
     {
@@ -102,15 +103,19 @@ public class AssetManager : MonoBehaviour
                         break;
 
                     case BlockTypes.stair:
-                        stairsIDs.Add(id);
+                        partsIDs.Add(id);
                         break;
 
                     case BlockTypes.beam:
-                        beamsIDs.Add(id);
+                        partsIDs.Add(id);
                         break;
 
                     case BlockTypes.fence:
-                        fencesIDs.Add(id);
+                        partsIDs.Add(id);
+                        break;
+
+                    case BlockTypes.garden_ground:
+                        othersIDs.Add(id);
                         break;
                 }
             }

@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class BlockMenuUI : MonoBehaviour
-{    
+{
+    public bool IsPanelOpened => blocksPanel.activeSelf;
+
+
     [Header("BlocksMenu")]
     //[SerializeField] private Button callBlocksButton;
     //[SerializeField] private Button closeBlocksButton;
@@ -18,9 +21,8 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private Button floorsFilterButton;
     [SerializeField] private Button wallsFilterButton;
     [SerializeField] private Button roofsFilterButton;
-    [SerializeField] private Button stairsFilterButton;
-    [SerializeField] private Button beamsFilterButton;
-    [SerializeField] private Button fencesFilterButton;
+    [SerializeField] private Button partsFilterButton;
+    [SerializeField] private Button othersFilterButton;
 
     [Header("FOR PC")]
     [SerializeField] private int leftPC = 30;
@@ -34,15 +36,22 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private Vector2 cellSizeM = new Vector2(192, 276);
     [SerializeField] private Vector2 spacingM = new Vector2(80, 120);
 
+    [Header("Icons")]
+    [SerializeField] private Image floorsImage;
+    [SerializeField] private Image wallsImage;
+    [SerializeField] private Image roofsImage;
+    [SerializeField] private Image partsImage;
+    [SerializeField] private Image othersImage;
+    private int currentIndex = 1;
+    private const int MAX_INDEX = 5;
 
     private BlockTypes defaultStartBlock = BlockTypes.floor;
     
     private List<GameObject> floors = new List<GameObject>();
     private List<GameObject> walls = new List<GameObject>();
     private List<GameObject> roofs = new List<GameObject>();
-    private List<GameObject> beams = new List<GameObject>();
-    private List<GameObject> fences = new List<GameObject>();
-    private List<GameObject> stairs = new List<GameObject>();
+    private List<GameObject> parts = new List<GameObject>();
+    private List<GameObject> others = new List<GameObject>();
 
     private SoundUI sounds;
     private GameManager gm;
@@ -60,6 +69,10 @@ public class BlockMenuUI : MonoBehaviour
 
         blocksPanel.SetActive(false);
         createBlocksPanel();
+        resetIcons();
+        floorsImage.color = Color.yellow;
+        floorsImage.transform.localScale = Vector3.one;
+        currentIndex = 1;
 
         if (Globals.IsMobile)
         {
@@ -85,67 +98,189 @@ public class BlockMenuUI : MonoBehaviour
 
         floorsFilterButton.onClick.AddListener(() =>
         {
-            if (defaultStartBlock == BlockTypes.floor) return;
-
-            sounds.PlayUISound(SoundsUI.click);
-            defaultStartBlock = BlockTypes.floor;
-            filterBlocksPanel();
+            activateFloors();
         });
 
         wallsFilterButton.onClick.AddListener(() =>
         {
-            if (defaultStartBlock == BlockTypes.wall) return;
-
-            sounds.PlayUISound(SoundsUI.click);
-            defaultStartBlock = BlockTypes.wall;
-            filterBlocksPanel();
+            activateWalls();
         });
 
         roofsFilterButton.onClick.AddListener(() =>
         {
-            if (defaultStartBlock == BlockTypes.roof) return;
-
-            sounds.PlayUISound(SoundsUI.click);
-            defaultStartBlock = BlockTypes.roof;
-            filterBlocksPanel();
+            activateRoofs();
         });
 
-        stairsFilterButton.onClick.AddListener(() =>
+        partsFilterButton.onClick.AddListener(() =>
         {
-            if (defaultStartBlock == BlockTypes.stair) return;
-
-            sounds.PlayUISound(SoundsUI.click);
-            defaultStartBlock = BlockTypes.stair;
-            filterBlocksPanel();
+            activateParts();
         });
 
-        beamsFilterButton.onClick.AddListener(() =>
+        othersFilterButton.onClick.AddListener(() =>
         {
-            if (defaultStartBlock == BlockTypes.beam) return;
-
-            sounds.PlayUISound(SoundsUI.click);
-            defaultStartBlock = BlockTypes.beam;
-            filterBlocksPanel();
+            activateOthers();
         });
+    }
 
-        fencesFilterButton.onClick.AddListener(() =>
-        {
-            if (defaultStartBlock == BlockTypes.fence) return;
+    private void activateFloors()
+    {
+        if (defaultStartBlock == BlockTypes.floor) return;
 
-            sounds.PlayUISound(SoundsUI.click);
-            defaultStartBlock = BlockTypes.fence;
-            filterBlocksPanel();
-        });
+        resetIcons();
+        floorsImage.color = Color.yellow;
+        floorsImage.transform.localScale = Vector3.one;
 
+        currentIndex = 1;
 
+        sounds.PlayUISound(SoundsUI.click);
+        defaultStartBlock = BlockTypes.floor;
+        filterBlocksPanel();
+    }
+
+    private void activateWalls()
+    {
+        if (defaultStartBlock == BlockTypes.wall) return;
+
+        resetIcons();
+        wallsImage.color = Color.yellow;
+        wallsImage.transform.localScale = Vector3.one;
+
+        currentIndex = 2;
+
+        sounds.PlayUISound(SoundsUI.click);
+        defaultStartBlock = BlockTypes.wall;
+        filterBlocksPanel();
+    }
+
+    private void activateRoofs()
+    {
+        if (defaultStartBlock == BlockTypes.roof) return;
+
+        resetIcons();
+        roofsImage.color = Color.yellow;
+        roofsImage.transform.localScale = Vector3.one;
+
+        currentIndex = 3;
+
+        sounds.PlayUISound(SoundsUI.click);
+        defaultStartBlock = BlockTypes.roof;
+        filterBlocksPanel();
+    }
+
+    private void activateParts()
+    {
+        if (defaultStartBlock == BlockTypes.parts) return;
+
+        resetIcons();
+        partsImage.color = Color.yellow;
+        partsImage.transform.localScale = Vector3.one;
+
+        currentIndex = 4;
+
+        sounds.PlayUISound(SoundsUI.click);
+        defaultStartBlock = BlockTypes.parts;
+        filterBlocksPanel();
+    }
+
+    private void activateOthers()
+    {
+        if (defaultStartBlock == BlockTypes.others) return;
+
+        resetIcons();
+        othersImage.color = Color.yellow;
+        othersImage.transform.localScale = Vector3.one;
+
+        currentIndex = 5;
+
+        sounds.PlayUISound(SoundsUI.click);
+        defaultStartBlock = BlockTypes.others;
+        filterBlocksPanel();
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Tab) && gm.PointerClickedCount <= 0 && !IsPanelOpened)
+        {
+            if (gm.IsBuildMode)
+            {
+                ShowBlocksPanel();
+                gm.PointerClickedCount = 0.1f;
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Tab) && blocksPanel.activeSelf)
+        {
+            HideAllPanel();
+        }
+
+        if (Input.GetKeyDown(KeyCode.D) && blocksPanel.activeSelf)
+        {
+            currentIndex++;
+
+            if (currentIndex > MAX_INDEX) currentIndex = 1;
+
+            switch (currentIndex)
+            {
+                case 1:
+                    activateFloors();
+                    break;
+
+                case 2:
+                    activateWalls();
+                    break;
+
+                case 3:
+                    activateRoofs();
+                    break;
+
+                case 4:
+                    activateParts();
+                    break;
+
+                case 5:
+                    activateOthers();
+                    break;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.A) && blocksPanel.activeSelf)
+        {
+            currentIndex--;
+
+            if (currentIndex < 1) currentIndex = MAX_INDEX;
+
+            switch (currentIndex)
+            {
+                case 1:
+                    activateFloors();
+                    break;
+
+                case 2:
+                    activateWalls();
+                    break;
+
+                case 3:
+                    activateRoofs();
+                    break;
+
+                case 4:
+                    activateParts();
+                    break;
+
+                case 5:
+                    activateOthers();
+                    break;
+            }
+        }
+
+
         if (backCkick.IsPressed)
         {
             gm.GetUI.HideBlocksPanel();
         }
+
+        
+
+        
     }
 
     private void createBlocksPanel()
@@ -153,9 +288,8 @@ public class BlockMenuUI : MonoBehaviour
         create(assets.GetArrayOfFloorsIds, ref floors);
         create(assets.GetArrayOfWallsIds, ref walls);
         create(assets.GetArrayOfRoofsIds, ref roofs);
-        create(assets.GetArrayOfBeamsIds, ref beams);
-        create(assets.GetArrayOfFencesIds, ref fences);
-        create(assets.GetArrayOfStairsIds, ref stairs);
+        create(assets.GetArrayOfPartsIds, ref parts);
+        create(assets.GetArrayOfOthersIds, ref others);
 
     }
     private void create(int[] sourceIDs, ref List<GameObject> sourceGameobjects)
@@ -182,9 +316,8 @@ public class BlockMenuUI : MonoBehaviour
         floors.ForEach(p => p.SetActive(false));
         walls.ForEach(p => p.SetActive(false));
         roofs.ForEach(p => p.SetActive(false));
-        stairs.ForEach(p => p.SetActive(false));
-        beams.ForEach(p => p.SetActive(false));
-        fences.ForEach(p => p.SetActive(false));
+        parts.ForEach(p => p.SetActive(false));
+        others.ForEach(p => p.SetActive(false));
     }
 
     public void ShowBlocksPanel()
@@ -228,17 +361,14 @@ public class BlockMenuUI : MonoBehaviour
                 roofs.ForEach(p => p.SetActive(true));
                 break;
 
-            case BlockTypes.stair:
-                stairs.ForEach(p => p.SetActive(true));
+            case BlockTypes.parts:
+                parts.ForEach(p => p.SetActive(true));
                 break;
 
-            case BlockTypes.beam:
-                beams.ForEach(p => p.SetActive(true));
+            case BlockTypes.others:
+                others.ForEach(p => p.SetActive(true));
                 break;
-
-            case BlockTypes.fence:
-                fences.ForEach(p => p.SetActive(true));
-                break;
+            
         }
     }
 
@@ -253,6 +383,24 @@ public class BlockMenuUI : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }            
+    }
+
+    private void resetIcons()
+    {
+        floorsImage.color = new Color(1, 1, 1, 0.8f);
+        floorsImage.transform.localScale = Vector3.one * 0.75f;
+
+        wallsImage.color = new Color(1, 1, 1, 0.8f);
+        wallsImage.transform.localScale = Vector3.one * 0.75f;
+
+        roofsImage.color = new Color(1, 1, 1, 0.8f);
+        roofsImage.transform.localScale = Vector3.one * 0.75f;
+
+        partsImage.color = new Color(1, 1, 1, 0.8f);
+        partsImage.transform.localScale = Vector3.one * 0.75f;
+
+        othersImage.color = new Color(1, 1, 1, 0.8f);
+        othersImage.transform.localScale = Vector3.one * 0.75f;
     }
         
 }

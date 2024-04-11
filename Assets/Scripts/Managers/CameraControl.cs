@@ -196,8 +196,8 @@ public class CameraControl : MonoBehaviour
             isBuildRegimeCorrected = true;
             isNonBuildRegimeCorrected = false;
 
-            mainCamera.localPosition = Globals.BasePosition + new Vector3(1,0,0);
-            baseCameraBodyPosition = Globals.BasePosition + new Vector3(1, 0, 0);
+            mainCamera.localPosition = Globals.BasePosition + new Vector3(3, 0, 1);
+            baseCameraBodyPosition = Globals.BasePosition + new Vector3(3, 0, 1);
 
         }
         else if (!gm.IsBuildMode && !isNonBuildRegimeCorrected)
@@ -252,7 +252,7 @@ public class CameraControl : MonoBehaviour
         if (_timer > _timerCooldown)
         {            
             _timer = 0;
-            _timerCooldown = 0.05f;
+            _timerCooldown = 0.02f;
             newSystem();
         }
         else

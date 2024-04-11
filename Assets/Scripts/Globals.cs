@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using YG;
-using System;
 
 
 public class Globals : MonoBehaviour
@@ -57,7 +56,7 @@ public class Globals : MonoBehaviour
 
     public const float ZOOM_DELTA = 0.5f;//0.3f;
     public const float ZOOM_LIMIT_LOW = 30f;
-    public const float ZOOM_LIMIT_HIGH = 70f;
+    public const float ZOOM_LIMIT_HIGH = 80f;
 
 
 

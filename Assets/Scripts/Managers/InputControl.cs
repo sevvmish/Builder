@@ -84,14 +84,14 @@ public class InputControl : MonoBehaviour
         {
             if (blockManager.IsBuildingBlocks)
             {
-                if (Physics.Raycast(mainPlayer.position + Vector3.up, (_camera.transform.forward * 50 + _camera.transform.right - mainPlayer.position).normalized, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
+                if (Physics.Raycast(mainPlayer.position + Vector3.up + mainPlayer.right*2, (_camera.transform.forward*50 + _camera.transform.right*10 - mainPlayer.position).normalized, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
                 {                    
                     markerPosition = hit.point;
                 }
             }
             else if (blockManager.IsDestroingBlocks)
             {
-                if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask))
+                if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask)) //_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask
                 {                    
                     if (hit.collider.TryGetComponent(out Block b) && b.IsFinalized)
                     {
@@ -260,7 +260,7 @@ public class InputControl : MonoBehaviour
                 }                
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Z))
+        else if (Input.GetMouseButtonDown(1) && gm.PointerClickedCount <= 0)
         {
             if (gm.IsBuildMode)
             {
@@ -284,14 +284,7 @@ public class InputControl : MonoBehaviour
                 }                
             }            
         }
-        else if (Input.GetMouseButtonDown(1) && gm.PointerClickedCount <= 0)
-        {
-            if (gm.IsBuildMode)
-            {
-                gm.GetUI.ShowBlocksPanel();
-                gm.PointerClickedCount = 0.1f;
-            }
-        }
+        
 
         if (gm.IsBuildMode && blockManager.IsChoosingBlocks) return;
 
