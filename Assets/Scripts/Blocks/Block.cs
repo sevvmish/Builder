@@ -181,7 +181,7 @@ public class Block : MonoBehaviour
                 break;
 
             case BlockTypes.fence:
-                assessBlockStatusFence();
+                assessBlockStatusStandartSurface();
                 break;
 
             case BlockTypes.beam:
@@ -190,6 +190,10 @@ public class Block : MonoBehaviour
 
             case BlockTypes.garden_ground:
                 assessBlockStatusGardenGround();
+                break;
+
+            case BlockTypes.furniture:
+                assessBlockStatusFurniture();
                 break;
         }
 
@@ -337,7 +341,7 @@ public class Block : MonoBehaviour
         }
     }
 
-    private void assessBlockStatusFence()
+    private void assessBlockStatusStandartSurface()
     {
         Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
 
@@ -357,6 +361,58 @@ public class Block : MonoBehaviour
                 {
                     isBad = true;
                     break;
+                }
+            }
+
+        }
+        else
+        {
+            isBad = true;
+        }
+
+        if (isBad)
+        {
+            MakeColorBad();
+        }
+        else
+        {
+            MakeColorGood();
+        }
+    }
+
+    private void assessBlockStatusFurniture()
+    {
+        Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+
+        bool isBad = false;
+
+        if (colliders.Length > 0)
+        {
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].gameObject.layer == 3)
+                {
+                    isBad = true;
+                    gm.GetUI.PlayerCrossNewBlockError();
+                    break;
+                }
+                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this))
+                {
+                    if (b.BlockType == BlockTypes.furniture && b.ID.ID == ID.ID)
+                    {
+                        isBad = true;
+                        break;
+                    }
+                    else if (b.BlockType == BlockTypes.floor || b.BlockType == BlockTypes.furniture)
+                    {
+                        isBad = false;
+                    }
+                    else
+                    {
+                        isBad = true;
+                        break;
+                    }
+                    
                 }
             }
 
@@ -1068,7 +1124,8 @@ public enum BlockTypes
     fence,
     parts,
     others,
-    garden_ground
+    garden_ground,
+    furniture
 }
 
 public enum BlockSizes

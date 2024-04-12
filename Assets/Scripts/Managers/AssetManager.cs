@@ -117,6 +117,10 @@ public class AssetManager : MonoBehaviour
                     case BlockTypes.garden_ground:
                         othersIDs.Add(id);
                         break;
+
+                    case BlockTypes.furniture:
+                        othersIDs.Add(id);
+                        break;
                 }
             }
         }
