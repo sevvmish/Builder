@@ -14,6 +14,8 @@ public class Globals : MonoBehaviour
     public static string CurrentLanguage;
     public static Translation Language;
 
+    public static int CurrentLevel;
+
     public static DateTime TimeWhenStartedPlaying;
     public static DateTime TimeWhenLastInterstitialWas;
     public static DateTime TimeWhenLastRewardedWas;
@@ -73,7 +75,5 @@ public class Globals : MonoBehaviour
 
     public static Vector3 UIPlayerPosition = new Vector3(0.1f, -0.8f, 0);
     public static Vector3 UIPlayerRotation = new Vector3(0, 180, 0);
-
-    public static System.Random MainRandom;
     
 }

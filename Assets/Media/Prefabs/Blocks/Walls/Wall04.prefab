@@ -821,7 +821,7 @@ MonoBehaviour:
   prototypeViewGood: {fileID: 8385635626059832545}
   prototypeViewBad: {fileID: 3306131911146700695}
   buildVFX: {fileID: 9154486476276431863}
-  sizeCheker: {x: 5.5, y: 3.5, z: 0.2}
+  sizeCheker: {x: 5.5, y: 4, z: 0.2}
   deltaCheker: {x: 0, y: 0, z: 0}
   deltaStep: 1
   rotationAngle: 90
@@ -832,7 +832,7 @@ MonoBehaviour:
   - {fileID: 8897169799237556516}
   blockSize: 2
   materialType: 1
-  volume: {x: 1, y: 1, z: 1}
+  volume: {x: 6, y: 4, z: 0}
   visualRenderers:
   - {fileID: 7854959590782364936}
   - {fileID: 1027722925610812233}
@@ -1066,6 +1066,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9c5fd652d7854f24f92233c5d2d600dd, type: 2}
+    - target: {fileID: -5754084199372789682, guid: 1bee40de8ccaa4d4695bcdf91ff32596, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -3199048594806314471, guid: 655cc5301a0c07c4fb641527916ed6c8, type: 3}
     - target: {fileID: 919132149155446097, guid: 1bee40de8ccaa4d4695bcdf91ff32596, type: 3}
       propertyPath: m_Name
       value: wall2 with doorway

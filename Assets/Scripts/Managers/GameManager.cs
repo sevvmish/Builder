@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIManager UI;
     [SerializeField] private BlockManager blockManager;
     [SerializeField] private TextMeshProUGUI texter;
+    [SerializeField] private LevelControl levelControl;
     private InputControl playerInput;
 
     public PlayerControl MainPlayerControl { get; private set; }
@@ -31,21 +32,22 @@ public class GameManager : MonoBehaviour
     public Transform GetMainPlayerTransform() => mainPlayer;    
     public AssetManager Assets => assetManager;
     public UIManager GetUI => UI;
+    public LevelControl LevelControl => levelControl;
     public BlockManager BlockManager => blockManager;
     public float PointerClickedCount;
 
     //GAME START    
     public bool IsGameStarted { get; private set; }
-    public bool IsBuildMode { get; private set; }
-    public bool IsCustomGame { get; private set; }
+    public bool IsBuildMode { get; private set; }    
     public bool IsWalkthroughGame { get; private set; }
 
     private Transform mainPlayer;    
     private float cameraShakeCooldown;
    
     public TextMeshProUGUI Texter => texter;
-    public Vector3 pointForMarker => playerInput.GetMarkerposition;
-    
+    public Vector3 pointForMarker => playerInput.GetMarkerPosition;
+    public Block blockForMarker => playerInput.GetMarkerAim;
+
 
 
     // Start is called before the first frame update
@@ -62,7 +64,7 @@ public class GameManager : MonoBehaviour
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
                
-        /*
+        
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
         Globals.IsInitiated = true;
@@ -70,7 +72,7 @@ public class GameManager : MonoBehaviour
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse("ru").GetCurrentTranslation();
-        Globals.MainRandom = new System.Random(Globals.MainPlayerData.Seed);
+        Globals.CurrentLevel = Globals.MainPlayerData.Level;
         if (Globals.IsMobile)
         {
             Globals.MainPlayerData.Zoom = 50;
@@ -78,7 +80,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Globals.MainPlayerData.Zoom = 60;
-        }*/
+        }
         //===========================
 
         if (Globals.IsMobile)
@@ -103,10 +105,19 @@ public class GameManager : MonoBehaviour
         playerInput = mainPlayer.GetComponent<InputControl>();
         //IsBuildMode = true;
         IsGameStarted = true;
+
+        IsWalkthroughGame = true;
     }
+
+    private void Start()
+    {
+        levelControl.SetData();        
+    }
+    
 
     public void SetBuildingMode(bool isActive)
     {
+
         IsBuildMode = isActive;
         SoundUI.Instance.PlayUISound(SoundsUI.success2);
 

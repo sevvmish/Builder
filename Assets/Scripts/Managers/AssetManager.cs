@@ -6,17 +6,31 @@ using UnityEngine;
 [Serializable]
 public class AssetManager : MonoBehaviour
 {
+    public Transform[] Levels { get => levels; }
     public Material VisualizationMaterial { get => visualizationMaterial; }
+    public Material MainAtlas { get => mainAtlas; }
+    public Material Brown { get => brown; }
+    public Material Black { get => black; }
+    public Material Carpet { get => carpet; }
 
+    [Header("Materials")]
+    [SerializeField] private Material mainAtlas;
+    [SerializeField] private Material brown;
+    [SerializeField] private Material black; 
+    [SerializeField] private Material carpet;
+    [SerializeField] private Material visualizationMaterial;
+
+    [Header("Locations")]
     [SerializeField] private Transform blockLocation;
-
     [SerializeField] private Transform floorsLocation;
     [SerializeField] private Transform wallsLocation;
     [SerializeField] private Transform roofsLocation;
     [SerializeField] private Transform partsLocation;
     [SerializeField] private Transform othersLocation;
 
-    [SerializeField] private Material visualizationMaterial;
+    [Header("Levels")]
+    [SerializeField] private Transform levelsLocation;
+    private Transform[] levels;
 
     private Dictionary<int, GameObject> linkIDtoAsset = new Dictionary<int, GameObject>();
 
@@ -40,6 +54,8 @@ public class AssetManager : MonoBehaviour
 
     private void Awake()
     {
+        
+
         initAssetsLink(floorsLocation);
         initAssetsLink(wallsLocation);
         initAssetsLink(roofsLocation);
@@ -52,7 +68,14 @@ public class AssetManager : MonoBehaviour
         markerDestroyer = Instantiate(markerDestroyerExample);
         markerDestroyer.SetActive(false);
 
+        levels = new Transform[levelsLocation.childCount];
+        for (int i = 0; i < levelsLocation.childCount; i++)
+        {
+            levels[i] = levelsLocation.GetChild(i);
+        }
     }
+
+    
 
     public int[] GetArrayOfFloorsIds => floorsIDs.ToArray();
     public int[] GetArrayOfWallsIds => wallsIDs.ToArray();
@@ -61,7 +84,7 @@ public class AssetManager : MonoBehaviour
     public int[] GetArrayOfOthersIds => othersIDs.ToArray();
 
     public GameObject GetGameObjectByID(int ID)
-    {
+    {        
         GameObject g = Instantiate(linkIDtoAsset[ID], blockLocation);
         g.gameObject.name += "-" + indexBuilder.ToString();
         indexBuilder++;

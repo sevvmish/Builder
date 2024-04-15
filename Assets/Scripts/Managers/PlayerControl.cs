@@ -7,6 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerControl : MonoBehaviour
 {
+    public SkinControl SkinControl { get; private set; }
+
     [Header("Controls")]    
     private AnimationControl animationControl;
     private Transform playerLocation;
@@ -97,6 +99,7 @@ public class PlayerControl : MonoBehaviour
         anim.gameObject.AddComponent<AnimationControl>();
         animationControl = anim.GetComponent<AnimationControl>();
         animationControl.SetData(anim, this);
+        SkinControl = anim.GetComponent<SkinControl>();
     }
 
     
@@ -472,55 +475,7 @@ public class PlayerControl : MonoBehaviour
         }                
         
     }
-
-
-    public void Respawn(Vector3 pos, Vector3 rot)
-    {
-        StartCoroutine(playRespawn(pos, rot));
-
-    }
-    private IEnumerator playRespawn(Vector3 pos, Vector3 rot)
-    {
-        IsDead = true;
-        IsCanAct = false;
-        isJump = false;
-        IsJumping = false;
-        IsFloating = false;
-        _transform.SetParent(playerLocation);
-
-        yield return new WaitForSeconds(0.2f);
-
-
-        IsCanAct = true;
-        IsCanJump = true;
-        IsCanWalk = true;
-
-        _rigidbody.velocity = Vector3.zero;
-      
-            angleYForMobile = rot.y;
-      
-        _transform.position = pos;
-        _transform.eulerAngles = new Vector3(0, rot.y, 0);
-        
-        IsDead = false;
-        IsSpeedChanged = false;
-        PlayerCurrentSpeed = PlayerMaxSpeed;
-    }
-
-    public void ApplyTrapForce(Vector3 forceVector, Vector3 contactPoint, ApplyForceType punchType, float additionalForce)
-    {
-        if (!IsCanAct) return;
-        if (additionalForce == 0) additionalForce = 1;
-                
-        
-        
-        if (punchType == ApplyForceType.Punch_large)
-        {        
-            gm.ShakeScreen(0.3f, 2, 30);
-        }
-
-    }
-
+    
 }
 
 public struct PhysicsCustomizing

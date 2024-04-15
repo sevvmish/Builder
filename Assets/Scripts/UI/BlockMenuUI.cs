@@ -6,11 +6,16 @@ using UnityEngine.UI;
 public class BlockMenuUI : MonoBehaviour
 {
     public bool IsPanelOpened => blocksPanel.activeSelf;
+    
+    [Header("BlocksMenu for visualization")]
+    [SerializeField] private GameObject blocksPanelForVis;
+    [SerializeField] private Transform blockMenuContainerForVis;
+    [SerializeField] private GridLayoutGroup gridLayoutGroupForVis;
+    [SerializeField] private PointerDownOnly backCkickForVis;
+    private Stage currentStage;
+    private Dictionary<Block, BlockPanelUI> panelsForVis = new Dictionary<Block, BlockPanelUI>();
 
-
-    [Header("BlocksMenu")]
-    //[SerializeField] private Button callBlocksButton;
-    //[SerializeField] private Button closeBlocksButton;
+    [Header("BlocksMenu")]    
     [SerializeField] private GameObject blocksPanel;
     [SerializeField] private GameObject blocksPanelExample;
     [SerializeField] private Transform blockMenuContainer;
@@ -68,6 +73,8 @@ public class BlockMenuUI : MonoBehaviour
         assets = gm.Assets;
 
         blocksPanel.SetActive(false);
+        blocksPanelForVis.SetActive(false);
+
         createBlocksPanel();
         resetIcons();
         floorsImage.color = Color.yellow;
@@ -83,6 +90,14 @@ public class BlockMenuUI : MonoBehaviour
             gridLayoutGroup.spacing = spacingM;
 
             blocksPanel.transform.localScale = Vector3.one * 0.8f;
+
+            gridLayoutGroupForVis.padding.left = leftM;
+            gridLayoutGroupForVis.padding.top = topM;
+
+            gridLayoutGroupForVis.cellSize = cellSizeM;
+            gridLayoutGroupForVis.spacing = spacingM;
+
+            blocksPanelForVis.transform.localScale = Vector3.one * 0.8f;
         }
         else
         {
@@ -93,6 +108,14 @@ public class BlockMenuUI : MonoBehaviour
             gridLayoutGroup.spacing = spacingPC;
 
             blocksPanel.transform.localScale = Vector3.one * 0.9f;
+
+            gridLayoutGroupForVis.padding.left = leftPC;
+            gridLayoutGroupForVis.padding.top = topPC;
+
+            gridLayoutGroupForVis.cellSize = cellSizePC;
+            gridLayoutGroupForVis.spacing = spacingPC;
+
+            blocksPanelForVis.transform.localScale = Vector3.one * 0.9f;
         }
         
 
@@ -203,8 +226,18 @@ public class BlockMenuUI : MonoBehaviour
         {
             if (gm.IsBuildMode)
             {
-                ShowBlocksPanel();
-                gm.PointerClickedCount = 0.1f;
+                if (gm.IsWalkthroughGame)
+                {
+                    ShowBlocksPanel();
+                    gm.PointerClickedCount = 0.1f;
+                }
+                else
+                {
+                    ShowBlocksPanel();
+                    gm.PointerClickedCount = 0.1f;
+                }
+
+                
             }
         }
         else if (Input.GetKeyDown(KeyCode.Tab) && blocksPanel.activeSelf)
@@ -273,25 +306,59 @@ public class BlockMenuUI : MonoBehaviour
         }
 
 
-        if (backCkick.IsPressed)
+        if (backCkick.IsPressed || backCkickForVis.IsPressed)
         {
             gm.GetUI.HideBlocksPanel();
+        }        
+    }
+
+    public void UpdateIconsForVis(Stage stage)
+    {
+        if (currentStage != null && currentStage.Equals(stage)) return;
+
+        if (currentStage != null && !currentStage.Equals(stage))
+        {
+            foreach (Block key in panelsForVis.Keys)
+            {
+                Destroy(panelsForVis[key].gameObject);
+            }
         }
 
-        
+        currentStage = stage;
+        panelsForVis.Clear();
 
-        
+        for (int i = 0; i < currentStage.Blocks.Count; i++)
+        {
+            GameObject g = Instantiate(blocksPanelExample, blockMenuContainerForVis);
+
+            if (Globals.IsMobile)
+            {
+                g.transform.localScale = Vector3.one * 1.4f;
+            }
+
+            int id = currentStage.Blocks[i].GetComponent<Identificator>().ID;
+            g.GetComponent<BlockPanelUI>().SetData(id, blockManager);
+            panelsForVis.Add(currentStage.Blocks[i], g.GetComponent<BlockPanelUI>());
+                        
+        }
     }
 
     private void createBlocksPanel()
     {
-        create(assets.GetArrayOfFloorsIds, ref floors);
-        create(assets.GetArrayOfWallsIds, ref walls);
-        create(assets.GetArrayOfRoofsIds, ref roofs);
-        create(assets.GetArrayOfPartsIds, ref parts);
-        create(assets.GetArrayOfOthersIds, ref others);
-
+        if (gm.IsWalkthroughGame)
+        {
+            //
+        }
+        else
+        {
+            create(assets.GetArrayOfFloorsIds, ref floors);
+            create(assets.GetArrayOfWallsIds, ref walls);
+            create(assets.GetArrayOfRoofsIds, ref roofs);
+            create(assets.GetArrayOfPartsIds, ref parts);
+            create(assets.GetArrayOfOthersIds, ref others);
+        }
     }
+
     private void create(int[] sourceIDs, ref List<GameObject> sourceGameobjects)
     {        
         if (sourceIDs.Length > 0)
@@ -324,10 +391,27 @@ public class BlockMenuUI : MonoBehaviour
     {
         sounds.PlayUISound(SoundsUI.click);
 
-        if (blocksPanel.activeSelf)
+        if (gm.IsWalkthroughGame)
         {
-            HideAllPanel();
-            return;
+            if (blocksPanelForVis.activeSelf)
+            {
+                HideAllPanel();
+                return;
+            }
+
+            blocksPanelForVis.SetActive(true);
+        }
+        else
+        {
+            if (blocksPanel.activeSelf)
+            {
+                HideAllPanel();
+                return;
+            }
+
+            blocksPanel.SetActive(true);
+
+            filterBlocksPanel();
         }
 
         if (!Globals.IsMobile)
@@ -335,14 +419,11 @@ public class BlockMenuUI : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
         }
-        
 
-        blockManager.StartChoosing();
+        blockManager.StartChoosing();              
         
-        blocksPanel.SetActive(true);
-
-        filterBlocksPanel();
     }
+
     private void filterBlocksPanel()
     {
         hideAll();
@@ -374,8 +455,17 @@ public class BlockMenuUI : MonoBehaviour
 
     public void HideAllPanel()
     {
-        blocksPanel.SetActive(false);
-        blockManager.StartBuilding();
+        if (gm.IsWalkthroughGame)
+        {
+            blocksPanelForVis.SetActive(false);
+            blockManager.StartBuilding();
+        }
+        else
+        {
+            blocksPanel.SetActive(false);
+            blockManager.StartBuilding();
+        }
+        
         
 
         if (!Globals.IsMobile)
@@ -387,6 +477,8 @@ public class BlockMenuUI : MonoBehaviour
 
     private void resetIcons()
     {
+        if (gm.IsWalkthroughGame) return;
+
         floorsImage.color = new Color(1, 1, 1, 0.8f);
         floorsImage.transform.localScale = Vector3.one * 0.75f;
 

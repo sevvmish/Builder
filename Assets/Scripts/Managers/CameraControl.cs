@@ -11,6 +11,7 @@ public class CameraControl : MonoBehaviour
 
     private Transform mainPlayer;
     private PlayerControl playerControl;
+    private SkinControl skinControl;
     private Transform mainCamera;
     private Transform mainCamTransformForRaycast;
     private Transform outerCamera;
@@ -70,6 +71,7 @@ public class CameraControl : MonoBehaviour
 
         outerCamera.eulerAngles += new Vector3(-25, 0, 0);
         defaultCameraDistance = (mainPlayerPoint - mainCamTransformForRaycast.position).magnitude;
+        skinControl = playerControl.SkinControl;
     }
 
     public void SwapControlBody(Transform newTransform)
@@ -182,6 +184,17 @@ public class CameraControl : MonoBehaviour
         {
             currentCameraDistance = 0;
         }
+                
+        if (currentCameraDistance < 0.25f)
+        {
+            skinControl.SetSkin(false);
+        }
+        else if(currentCameraDistance > 0.3f)
+        {
+            skinControl.SetSkin(true);
+        }
+
+
 
         Vector3 newVector = Vector3.Lerp(new Vector3(0, 1f, 0.7f), baseCameraBodyPosition, currentCameraDistance);
         mainCamera.DOLocalMove(newVector, 0.05f).SetEase(Ease.Linear);
@@ -189,15 +202,15 @@ public class CameraControl : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   
-        
+    {        
         if (gm.IsBuildMode && !isBuildRegimeCorrected)
         {
             isBuildRegimeCorrected = true;
             isNonBuildRegimeCorrected = false;
 
-            mainCamera.localPosition = Globals.BasePosition + new Vector3(2, 0, 1);
-            baseCameraBodyPosition = Globals.BasePosition + new Vector3(2, 0, 1);
+            mainCamera.localPosition = Globals.BasePosition + new Vector3(1, 0, 1);
+            baseCameraBodyPosition = Globals.BasePosition + new Vector3(1, 0, 1);
+            previousDistance = 0;
 
         }
         else if (!gm.IsBuildMode && !isNonBuildRegimeCorrected)
@@ -207,6 +220,7 @@ public class CameraControl : MonoBehaviour
 
             mainCamera.localPosition = Globals.BasePosition;
             baseCameraBodyPosition = Globals.BasePosition;
+            previousDistance = 0;
         }
         
 
@@ -270,9 +284,18 @@ public class CameraControl : MonoBehaviour
 
         Vector3 playerPoint = mainPlayerPoint;
 
-        if (Physics.Raycast(playerPoint, (mainCamTransformForRaycast.position - playerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(playerPoint + Vector3.up * 0.5f, (mainCamTransformForRaycast.position - playerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask, QueryTriggerInteraction.Ignore))
         {
             float distToBarrier = (playerPoint - hit.point).magnitude;
+
+            float distKoeff = distToBarrier / defaultCameraDistance;
+            setCurrentCameraDistance(distKoeff);
+
+            /*
+            float distToBarrier = (playerPoint - hit.point).magnitude;
+
+            print((MathF.Abs(distToBarrier - previousDistance) < 1) + " = " + (distToBarrier > 2));
+
             if (MathF.Abs(distToBarrier - previousDistance) < 1 && distToBarrier > 2) return;
 
             if (distToBarrier < defaultCameraDistance * 0.9f) distToBarrier *= 0.9f;
@@ -282,7 +305,7 @@ public class CameraControl : MonoBehaviour
             if ((currentCameraDistance <= 0.1f && distKoeff <= 0.1f) || (currentCameraDistance - distKoeff) < -0.1f) return;
             
             setCurrentCameraDistance(distKoeff);
-            previousDistance = distToBarrier;
+            previousDistance = distToBarrier;*/
         }
         else
         {

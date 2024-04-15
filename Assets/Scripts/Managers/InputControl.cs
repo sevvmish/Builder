@@ -10,7 +10,6 @@ public class InputControl : MonoBehaviour
     private Joystick joystick;
     private PlayerControl playerControl;
     private CameraControl cameraControl;
-    private Transform playerTransform;
     private PointerDownOnly jump;
     private PointerDownOnly jumpUp;
     private PointerDownOnly jumpDown;
@@ -26,8 +25,11 @@ public class InputControl : MonoBehaviour
     private float cameraRayCast = 50f;
 
     private Vector3 markerPosition;
-    public Vector3 GetMarkerposition => markerPosition;
+    private Block markerAim;
+    public Vector3 GetMarkerPosition => markerPosition;
+    public Block GetMarkerAim => markerAim;
     private Transform mainPlayer;
+    
 
     private LayerMask ignoreMask;
     private LayerMask blockMask;
@@ -42,7 +44,6 @@ public class InputControl : MonoBehaviour
         
         cameraControl = GameManager.Instance.GetCameraControl();
         playerControl = gameObject.GetComponent<PlayerControl>();
-        playerTransform = playerControl.transform;
 
         ignoreMask = LayerMask.GetMask(new string[] { "player" });
         blockMask = LayerMask.GetMask(new string[] { "block" });
@@ -63,6 +64,7 @@ public class InputControl : MonoBehaviour
         }
 
         mainPlayer = gm.GetMainPlayerTransform();
+        
     }
 
     // Update is called once per frame
@@ -82,13 +84,33 @@ public class InputControl : MonoBehaviour
        
         if (gm.IsBuildMode)
         {
+            if (blockManager.IsBuildingBlocks && gm.IsWalkthroughGame)
+            {
+                if (Physics.Raycast(mainPlayer.position + Vector3.up * 2, _camera.transform.forward, out hit, 50f, blockMask)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
+                {                    
+                    if (hit.collider.TryGetComponent(out Block bl) && !bl.IsFinalized)
+                    {
+                        markerAim = bl;
+                    }
+                    else
+                    {
+                        markerAim = null;
+                    }
+                }
+                else
+                {
+                    markerAim = null;
+                }
+            }
+            
+
             if (blockManager.IsBuildingBlocks)
             {
-                if (Physics.Raycast(mainPlayer.position + Vector3.up + mainPlayer.right*2, (_camera.transform.forward*50 + _camera.transform.right*10 - mainPlayer.position).normalized, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
+                if (Physics.Raycast(mainPlayer.position + Vector3.up*2, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
                 {                    
                     markerPosition = hit.point;
                 }
-            }
+            }            
             else if (blockManager.IsDestroingBlocks)
             {
                 if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask)) //_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask
@@ -238,7 +260,7 @@ public class InputControl : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (gm.IsBuildMode)
+            if (gm.IsBuildMode && !gm.IsWalkthroughGame)
             {
                 if (!blockManager.IsDestroingBlocks)
                 {
@@ -252,7 +274,7 @@ public class InputControl : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            if (gm.IsBuildMode)
+            if (gm.IsBuildMode && !gm.IsWalkthroughGame)
             {
                 if (blockManager.IsBuildingBlocks)
                 {
@@ -260,7 +282,7 @@ public class InputControl : MonoBehaviour
                 }                
             }
         }
-        else if (Input.GetMouseButtonDown(1) && gm.PointerClickedCount <= 0)
+        else if (Input.GetMouseButtonDown(1) && gm.PointerClickedCount <= 0 && !gm.IsWalkthroughGame)
         {
             if (gm.IsBuildMode)
             {

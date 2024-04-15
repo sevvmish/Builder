@@ -303,8 +303,8 @@ Transform:
   m_GameObject: {fileID: 2125391936047443597}
   serializedVersion: 2
   m_LocalRotation: {x: -0.27059805, y: 0.6532815, z: 0.27059805, w: 0.6532815}
-  m_LocalPosition: {x: -0.86, y: 1.2119999, z: 1.53}
-  m_LocalScale: {x: 1.5, y: 0.1, z: 4.5}
+  m_LocalPosition: {x: -0.957, y: 1.309, z: 1.53}
+  m_LocalScale: {x: 1.5, y: 0.3, z: 4.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 113715017893119115}
@@ -448,8 +448,8 @@ Transform:
   m_GameObject: {fileID: 4484878803724557660}
   serializedVersion: 2
   m_LocalRotation: {x: -0.38268343, y: -0, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: 1.4, y: 1.212, z: -0.841}
-  m_LocalScale: {x: 1.5, y: 0.1, z: 4.5}
+  m_LocalPosition: {x: 1.4, y: 1.353, z: -0.982}
+  m_LocalScale: {x: 1.5, y: 0.3, z: 4.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 113715017893119115}
@@ -494,6 +494,7 @@ GameObject:
   - component: {fileID: 2652668961199243967}
   - component: {fileID: 9004018309704964828}
   - component: {fileID: 2307176611066014690}
+  - component: {fileID: 3823716443883396953}
   m_Layer: 7
   m_Name: Cube (4)
   m_TagString: Untagged
@@ -566,6 +567,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3823716443883396953
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4882942824897847641}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0000002, y: 1, z: 1.0000002}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5186307268487939115
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,6 +698,7 @@ GameObject:
   - component: {fileID: 991580116749846414}
   - component: {fileID: 1906417583548196822}
   - component: {fileID: 1715148773923946680}
+  - component: {fileID: 4602220783907821611}
   m_Layer: 7
   m_Name: Cube (3)
   m_TagString: Untagged
@@ -748,6 +771,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4602220783907821611
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6234003849080064169}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.99999994}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7215515801087719063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1003,7 +1047,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.98
+      value: -1.12
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1108,43 +1152,43 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4.7
+      value: 4.86
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3.3891156
+      value: 3.55
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.0657597
+      value: 1.0884355
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.9794744
+      value: -0.98
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.2807313
+      value: 1.28
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.770053
+      value: -0.96
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.64283466
+      value: 0.64862776
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.6586108
+      value: -0.65333813
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.25639355
+      value: -0.26954636
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.29539424
+      value: 0.2824468
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1156,11 +1200,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 93.354
+      value: 91.057
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_ReceiveShadows

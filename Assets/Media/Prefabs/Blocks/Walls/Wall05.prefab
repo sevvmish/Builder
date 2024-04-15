@@ -70,7 +70,7 @@ MonoBehaviour:
   prototypeViewGood: {fileID: 8669887471050506670}
   prototypeViewBad: {fileID: 9089682817544141318}
   buildVFX: {fileID: 1874150185641913224}
-  sizeCheker: {x: 5.5, y: 3.5, z: 0.2}
+  sizeCheker: {x: 5.5, y: 4, z: 0.2}
   deltaCheker: {x: 0, y: 0, z: 0}
   deltaStep: 1
   rotationAngle: 90
@@ -79,20 +79,19 @@ MonoBehaviour:
   - {fileID: 3353006620659331220}
   blockSize: 2
   materialType: 1
-  volume: {x: 1, y: 1, z: 1}
+  volume: {x: 6, y: 4, z: 0}
   visualRenderers:
   - {fileID: 2040272286065827386}
   - {fileID: 3416899340103731055}
   - {fileID: 8130463265546431487}
   - {fileID: 7588963979474467026}
   - {fileID: 8535641269090009655}
-  - {fileID: 2729092237750770389}
+  - {fileID: 1293228574868041832}
   - {fileID: 7020338711726168116}
   - {fileID: 8428236883068835480}
   - {fileID: 514234151385956277}
   - {fileID: 6322561030077521774}
   - {fileID: 8323600942693263948}
-  - {fileID: 1293228574868041832}
   visualMaterial: {fileID: 0}
 --- !u!65 &3353006620659331220
 BoxCollider:
@@ -1445,6 +1444,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9c5fd652d7854f24f92233c5d2d600dd, type: 2}
+    - target: {fileID: -5754084199372789682, guid: e1c2607f60fcb0149b5d3bb7d37db121, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -3198145272185340695, guid: 9606f7ed8d491824fa914566ebfeb6be, type: 3}
     - target: {fileID: 919132149155446097, guid: e1c2607f60fcb0149b5d3bb7d37db121, type: 3}
       propertyPath: m_Name
       value: wall2 with window

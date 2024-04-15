@@ -2,7 +2,9 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Block : MonoBehaviour
 {
@@ -11,7 +13,7 @@ public class Block : MonoBehaviour
     public Sprite BlockIcon { get => blockIcon; }
     public bool IsRotatable { get => isRotatable; }
     public bool IsGoodToFinalize => (prototypeViewGood.activeSelf && !prototypeViewBad.activeSelf);
-    public bool IsFinalized => realView.activeSelf;
+    public bool IsFinalized { get; private set; }
     public DeltaDimentions DeltaStep { get => deltaStep; }
     public float RotationAngle { get => rotationAngle; }
     public Vector3 Volume { get => volume; }
@@ -66,7 +68,7 @@ public class Block : MonoBehaviour
         {
             for (int i = 0; i < visualRenderers.Length; i++)
             {
-                rendererMaterials.Add(visualRenderers[i], visualRenderers[i].material);
+                if (!rendererMaterials.ContainsKey(visualRenderers[i])) rendererMaterials.Add(visualRenderers[i], visualRenderers[i].material);                
             }
         }
         else
@@ -92,17 +94,38 @@ public class Block : MonoBehaviour
     {
         if (isActive)
         {
-            realView.SetActive(true);
+            //realView.SetActive(true);
             for (int i = 0; i < visualRenderers.Length; i++)
             {
-                visualRenderers[i].material = visualMaterial;
+                visualRenderers[i].sharedMaterial = visualMaterial;
             }
         }
         else
         {
             for (int i = 0; i < visualRenderers.Length; i++)
-            {
-                visualRenderers[i].material = rendererMaterials[visualRenderers[i]];
+            {                
+                if (rendererMaterials[visualRenderers[i]].name.Contains("main"))
+                {
+                    visualRenderers[i].sharedMaterial = gm.Assets.MainAtlas;
+                }
+                else if (rendererMaterials[visualRenderers[i]].name.Contains("black"))
+                {
+                    visualRenderers[i].sharedMaterial = gm.Assets.Black;
+                }
+                else if (rendererMaterials[visualRenderers[i]].name.Contains("brown"))
+                {
+                    visualRenderers[i].sharedMaterial = gm.Assets.Brown;
+                }
+                else if (rendererMaterials[visualRenderers[i]].name.Contains("carpet"))
+                {
+                    visualRenderers[i].sharedMaterial = gm.Assets.Carpet;
+                }
+                else
+                {
+                    visualRenderers[i].sharedMaterial = rendererMaterials[visualRenderers[i]];
+                }
+
+                //
             }
         }
         
@@ -131,6 +154,7 @@ public class Block : MonoBehaviour
     {        
         hideAll();
         realView.SetActive(true);
+        IsFinalized = true;
         SetVisualization(false);
         SetColliders(true);
     }
@@ -160,44 +184,53 @@ public class Block : MonoBehaviour
 
         if (lastMarkerPosition == markerPoint) return;
 
-        assessRightPositionVector(markerPoint);
-
-        switch (BlockType)
+        if (gm.IsWalkthroughGame)
         {
-            case BlockTypes.floor:
-                assessBlockStatusFloor();
-                break;
 
-            case BlockTypes.wall:
-                assessBlockStatusWall();
-                break;
+        }
+        else
+        {
+            assessRightPositionVector(markerPoint);
 
-            case BlockTypes.roof:
-                assessBlockStatusRoof();
-                break;
+            switch (BlockType)
+            {
+                case BlockTypes.floor:
+                    assessBlockStatusFloor();
+                    break;
 
-            case BlockTypes.stair:
-                assessBlockStatusStair();
-                break;
+                case BlockTypes.wall:
+                    assessBlockStatusWall();
+                    break;
 
-            case BlockTypes.fence:
-                assessBlockStatusStandartSurface();
-                break;
+                case BlockTypes.roof:
+                    assessBlockStatusRoof();
+                    break;
 
-            case BlockTypes.beam:
-                assessBlockStatusBeam();
-                break;
+                case BlockTypes.stair:
+                    assessBlockStatusStair();
+                    break;
 
-            case BlockTypes.garden_ground:
-                assessBlockStatusGardenGround();
-                break;
+                case BlockTypes.fence:
+                    assessBlockStatusStandartSurface();
+                    break;
 
-            case BlockTypes.furniture:
-                assessBlockStatusFurniture();
-                break;
+                case BlockTypes.beam:
+                    assessBlockStatusBeam();
+                    break;
+
+                case BlockTypes.garden_ground:
+                    assessBlockStatusGardenGround();
+                    break;
+
+                case BlockTypes.furniture:
+                    assessBlockStatusFurniture();
+                    break;
+            }
+
+            lastMarkerPosition = markerPoint;
         }
 
-        lastMarkerPosition = markerPoint;
+        
     }
 
     private void assessBlockStatusBeam()
@@ -512,19 +545,31 @@ public class Block : MonoBehaviour
         if (colliders.Length > 0)
         {            
             for (int i = 0; i < colliders.Length; i++)
-            {     
-                /*
+            {                
                 if (colliders[i].gameObject.layer == 3)
                 {
                     isBad = true;
                     gm.GetUI.PlayerCrossNewBlockError();
                     break;
                 }
-                else */if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) )
+                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) )
                 {
                     
                     if (b.blockType == BlockTypes.wall)
-                    {                        
+                    {
+                        print(b.gameObject.name);
+
+                        if ((_transform.position.y - b.transform.position.y) >=2)
+                        {
+                            _transform.position = new Vector3(_transform.position.x, b.transform.position.y + b.volume.y, _transform.position.z);
+                        }
+                        else
+                        {
+                            _transform.position = new Vector3(_transform.position.x, b.transform.position.y, _transform.position.z);
+                        }
+
+
+                        
                         Vector3 dir = Vector3.zero;
                         int sign = 0;
                         int Yangle = (int)Mathf.Abs(b.transform.eulerAngles.y);
@@ -532,12 +577,12 @@ public class Block : MonoBehaviour
                         if (Yangle == 0 || Yangle == 180 || Yangle == 360)
                         {
                             dir = new Vector3(0, 0, 1);
-                            sign = (gm.GetMainPlayerTransform().position.z - b.transform.position.z/*_transform.position.z*/) > 0 ? 1 : -1;                            
+                            sign = (gm.GetMainPlayerTransform().position.z - b.transform.position.z) > 0 ? 1 : -1;                            
                         }
                         else
                         {
                             dir = new Vector3(1, 0, 0);
-                            sign = (gm.GetMainPlayerTransform().position.x - b.transform.position.z/*_transform.position.z*/) > 0 ? 1 : -1;
+                            sign = (gm.GetMainPlayerTransform().position.x - b.transform.position.x) > 0 ? 1 : -1;
                         }
 
 
@@ -556,15 +601,7 @@ public class Block : MonoBehaviour
                                 isBad = true;
                                 break;
                             }
-
-                            /*
-                            colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
-                            
-                            if (colliders.Length == 0)
-                            {
-                                isBad = false;
-                                break;
-                            }*/
+                        
                                 
                         }
                         else
@@ -762,97 +799,194 @@ public class Block : MonoBehaviour
                 }
 
                 if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this))
-                {
+                {                    
                     if (b.blockType == BlockTypes.wall)
                     {
-                        Vector3 dir = Vector3.zero;
-                        int sign = 0;
-                        int Yangle = (int)Mathf.Abs(b.transform.eulerAngles.y);
-
-                        if (Yangle == 0 || Yangle == 180 || Yangle == 360)
+                        if ((_transform.position.y - b.transform.position.y) >= 2.5f) 
                         {
+                            _transform.position = b.transform.position + Vector3.up * b.volume.y;
+                            colliders = Physics.OverlapBox(_transform.position + Vector3.up * 2, getBoxForBlockCheck() * 0.9f, _transform.rotation);
 
-                            if (Mathf.Abs(_transform.position.y - b.transform.position.y) > Mathf.Abs(_transform.position.x - b.transform.position.x))
-                            {
-                                _transform.position = new Vector3(_transform.position.x, b.transform.position.y + 4, _transform.position.z);
-                                colliders = Physics.OverlapBox(_transform.position + Vector3.up * 2, getBoxForBlockCheck(), _transform.rotation);
-                                if (!isCertainBlockTypeInArray(colliders, BlockTypes.wall))
-                                {
-                                    isBad = false;
-                                    break;
-                                }
-                                else
-                                {
-                                    isBad = true;
-                                    break;
-                                }
-                            }
-                            else if (_transform.position.x > b.transform.position.x)
-                            {
-                                dir = new Vector3(1, 0, 0);
-                                sign = 1;
-                            }
-                            else if (_transform.position.x <= b.transform.position.x)
-                            {
-                                dir = new Vector3(1, 0, 0);
-                                sign = -1;
-                            }
-                        }
-                        else
-                        {
-                            if (Mathf.Abs(_transform.position.y - b.transform.position.y) > Mathf.Abs(_transform.position.z - b.transform.position.z))
-                            {
-                                _transform.position = new Vector3(_transform.position.x, b.transform.position.y + 4, _transform.position.z);
-                                colliders = Physics.OverlapBox(_transform.position + Vector3.up * 2, getBoxForBlockCheck(), _transform.rotation);
-                                if (!isCertainBlockTypeInArray(colliders, BlockTypes.wall))
-                                {
-                                    isBad = false;
-                                    break;
-                                }
-                                else
-                                {
-                                    isBad = true;
-                                    break;
-                                }
-
-                            }
-                            else if (_transform.position.z > b.transform.position.z)
-                            {
-                                dir = new Vector3(0, 0, 1);
-                                sign = 1;
-                            }
-                            else if (_transform.position.z <= b.transform.position.z)
-                            {
-                                dir = new Vector3(0, 0, 1);
-                                sign = -1;
-                            }
-                        }
-
-                        bool result = pushBlockToGoodPlace(b, dir, sign);
-
-                        if (result)
-                        {
-                            colliders = Physics.OverlapBox(_transform.position + Vector3.up * 2, getBoxForBlockCheck(), _transform.rotation);
                             if (!isCertainBlockTypeInArray(colliders, BlockTypes.wall))
-                            {
+                            {                                
                                 isBad = false;
                                 break;
                             }
                             else
-                            {
+                            {                                
                                 isBad = true;
                                 break;
                             }
+                        }
+
+                        int Yangle = (int)Mathf.Abs(b.transform.eulerAngles.y);
+
+                        if (Yangle == 0 || Yangle == 180 || Yangle == 360)
+                        {
+                            if (_transform.position.x > b.transform.position.x)
+                            {
+                                _transform.position = b.transform.position + new Vector3(b.volume.x / 2 + volume.x / 2, 0, 0);
+                            }
+                            else if (_transform.position.x <= b.transform.position.x)
+                            {
+                                _transform.position = b.transform.position + new Vector3(-b.volume.x / 2 - volume.x / 2, 0, 0);
+                            }
+                        }
+                        else
+                        {
+                            if (_transform.position.z > b.transform.position.z)
+                            {
+                                _transform.position = b.transform.position + new Vector3(0, 0, b.volume.x / 2 + volume.x / 2);
+                            }
+                            else if (_transform.position.z <= b.transform.position.z)
+                            {
+                                _transform.position = b.transform.position + new Vector3(0, 0, -b.volume.x / 2 - volume.x / 2);
+                            }
+                        }
+
+                        colliders = Physics.OverlapBox(_transform.position + Vector3.up * 2, getBoxForBlockCheck() * 0.9f, _transform.rotation);
+
+                        if (!isCertainBlockTypeInArray(colliders, BlockTypes.wall))
+                        {
+                            isBad = false;
+                            break;
                         }
                         else
                         {
                             isBad = true;
                             break;
                         }
+
+
+                        /*
+                        if ((_transform.position.y - b.transform.position.y) >= 3f
+                            )
+                        {
+                            print("11111111");
+
+
+                            Vector3 prev = _transform.position;
+                            _transform.position = new Vector3(_transform.position.x, b.transform.position.y + b.volume.y, _transform.position.z); //b.transform.position + Vector3.up * b.volume.y;
+                         
+                        }
+                        else
+                        {
+                            _transform.position = new Vector3(_transform.position.x, b.transform.position.y, _transform.position.z);                            
+                        }
+
+                        print("222222 " + b.gameObject.name);
+
+                        //_transform.position = new Vector3(_transform.position.x, b.transform.position.y, _transform.position.z);
+
+                        Vector3 dir = Vector3.zero;
+                        int sign = 0;
+                        int Yangle = (int)Mathf.Abs(b.transform.eulerAngles.y);
+
+                        if (Yangle == 0 || Yangle == 180 || Yangle == 360)
+                        {
+                            if (_transform.position.x > b.transform.position.x)
+                            {
+                                _transform.position += new Vector3(b.volume.x / 2 + volume.x/2, 0, 0);
+                                dir = new Vector3(1, 0, 0);
+                                sign = 1;
+                            }
+                            else if (_transform.position.x <= b.transform.position.x)
+                            {
+                                _transform.position += new Vector3(-b.volume.x / 2 - volume.x / 2, 0, 0);
+                                dir = new Vector3(1, 0, 0);
+                                sign = -1;
+                            }
+                        }
+                        else
+                        {
+                            if (_transform.position.z > b.transform.position.z)
+                            {
+                                _transform.position += new Vector3(0, 0, b.volume.x / 2 + volume.x / 2);
+                                dir = new Vector3(0, 0, 1);
+                                sign = 1;
+                            }
+                            else if (_transform.position.z <= b.transform.position.z)
+                            {
+                                _transform.position += new Vector3(0, 0, -b.volume.x / 2 - volume.x / 2);
+                                dir = new Vector3(0, 0, 1);
+                                sign = -1;
+                            }
+                        }
+
+                        
+                        //bool result = pushBlockToGoodPlace(b, dir, sign);
+
+                        if (isSameBlocks(this))
+                        {
+                            isBad = true;
+                            break;
+                        }
+                        else
+                        {
+                            isBad = false;
+                            break;
+                        }
+                        */
+
                     }
                     else if (b.blockType == BlockTypes.floor)
-                    {
+                    {                        
                         _transform.position = new Vector3(_transform.position.x, b.transform.position.y + b.volume.y, _transform.position.z);
+
+                        if (b.volume.x >= 3 && b.volume.z >= 3)
+                        {                            
+                            if ((b.transform.position - _transform.position).magnitude <= 1.5f)
+                            {
+                                _transform.position = b.transform.position + Vector3.up * b.volume.y;
+                            }
+                            else
+                            {
+                                int Yangle = (int)Mathf.Abs(b.transform.eulerAngles.y);
+
+                                if (Yangle == 0 || Yangle == 180 || Yangle == 360)
+                                {
+                                    Vector3 another = b.transform.position + Vector3.up * b.volume.y;
+
+                                    if (   (_transform.position - new Vector3(another.x + b.volume.x / 2f, another.y, another.z)).magnitude <= 1.5f)
+                                    {
+                                        _transform.position = new Vector3(another.x + b.volume.x / 2f, another.y, another.z);
+                                    }
+                                    else if ((_transform.position - new Vector3(another.x - b.volume.x / 2f, another.y, another.z)).magnitude <= 1.5f)
+                                    {
+                                        _transform.position = new Vector3(another.x - b.volume.x / 2f, another.y, another.z);
+                                    }
+                                    else if ((_transform.position - new Vector3(another.x, another.y, another.z + b.volume.z / 2f)).magnitude <= 1.5f)
+                                    {
+                                        _transform.position = new Vector3(another.x, another.y, another.z + b.volume.z / 2f);
+                                    }
+                                    else if ((_transform.position - new Vector3(another.x, another.y, another.z - b.volume.z / 2f)).magnitude <= 1.5f)
+                                    {
+                                        _transform.position = new Vector3(another.x, another.y, another.z - b.volume.z / 2f);
+                                    }
+                                }
+                                else
+                                {
+                                    Vector3 another = b.transform.position + Vector3.up * b.volume.y;
+
+                                    if ((_transform.position - new Vector3(another.x, another.y, another.z + b.volume.x / 2f)).magnitude <= 1.5f)
+                                    {
+                                        _transform.position = new Vector3(another.x, another.y, another.z + b.volume.x / 2f);
+                                    }
+                                    else if ((_transform.position - new Vector3(another.x, another.y, another.z - b.volume.x / 2f)).magnitude <= 1.5f)
+                                    {
+                                        _transform.position = new Vector3(another.x, another.y, another.z - b.volume.x / 2f);
+                                    }
+                                    else if ((_transform.position - new Vector3(another.x + b.volume.z / 2f, another.y, another.z)).magnitude <= 1.5f)
+                                    {
+                                        _transform.position = new Vector3(another.x + b.volume.z / 2f, another.y, another.z);
+                                    }
+                                    else if ((_transform.position - new Vector3(another.x - b.volume.z / 2f, another.y, another.z)).magnitude <= 1.5f)
+                                    {
+                                        _transform.position = new Vector3(another.x - b.volume.z / 2f, another.y, another.z);
+                                    }
+                                }
+                            }
+                        }
                     }
 
 
@@ -873,6 +1007,19 @@ public class Block : MonoBehaviour
         {
             MakeColorGood();
         }
+    }
+
+    private bool isSameBlocks(Block b)
+    {
+        for (int i = 0; i < blockManager.ReadyBlocks.Count; i++)
+        {
+            if (blockManager.ReadyBlocks[i].blockType == b.blockType && blockManager.ReadyBlocks[i].transform.position == b.transform.position)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private bool isCertainBlockTypeInArray(Collider[] colliders, BlockTypes _type)

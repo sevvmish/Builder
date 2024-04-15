@@ -44,7 +44,8 @@ public class UIManager : MonoBehaviour
 
     [Header("BlocksMenu")]
     [SerializeField] private BlockMenuUI blockMenuUI;
-    
+    public BlockMenuUI BlockMenuUI { get => blockMenuUI; }
+
     private SoundUI sounds;
     private GameManager gm;
     private AssetManager assets;
@@ -221,12 +222,24 @@ public class UIManager : MonoBehaviour
 
         if (Globals.IsMobile)
         {
-            cancelLastBlockButton.gameObject.SetActive(true);
-            buildCurrentBlockButton.gameObject.SetActive(true);
-            deleteCurrentBlockButton.gameObject.SetActive(false);
-            startBuildingBlockButton.gameObject.SetActive(false);
-            startDestroingBlockButton.gameObject.SetActive(true);
-            rotateCurrentBlockButton.gameObject.SetActive(true);
+            if (gm.IsWalkthroughGame)
+            {
+                cancelLastBlockButton.gameObject.SetActive(false);
+                buildCurrentBlockButton.gameObject.SetActive(true);
+                deleteCurrentBlockButton.gameObject.SetActive(false);
+                startBuildingBlockButton.gameObject.SetActive(false);
+                startDestroingBlockButton.gameObject.SetActive(false);
+                rotateCurrentBlockButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                cancelLastBlockButton.gameObject.SetActive(true);
+                buildCurrentBlockButton.gameObject.SetActive(true);
+                deleteCurrentBlockButton.gameObject.SetActive(false);
+                startBuildingBlockButton.gameObject.SetActive(false);
+                startDestroingBlockButton.gameObject.SetActive(true);
+                rotateCurrentBlockButton.gameObject.SetActive(true);
+            }            
             
         }
         else

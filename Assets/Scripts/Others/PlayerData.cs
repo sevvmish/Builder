@@ -14,7 +14,7 @@ public class PlayerData
     public float Zoom;
     public bool IsZoomCorrected;
 
-    public int Seed;
+    public int Level;
 
     public PlayerData()
     {        
@@ -24,7 +24,7 @@ public class PlayerData
         Mus = 1; // music
         Zoom = 50; //camera zoom
         IsZoomCorrected = false;
-        Seed = 152;
+        Level = 0;
 
         Debug.Log("created PlayerData instance");
     }

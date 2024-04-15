@@ -16,6 +16,7 @@ public class BlockManager : MonoBehaviour
     [SerializeField] private LineRenderer liner;
 
     private GameManager gm;
+    private LevelControl lc;
     private SoundUI sounds;
     private AssetManager assets;
     private Transform playerTransform;
@@ -34,6 +35,7 @@ public class BlockManager : MonoBehaviour
     void Start()
     {
         gm = GameManager.Instance;
+        lc = gm.LevelControl;
         sounds = SoundUI.Instance;
         assets = gm.Assets;
         playerTransform = gm.GetMainPlayerTransform();
@@ -46,8 +48,16 @@ public class BlockManager : MonoBehaviour
         OnChangeCurrentBlock = changeCurrentBlockCall;
 
         //=
-        currentID = 1;
-        //StartBuilding();
+        if (gm.IsWalkthroughGame)
+        {
+            currentID = -1;
+        }
+        else
+        {
+            currentID = 1;
+        }
+        
+        
 
         if (Globals.IsMobile)
         {
@@ -77,7 +87,15 @@ public class BlockManager : MonoBehaviour
             {
                 if (CurrentActiveBlock != null)
                 {
-                    updateCurrentBlockPosition();
+                    if (gm.IsWalkthroughGame)
+                    {
+                        updateCurrentBlockPositionForVis();
+                    }
+                    else
+                    {
+                        updateCurrentBlockPosition();
+                    }
+                    
                     marker.position = gm.pointForMarker;
                 }
             }
@@ -249,17 +267,33 @@ public class BlockManager : MonoBehaviour
 
     public void BuildCurrentBlockCall()
     {
-        if (CurrentActiveBlock != null && CurrentActiveBlock.IsGoodToFinalize)
+        if (gm.IsWalkthroughGame)
         {
-            sounds.PlayBuild(CurrentActiveBlock);
-            CurrentActiveBlock.MakeFinalView();
-            ReadyBlocks.Add(CurrentActiveBlock);
-            getNewBlock(currentID);            
+            if (CurrentActiveBlock != null)
+            {
+                //&&&&&&&&&&&&&&&&&&
+            }
+            else
+            {
+                sounds.PlayUISound(SoundsUI.error1);
+            }
         }
         else
         {
-            sounds.PlayUISound(SoundsUI.error1);
+            if (CurrentActiveBlock != null && CurrentActiveBlock.IsGoodToFinalize)
+            {
+                sounds.PlayBuild(CurrentActiveBlock);
+                CurrentActiveBlock.MakeFinalView();
+                ReadyBlocks.Add(CurrentActiveBlock);
+                getNewBlock(currentID);
+            }
+            else
+            {
+                sounds.PlayUISound(SoundsUI.error1);
+            }
         }
+
+        
     }
 
     public void DeleteCurrentBlock()
@@ -286,7 +320,7 @@ public class BlockManager : MonoBehaviour
     }
 
     private void changeCurrentBlockCall(int val)
-    {
+    {        
         if (val == currentID)
         {
             gm.GetUI.HideBlocksPanel();
@@ -299,33 +333,42 @@ public class BlockManager : MonoBehaviour
         getNewBlock(currentID);
     }
 
+    private void updateCurrentBlockPositionForVis()
+    {
+        if (CurrentActiveBlock != null)
+        {
+            if (gm.blockForMarker != null && CurrentActiveBlock.ID.ID == gm.blockForMarker.ID.ID)
+            {
+                CurrentActiveBlock.transform.position = gm.blockForMarker.transform.position;
+                CurrentActiveBlock.transform.eulerAngles = gm.blockForMarker.transform.eulerAngles;
+                CurrentActiveBlock.MakeColorGood();
+            }
+            else
+            {
+                CurrentActiveBlock.transform.position = gm.pointForMarker;
+                CurrentActiveBlock.transform.eulerAngles = Vector3.zero;
+                CurrentActiveBlock.MakeColorBad();
+            }
+            
+        }
+    }
+
     private void updateCurrentBlockPosition()
     {
         if (CurrentActiveBlock != null)
         {
             CurrentActiveBlock.SetPosition(gm.pointForMarker);
-
-            /*
-            switch (CurrentActiveBlock.BlockType)
-            {
-                case BlockTypes.floor:
-                    CurrentActiveBlock.SetPosition(gm.pointForMarker);
-                    break;
-
-                case BlockTypes.wall:
-                    CurrentActiveBlock.SetPosition(gm.pointForMarker);
-                    break;
-
-                case BlockTypes.roof:
-                    CurrentActiveBlock.SetPosition(gm.pointForMarker);
-                    break;
-            }*/
         }
     }
 
 
     private void getNewBlock(int id)
     {        
+        if (id == -1 && gm.IsWalkthroughGame)
+        {
+            id = lc.GetFirstID();
+        }
+
         GameObject newBlock = assets.GetGameObjectByID(id);
         CurrentActiveBlock = newBlock.GetComponent<Block>();
         CurrentActiveBlock.gameObject.SetActive(true);
@@ -346,11 +389,8 @@ public class BlockManager : MonoBehaviour
 
         CurrentActiveBlock.MakeColorBad();
         //marker.gameObject.SetActive(true);
-        updateCurrentBlockPosition();
+        if (!gm.IsWalkthroughGame) updateCurrentBlockPosition();
         gm.GetUI.NewBlockChosen();
     }
 
-    private Vector3 lowerPlayerPoint => playerTransform.position + playerTransform.forward + Vector3.up * 0.1f;
-    private Vector3 mediumPlayerPoint => playerTransform.position + playerTransform.forward + Vector3.up * 0.5f;
-    private Vector3 highPlayerPoint => playerTransform.position + playerTransform.forward + Vector3.up;
 }

@@ -10,9 +10,10 @@ public class Identificator : MonoBehaviour
     public int ID { get => id; }
     public int UniqueID { get => uniqueID; }
 
-    private void OnEnable()
-    {
+    private void Awake()
+    {        
         uniqueID = Random.Range(0, 1000000);
     }
+
 
 }

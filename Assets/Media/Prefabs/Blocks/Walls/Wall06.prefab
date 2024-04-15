@@ -111,7 +111,7 @@ MonoBehaviour:
   - {fileID: 4647848746909363631}
   blockSize: 1
   materialType: 1
-  volume: {x: 1, y: 1, z: 1}
+  volume: {x: 3, y: 3, z: 0}
   visualRenderers:
   - {fileID: 2262971862959195034}
   visualMaterial: {fileID: 0}
@@ -566,6 +566,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
       propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 6c9842bb3f87b95439cde9295afabc9e, type: 3}

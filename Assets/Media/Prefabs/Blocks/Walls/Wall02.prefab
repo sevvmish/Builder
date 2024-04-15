@@ -70,7 +70,7 @@ MonoBehaviour:
   prototypeViewGood: {fileID: 4771955563363045173}
   prototypeViewBad: {fileID: 5946987666006565793}
   buildVFX: {fileID: 1788075127247361299}
-  sizeCheker: {x: 3.5, y: 3.5, z: 0.2}
+  sizeCheker: {x: 3.5, y: 4, z: 0.2}
   deltaCheker: {x: 0, y: 0, z: 0}
   deltaStep: 1
   rotationAngle: 90
@@ -79,7 +79,7 @@ MonoBehaviour:
   - {fileID: 1887568086964551267}
   blockSize: 1
   materialType: 1
-  volume: {x: 1, y: 1, z: 1}
+  volume: {x: 4, y: 4, z: 0}
   visualRenderers:
   - {fileID: 6972167347121013067}
   - {fileID: 2694303604577803590}
