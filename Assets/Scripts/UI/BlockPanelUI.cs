@@ -11,6 +11,7 @@ public class BlockPanelUI : MonoBehaviour
     [SerializeField] private Image[] sizes;
     [SerializeField] private Sprite full;
     [SerializeField] private Sprite empty;
+    [SerializeField] private TextMeshProUGUI amountText;
 
     private int id;
     private BlockManager blockManager;
@@ -19,6 +20,34 @@ public class BlockPanelUI : MonoBehaviour
     private GameManager gm;
     private AssetManager assets;
 
+    public int Amount { 
+        get 
+        {
+            return amount;
+        }
+
+        set
+        {
+            amount = value;
+
+            if (amount == 0)
+            {
+                gameObject.SetActive(false);
+            }
+            else if (amount == 1)
+            {
+                amountText.text = "";
+                gameObject.SetActive(true);
+            }
+            else if (amount > 1)
+            {
+                amountText.text = "x" + amount.ToString();
+                gameObject.SetActive(true);
+            }
+        }
+    }
+    private int amount = 1;
+        
 
     public void SetData(int id, BlockManager bm)
     {
@@ -66,7 +95,7 @@ public class BlockPanelUI : MonoBehaviour
             blockManager.OnChangeCurrentBlock?.Invoke(this.id);
         });
 
-        
+        amountText.text = "";
     }
         
 }

@@ -1,5 +1,5 @@
 {
-  "idSave": 75,
+  "idSave": 76,
   "isFirstSession": false,
   "language": "ru",
   "promptDone": false,
@@ -10,5 +10,5 @@
     true,
     false
   ],
-  "MainSave1": "{\"L\":\"ru\",\"M\":0,\"S\":1,\"Mus\":1,\"Zoom\":60.5,\"IsZoomCorrected\":true,\"Seed\":152}"
+  "MainSave1": "{\"L\":\"ru\",\"M\":0,\"S\":1,\"Mus\":1,\"Zoom\":60.0,\"IsZoomCorrected\":true,\"Level\":0}"
 }

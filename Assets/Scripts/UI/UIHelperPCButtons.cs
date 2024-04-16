@@ -36,6 +36,7 @@ public class UIHelperPCButtons : MonoBehaviour
     private bool isBuildingInBuilding;
     private GameManager gm;
     private BlockManager bm;
+    private bool isWinWalkthrough;
 
     // Start is called before the first frame update
     void Start()
@@ -66,9 +67,9 @@ public class UIHelperPCButtons : MonoBehaviour
 
             buildingBlocks.SetActive(true);
             setBlockText.gameObject.SetActive(true);
-            rotateBlockText.gameObject.SetActive(true);
-            cancelBlockText.gameObject.SetActive(true);
-            howToDelBlocksText.gameObject.SetActive(true);
+            if (!gm.IsWalkthroughGame) rotateBlockText.gameObject.SetActive(true);
+            if (!gm.IsWalkthroughGame) cancelBlockText.gameObject.SetActive(true);
+            if (!gm.IsWalkthroughGame) howToDelBlocksText.gameObject.SetActive(true);
             setBlockText.text = Globals.Language.SetBlockHelper;
             rotateBlockText.text = Globals.Language.RotateBlockHelper;
             cancelBlockText.text = Globals.Language.CancelBlockHelper;
@@ -77,6 +78,11 @@ public class UIHelperPCButtons : MonoBehaviour
             deletingBlocks.SetActive(false);
             delBlockText.text= Globals.Language.DelBlockHelper;
             howToBuildBlocksText.text = Globals.Language.HowToBuildHelper;
+
+            if (gm.IsWalkthroughGame)
+            {
+                setBlockText.GetComponent<RectTransform>().anchoredPosition = new Vector2(315, -37);
+            }
         }
         else
         {
@@ -101,6 +107,12 @@ public class UIHelperPCButtons : MonoBehaviour
     private void Update()
     {
         if (Globals.IsMobile) return;
+
+        if (gm.IsWinWalkthroughGame && !isWinWalkthrough)
+        {
+            isWinWalkthrough = true;
+            buildRegimeArrowText.color = new Color(1, 1, 0, 0.5f);
+        }
 
         if (gm.IsBuildMode != isBuildMode)
         {
@@ -138,9 +150,9 @@ public class UIHelperPCButtons : MonoBehaviour
                 else
                 {
                     buildingBlocks.SetActive(false);
-                    deletingBlocks.SetActive(true);
+                    if (!gm.IsWalkthroughGame) deletingBlocks.SetActive(true);
                 }
-        }
+            }
         }
         
     }

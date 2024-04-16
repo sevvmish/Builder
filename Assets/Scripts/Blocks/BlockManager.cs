@@ -269,9 +269,20 @@ public class BlockManager : MonoBehaviour
     {
         if (gm.IsWalkthroughGame)
         {
-            if (CurrentActiveBlock != null)
+            if (CurrentActiveBlock != null && gm.blockForMarker != null && CurrentActiveBlock.ID.ID == gm.blockForMarker.ID.ID)
             {
-                //&&&&&&&&&&&&&&&&&&
+                gm.blockForMarker.MakeFinalView();
+                sounds.PlayBuild(CurrentActiveBlock);
+                Destroy(CurrentActiveBlock.gameObject);
+                lc.UpdateProgress();
+
+                if (!lc.IsIDForBlockOK(currentID))
+                {
+                    int newBlockID = lc.GetFirstID();
+                    if (currentID != newBlockID) currentID = newBlockID;
+                }
+                
+                getNewBlock(currentID);                
             }
             else
             {
@@ -368,6 +379,8 @@ public class BlockManager : MonoBehaviour
         {
             id = lc.GetFirstID();
         }
+
+        if (gm.IsWinWalkthroughGame) return;
 
         GameObject newBlock = assets.GetGameObjectByID(id);
         CurrentActiveBlock = newBlock.GetComponent<Block>();

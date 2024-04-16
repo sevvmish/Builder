@@ -13,7 +13,7 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private GridLayoutGroup gridLayoutGroupForVis;
     [SerializeField] private PointerDownOnly backCkickForVis;
     private Stage currentStage;
-    private Dictionary<Block, BlockPanelUI> panelsForVis = new Dictionary<Block, BlockPanelUI>();
+    private Dictionary<int, BlockPanelUI> panelsForVis = new Dictionary<int, BlockPanelUI>();
 
     [Header("BlocksMenu")]    
     [SerializeField] private GameObject blocksPanel;
@@ -314,11 +314,27 @@ public class BlockMenuUI : MonoBehaviour
 
     public void UpdateIconsForVis(Stage stage)
     {
-        if (currentStage != null && currentStage.Equals(stage)) return;
+        if (currentStage != null && currentStage.Equals(stage))
+        {
+            foreach (int b in panelsForVis.Keys)
+            {
+                panelsForVis[b].Amount = 0;
+            }
+
+            for (int i = 0; i < currentStage.Blocks.Count; i++)
+            {
+                if (!currentStage.Blocks[i].IsFinalized)
+                {
+                    panelsForVis[currentStage.Blocks[i].ID.ID].Amount++;
+                }                
+            }
+
+            return;
+        }
 
         if (currentStage != null && !currentStage.Equals(stage))
         {
-            foreach (Block key in panelsForVis.Keys)
+            foreach (int key in panelsForVis.Keys)
             {
                 Destroy(panelsForVis[key].gameObject);
             }
@@ -329,17 +345,23 @@ public class BlockMenuUI : MonoBehaviour
 
         for (int i = 0; i < currentStage.Blocks.Count; i++)
         {
-            GameObject g = Instantiate(blocksPanelExample, blockMenuContainerForVis);
-
-            if (Globals.IsMobile)
+            if (panelsForVis.ContainsKey(currentStage.Blocks[i].ID.ID))
             {
-                g.transform.localScale = Vector3.one * 1.4f;
+                panelsForVis[currentStage.Blocks[i].ID.ID].Amount++;
             }
+            else
+            {
+                GameObject g = Instantiate(blocksPanelExample, blockMenuContainerForVis);
 
-            int id = currentStage.Blocks[i].GetComponent<Identificator>().ID;
-            g.GetComponent<BlockPanelUI>().SetData(id, blockManager);
-            panelsForVis.Add(currentStage.Blocks[i], g.GetComponent<BlockPanelUI>());
-                        
+                if (Globals.IsMobile)
+                {
+                    g.transform.localScale = Vector3.one * 1.4f;
+                }
+
+                int id = currentStage.Blocks[i].GetComponent<Identificator>().ID;
+                g.GetComponent<BlockPanelUI>().SetData(id, blockManager);
+                panelsForVis.Add(id, g.GetComponent<BlockPanelUI>());
+            }
         }
     }
 

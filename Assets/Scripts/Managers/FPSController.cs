@@ -40,7 +40,7 @@ public class FPSController : MonoBehaviour
     {
         if (Globals.IsLowFPS) return;
 
-        if (_timer > 0.2f)
+        if (_timer > 0.1f)
         {
             _timer = 0;
             if (EasyFpsCounter.EasyFps != null)
@@ -53,7 +53,7 @@ public class FPSController : MonoBehaviour
 
                 float ave = GetAverage();
 
-                if (fps.Count > 40 && ave > 5 && ave < 45)
+                if (fps.Count > 20 && ave > 5 && ave < 45)
                 {
                     Globals.IsLowFPS = true;
                     QualitySettings.shadows = ShadowQuality.Disable;

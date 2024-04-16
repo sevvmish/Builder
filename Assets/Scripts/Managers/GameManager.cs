@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     private InputControl playerInput;
 
     public PlayerControl MainPlayerControl { get; private set; }
-        
+
     public Camera GetCamera() => _camera;
     public Transform GetCameraBody() => cameraBody;
     public CameraControl GetCameraControl() => cameraControl;
@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     public bool IsGameStarted { get; private set; }
     public bool IsBuildMode { get; private set; }    
     public bool IsWalkthroughGame { get; private set; }
+    public bool IsWinWalkthroughGame { get; private set; }
 
     private Transform mainPlayer;    
     private float cameraShakeCooldown;
@@ -88,7 +89,6 @@ public class GameManager : MonoBehaviour
             QualitySettings.antiAliasing = 2;
             QualitySettings.shadows = ShadowQuality.HardOnly;
             QualitySettings.shadowResolution = ShadowResolution.Medium;
-
         }
         else
         {
@@ -111,22 +111,35 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        levelControl.SetData();        
+        if (IsWalkthroughGame)
+        {
+            levelControl.SetData();
+        }
+            
     }
     
+    public void WinGameWithVisualization()
+    {
+        IsBuildMode = false;
+        blockManager.StopBuilding();
+        IsWinWalkthroughGame = true;
+    }
 
     public void SetBuildingMode(bool isActive)
     {
+        if (IsWinWalkthroughGame && isActive) return;
 
         IsBuildMode = isActive;
         SoundUI.Instance.PlayUISound(SoundsUI.success2);
 
         if (isActive)
         {
+            if (IsWalkthroughGame) levelControl.SetVisible(true);
             blockManager.StartBuilding();
         }
         else
         {
+            if (IsWalkthroughGame) levelControl.SetVisible(false);
             blockManager.StopBuilding();
         }
     }

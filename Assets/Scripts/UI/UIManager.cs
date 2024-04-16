@@ -35,6 +35,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button startBuildingBlockButton;
     [SerializeField] private Button callBlocksButton;
     [SerializeField] private Button closeBlocksButton;
+    [SerializeField] private Button closeBlocksButtonForVis;
     [SerializeField] private Button BuildingModeButton;
     [SerializeField] private GameObject BuildingModeCloseSign;
 
@@ -71,6 +72,8 @@ public class UIManager : MonoBehaviour
         //startbuildingPrefs();
         blockText.text = Globals.Language.Blocks;
         buildText.text = Globals.Language.Build;
+
+        rotateCurrentBlockButton.gameObject.SetActive(false);
 
         if (!Globals.IsMobile)
         {
@@ -133,6 +136,14 @@ public class UIManager : MonoBehaviour
             startbuildingPrefs();
         });
 
+        closeBlocksButtonForVis.onClick.AddListener(() =>
+        {
+            sounds.PlayUISound(SoundsUI.click);
+            blockMenuUI.HideAllPanel();
+
+            startbuildingPrefs();
+        });
+
         cancelLastBlockButton.onClick.AddListener(() =>
         {
             sounds.PlayUISound(SoundsUI.click);            
@@ -151,7 +162,12 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        
+        if (BuildingModeButton.interactable && gm.IsWinWalkthroughGame)
+        {
+            BuildingModeButton.interactable = false;
+            buildText.color = new Color(1, 1, 0, 0.5f);
+            BuildingModeButton.transform.GetChild(0).GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+        }
 
         if (!gm.IsBuildMode && currentRegime != 1)
         {
@@ -270,7 +286,7 @@ public class UIManager : MonoBehaviour
     {
         if (blockManager.CurrentActiveBlock != null && blockManager.CurrentActiveBlock.IsRotatable)
         {
-            if (Globals.IsMobile) rotateCurrentBlockButton.gameObject.SetActive(true);
+            if (Globals.IsMobile && !gm.IsWalkthroughGame) rotateCurrentBlockButton.gameObject.SetActive(true);
         }
         else
         {
@@ -304,13 +320,13 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(0.15f);
         regimeText.transform.DOShakeScale(0.2f, 1, 30).SetEase(Ease.InOutBounce);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
         regimeText.color = new Color(1, 1, 0, 0.66f);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         regimeText.color = new Color(1, 1, 0, 0.33f);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         regimeText.gameObject.SetActive(false);
     }
 }

@@ -9,16 +9,58 @@ public class LevelControl : MonoBehaviour
     {
         Stage s = CurrentStage();
 
-        for (int i = 0; i < s.Blocks.Count; i++)
+        if (s == null )
         {
-            if (!s.Blocks[i].IsFinalized)
-            {
-                return s.Blocks[i].GetComponent<Identificator>().ID;
-            }
+            gm.WinGameWithVisualization();
+            return 0;
         }
 
+        if (s.Blocks.Count > 0)
+        {
+            for (int i = 0; i < s.Blocks.Count; i++)
+            {
+                if (!s.Blocks[i].IsFinalized)
+                {
+                    return s.Blocks[i].GetComponent<Identificator>().ID;
+                }
+            }
+        }
+        else
+        {
+            return 0;
+        }
+        
         return 0;
     }
+
+    public bool IsIDForBlockOK(int id)
+    {
+        Stage s = CurrentStage();
+
+        if (s == null)
+        {
+            gm.WinGameWithVisualization();
+            return false;
+        }
+
+        if (s.Blocks.Count > 0)
+        {
+            for (int i = 0; i < s.Blocks.Count; i++)
+            {
+                if (!s.Blocks[i].IsFinalized && s.Blocks[i].ID.ID == id)
+                {
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+        return false;
+    }
+
     public int CurrentStageNumber()
     {
         int result = -1;
@@ -122,6 +164,36 @@ public class LevelControl : MonoBehaviour
         }
     }
 
+    public void SetVisible(bool isVisible)
+    {
+        Stage s = CurrentStage();
+        if (s == null)
+        {
+            return;
+        }
+
+        if (isVisible)
+        {            
+            for (int i = 0; i < s.Blocks.Count; i++)
+            {
+                if (!s.Blocks[i].IsFinalized)
+                {
+                    s.Blocks[i].gameObject.SetActive(true);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < s.Blocks.Count; i++)
+            {
+                if (!s.Blocks[i].IsFinalized)
+                {
+                    s.Blocks[i].gameObject.SetActive(false);
+                }
+            }
+        }
+    }
+
     private void updateBlocks()
     {
         Stage s = CurrentStage();
@@ -131,7 +203,7 @@ public class LevelControl : MonoBehaviour
         {
             if (!s.Blocks[i].IsFinalized)
             {
-                s.Blocks[i].gameObject.SetActive(true);
+                if (gm.IsBuildMode) s.Blocks[i].gameObject.SetActive(true);
                 s.Blocks[i].SetVisualization(true);
             }
         }
