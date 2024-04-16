@@ -33,5 +33,12 @@ public class Translation : ScriptableObject
     public string DelBlockHelper;
     public string HowToBuildHelper;
 
+    public string Stage;
+    public string StageFrom;
+
+    public string MissionName0;
+    public string MissionName1;
+    public string MissionName2;
+
     public Translation() { }
 }

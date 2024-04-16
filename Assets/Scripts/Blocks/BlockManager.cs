@@ -272,9 +272,10 @@ public class BlockManager : MonoBehaviour
             if (CurrentActiveBlock != null && gm.blockForMarker != null && CurrentActiveBlock.ID.ID == gm.blockForMarker.ID.ID)
             {
                 gm.blockForMarker.MakeFinalView();
+                Vector3 pos = CurrentActiveBlock.transform.position;
                 sounds.PlayBuild(CurrentActiveBlock);
                 Destroy(CurrentActiveBlock.gameObject);
-                lc.UpdateProgress();
+                
 
                 if (!lc.IsIDForBlockOK(currentID))
                 {
@@ -282,7 +283,8 @@ public class BlockManager : MonoBehaviour
                     if (currentID != newBlockID) currentID = newBlockID;
                 }
                 
-                getNewBlock(currentID);                
+                getNewBlock(currentID, pos);
+                lc.UpdateProgress();
             }
             else
             {
@@ -372,8 +374,12 @@ public class BlockManager : MonoBehaviour
         }
     }
 
-
     private void getNewBlock(int id)
+    {
+        getNewBlock(id, Vector3.zero);
+    }
+
+    private void getNewBlock(int id, Vector3 position)
     {        
         if (id == -1 && gm.IsWalkthroughGame)
         {
@@ -385,7 +391,7 @@ public class BlockManager : MonoBehaviour
         GameObject newBlock = assets.GetGameObjectByID(id);
         CurrentActiveBlock = newBlock.GetComponent<Block>();
         CurrentActiveBlock.gameObject.SetActive(true);
-        CurrentActiveBlock.transform.position = Vector3.zero;
+        CurrentActiveBlock.transform.position = position;
 
         if (CurrentActiveBlock.IsRotatable)
         {
@@ -401,7 +407,6 @@ public class BlockManager : MonoBehaviour
         CurrentActiveBlock.transform.localScale = Vector3.one;
 
         CurrentActiveBlock.MakeColorBad();
-        //marker.gameObject.SetActive(true);
         if (!gm.IsWalkthroughGame) updateCurrentBlockPosition();
         gm.GetUI.NewBlockChosen();
     }

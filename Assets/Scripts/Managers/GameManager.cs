@@ -107,6 +107,8 @@ public class GameManager : MonoBehaviour
         IsGameStarted = true;
 
         IsWalkthroughGame = true;
+
+        
     }
 
     private void Start()
@@ -115,7 +117,6 @@ public class GameManager : MonoBehaviour
         {
             levelControl.SetData();
         }
-            
     }
     
     public void WinGameWithVisualization()

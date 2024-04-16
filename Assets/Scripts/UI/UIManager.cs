@@ -292,6 +292,8 @@ public class UIManager : MonoBehaviour
         {
             rotateCurrentBlockButton.gameObject.SetActive(false);
         }
+
+        blockMenuUI.UpdateAdditionalBlockInfo();
     }
 
     

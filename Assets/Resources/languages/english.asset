@@ -33,3 +33,8 @@ MonoBehaviour:
   HowToDelHelper: 'TO DELETE BLOCKS:       button "Q"'
   DelBlockHelper: 'DELETE BLOCK:      left mouse button'
   HowToBuildHelper: 'TO BUILD BLOCKS:       button "Q"'
+  Stage: Stage
+  StageFrom: of
+  MissionName0: Tutorial
+  MissionName1: First mission
+  MissionName2: Second mission

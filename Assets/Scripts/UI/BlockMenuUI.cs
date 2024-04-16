@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +14,22 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private Transform blockMenuContainerForVis;
     [SerializeField] private GridLayoutGroup gridLayoutGroupForVis;
     [SerializeField] private PointerDownOnly backCkickForVis;
+    [SerializeField] private TextMeshProUGUI missionName;
+    [SerializeField] private TextMeshProUGUI missionStage;
+    [SerializeField] private Slider missionProgress;
+    [SerializeField] private Image missionIcon;
+
     private Stage currentStage;
     private Dictionary<int, BlockPanelUI> panelsForVis = new Dictionary<int, BlockPanelUI>();
+
+    [Header("Block Additional INFO")]
+    [SerializeField] private GameObject blockAdditionalInfo;
+    [SerializeField] private TextMeshProUGUI amountLeftText;
+    [SerializeField] private Slider progressLeft;
+    [SerializeField] private Image blockIcon;
+    private Block currentBlock;
+    private Vector2 blockAdditionalInfoPosition;
+
 
     [Header("BlocksMenu")]    
     [SerializeField] private GameObject blocksPanel;
@@ -60,20 +76,35 @@ public class BlockMenuUI : MonoBehaviour
 
     private SoundUI sounds;
     private GameManager gm;
+    private LevelControl lc;
+    private BlockManager bm;
     private AssetManager assets;
 
     [SerializeField] private BlockManager blockManager;
 
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         sounds = SoundUI.Instance;
         gm = GameManager.Instance;
+        lc = gm.LevelControl;
+        bm = gm.BlockManager;
         assets = gm.Assets;
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {        
         blocksPanel.SetActive(false);
         blocksPanelForVis.SetActive(false);
+
+        if (gm.IsWalkthroughGame)
+        {
+            missionName.text = getMissionName(Globals.CurrentLevel);
+            missionIcon.sprite = lc.GetLevelData.MissionIcon;
+        }
+        blockAdditionalInfo.SetActive(false);
+        blockAdditionalInfoPosition = blockAdditionalInfo.GetComponent<RectTransform>().anchoredPosition;
 
         createBlocksPanel();
         resetIcons();
@@ -222,6 +253,11 @@ public class BlockMenuUI : MonoBehaviour
 
     private void Update()
     {
+        if (!gm.IsBuildMode && blockAdditionalInfo.activeSelf)
+        {
+            blockAdditionalInfo.SetActive(false);
+        }
+
         if (Input.GetKeyDown(KeyCode.Tab) && gm.PointerClickedCount <= 0 && !IsPanelOpened)
         {
             if (gm.IsBuildMode)
@@ -309,11 +345,11 @@ public class BlockMenuUI : MonoBehaviour
         if (backCkick.IsPressed || backCkickForVis.IsPressed)
         {
             gm.GetUI.HideBlocksPanel();
-        }        
+        }
     }
 
     public void UpdateIconsForVis(Stage stage)
-    {
+    {        
         if (currentStage != null && currentStage.Equals(stage))
         {
             foreach (int b in panelsForVis.Keys)
@@ -328,7 +364,7 @@ public class BlockMenuUI : MonoBehaviour
                     panelsForVis[currentStage.Blocks[i].ID.ID].Amount++;
                 }                
             }
-
+            
             return;
         }
 
@@ -363,6 +399,103 @@ public class BlockMenuUI : MonoBehaviour
                 panelsForVis.Add(id, g.GetComponent<BlockPanelUI>());
             }
         }
+
+        
+    }
+
+    public void UpdateAdditionalBlockInfo()
+    {        
+        if (!gm.IsBuildMode) return;
+                
+        Block block = bm.CurrentActiveBlock;
+        if (block == null)
+        {
+            blockAdditionalInfo.SetActive(false);
+            return;
+        }
+        else
+        {
+            blockAdditionalInfo.SetActive(true);
+        }
+
+        if (currentBlock != null && currentBlock.ID.ID != block.ID.ID)
+        {
+            currentBlock = block;
+            StartCoroutine(playChangeAdditionalInfo(blockAdditionalInfo.transform, block));
+            return;
+        }
+
+        currentBlock = block;
+
+        blockIcon.sprite = block.BlockIcon;
+
+        int overall = 0;
+        int left = 0;
+        int done = 0;
+
+        Stage s = lc.CurrentStage();
+
+        for (int i = 0; i < s.Blocks.Count; i++)
+        {
+            if (s.Blocks[i].ID.ID == block.ID.ID)
+            {
+                if (s.Blocks[i].IsFinalized)
+                {
+                    done++;
+                }
+                else
+                {                    
+                    left++;
+                }
+
+                overall++;
+            }
+        }
+
+        amountLeftText.text = "x" + left;
+        progressLeft.value = (float)done / overall;
+    }
+    private IEnumerator playChangeAdditionalInfo(Transform t, Block b)
+    {        
+        RectTransform r = t.GetComponent<RectTransform>();
+        r.DOAnchorPos(blockAdditionalInfoPosition + new Vector2(1000, 0), 0.1f).SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.1f);
+
+        blockIcon.sprite = b.BlockIcon;
+
+        int overall = 0;
+        int left = 0;
+        int done = 0;
+
+        Stage s = lc.CurrentStage();
+
+        for (int i = 0; i < s.Blocks.Count; i++)
+        {
+            if (s.Blocks[i].ID.ID == b.ID.ID)
+            {
+                if (s.Blocks[i].IsFinalized)
+                {
+                    done++;
+                }
+                else
+                {
+                    left++;
+                }
+
+                overall++;
+            }
+        }
+
+        amountLeftText.text = "x" + left;
+        progressLeft.value = (float)done / overall;
+
+        r.DOAnchorPos(blockAdditionalInfoPosition, 0.1f).SetEase(Ease.InOutQuad);
+    }
+
+    private void updateMissionInfo()
+    {   
+        missionStage.text = $"{Globals.Language.Stage}: {lc.CurrentStageNumber()} {Globals.Language.StageFrom} {lc.StagesAmount}";
+        missionProgress.value = (float)lc.CurrentStageNumber() / lc.StagesAmount;
     }
 
     private void createBlocksPanel()
@@ -421,7 +554,9 @@ public class BlockMenuUI : MonoBehaviour
                 return;
             }
 
-            blocksPanelForVis.SetActive(true);
+            //blocksPanelForVis.SetActive(true);
+            StartCoroutine(playShow(blocksPanelForVis.transform));
+            updateMissionInfo();            
         }
         else
         {
@@ -432,7 +567,7 @@ public class BlockMenuUI : MonoBehaviour
             }
 
             blocksPanel.SetActive(true);
-
+            StartCoroutine(playShow(blocksPanel.transform));
             filterBlocksPanel();
         }
 
@@ -442,7 +577,16 @@ public class BlockMenuUI : MonoBehaviour
             Cursor.visible = true;
         }
 
-        blockManager.StartChoosing();              
+        blockManager.StartChoosing();
+    }
+    private IEnumerator playShow(Transform t)
+    {
+        t.gameObject.SetActive(true);
+
+        RectTransform r = t.GetComponent<RectTransform>();
+        r.anchoredPosition = new Vector2 (-1200, 0);
+        r.DOAnchorPos(new Vector2(0, 0), 0.25f).SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.25f);
         
     }
 
@@ -479,12 +623,14 @@ public class BlockMenuUI : MonoBehaviour
     {
         if (gm.IsWalkthroughGame)
         {
-            blocksPanelForVis.SetActive(false);
+            //blocksPanelForVis.SetActive(false);
+            StartCoroutine(playHide(blocksPanelForVis.transform));
             blockManager.StartBuilding();
         }
         else
         {
-            blocksPanel.SetActive(false);
+            //blocksPanel.SetActive(false);
+            StartCoroutine(playHide(blocksPanel.transform));
             blockManager.StartBuilding();
         }
         
@@ -495,6 +641,13 @@ public class BlockMenuUI : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }            
+    }
+    private IEnumerator playHide(Transform t)
+    {
+        RectTransform r = t.GetComponent<RectTransform>();
+        r.DOAnchorPos(new Vector2(-1200, 0), 0.25f).SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.25f);
+        t.gameObject.SetActive(false);
     }
 
     private void resetIcons()
@@ -515,6 +668,23 @@ public class BlockMenuUI : MonoBehaviour
 
         othersImage.color = new Color(1, 1, 1, 0.8f);
         othersImage.transform.localScale = Vector3.one * 0.75f;
+    }
+
+    private static string getMissionName(int level)
+    {
+        switch (level)
+        {
+            case 0:
+                return Globals.Language.MissionName0;
+
+            case 1:
+                return Globals.Language.MissionName1;
+
+            case 2:
+                return Globals.Language.MissionName2;
+        }
+
+        return "";
     }
         
 }

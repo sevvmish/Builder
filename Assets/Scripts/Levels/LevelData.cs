@@ -6,4 +6,5 @@ public class LevelData : MonoBehaviour
 {
     public Vector3 Position = Vector3.zero;
     public Vector3 Rotation = Vector3.zero;
+    public Sprite MissionIcon;
 }
