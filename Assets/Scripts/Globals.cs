@@ -15,6 +15,7 @@ public class Globals : MonoBehaviour
     public static Translation Language;
 
     public static int CurrentLevel;
+    public static bool IsWalkthroughEnabled;
 
     public static DateTime TimeWhenStartedPlaying;
     public static DateTime TimeWhenLastInterstitialWas;
@@ -75,5 +76,17 @@ public class Globals : MonoBehaviour
 
     public static Vector3 UIPlayerPosition = new Vector3(0.1f, -0.8f, 0);
     public static Vector3 UIPlayerRotation = new Vector3(0, 180, 0);
-    
+
+    public static bool IsMobileChecker()
+    {
+        if (Application.isMobilePlatform)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 }

@@ -556,9 +556,7 @@ public class Block : MonoBehaviour
                 {
                     
                     if (b.blockType == BlockTypes.wall)
-                    {
-                        print(b.gameObject.name);
-
+                    {                        
                         if ((_transform.position.y - b.transform.position.y) >=2)
                         {
                             _transform.position = new Vector3(_transform.position.x, b.transform.position.y + b.volume.y, _transform.position.z);

@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
                
-        
+        /*
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
         Globals.IsInitiated = true;
@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Globals.MainPlayerData.Zoom = 60;
-        }
+        }*/
         //===========================
 
         if (Globals.IsMobile)
@@ -97,6 +97,8 @@ public class GameManager : MonoBehaviour
             QualitySettings.shadowResolution = ShadowResolution.Medium;
         }
 
+        
+
         mainPlayer = AddPlayer(true, Vector3.zero, Vector3.zero).transform;
         mainPlayer.position = new Vector3(0, 0, 0);
         cameraControl.SetData(mainPlayer, cameraBody, _camera.transform);        
@@ -106,13 +108,13 @@ public class GameManager : MonoBehaviour
         //IsBuildMode = true;
         IsGameStarted = true;
 
-        IsWalkthroughGame = true;
-
-        
+        IsWalkthroughGame = Globals.IsWalkthroughEnabled;        
     }
 
     private void Start()
     {
+        ScreenSaver.Instance.ShowScreen();
+
         if (IsWalkthroughGame)
         {
             levelControl.SetData();

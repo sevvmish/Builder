@@ -24,6 +24,17 @@ MonoBehaviour:
   RegimeBuilderDeleter: DESTRUCTION MODE
   Blocks: BLOCKS
   Build: BUILDING
+  ToBuild: BUILD
+  ToDelete: DELETE
+  ToRotate: ROTATE
+  ToCancel: CANCEL
+  ToBuildRegime: back to building
+  ToDeleteRegime: deleting regime
+  Continue: continue
+  Exit: exit
+  Sound: sound
+  Music: music
+  PlayerIsObstacle: Your character is in the way
   BlockArrow: button "TAB"
   BuildRegimeArrow: TURN ON/OFF      button "B"
   OptionsArrow: button "ESC"

@@ -3,18 +3,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using YG;
 
 public class MainMenuUI : MonoBehaviour
 {
+    [SerializeField] private Button walkthrough;
+    [SerializeField] private Button custom;
+
     // Start is called before the first frame update
     void Start()
     {
+        ScreenSaver.Instance.ShowScreen();
+
         if (Globals.IsInitiated)
         {
             playWhenInitialized();
             localize();
         }
+
+        walkthrough.onClick.AddListener(() =>
+        {
+            walkthrough.interactable = false;
+            Globals.IsWalkthroughEnabled = true;
+            StartCoroutine(playStartLevel());
+        });
+
+        custom.onClick.AddListener(() =>
+        {
+            custom.interactable = false;
+            Globals.IsWalkthroughEnabled = false;
+            StartCoroutine(playStartLevel());
+        });
     }
 
     // Update is called once per frame
@@ -30,7 +50,7 @@ public class MainMenuUI : MonoBehaviour
             Globals.CurrentLanguage = YandexGame.EnvironmentData.language;
             print("language set to: " + Globals.CurrentLanguage);
 
-            Globals.IsMobile = YandexGame.EnvironmentData.isMobile;
+            Globals.IsMobile = Globals.IsMobileChecker();//= YandexGame.EnvironmentData.isMobile;
                         
             print("platform mobile: " + Globals.IsMobile);
 
@@ -88,10 +108,11 @@ public class MainMenuUI : MonoBehaviour
         }
         
 
-        StartCoroutine(playStartLevel());
+        //StartCoroutine(playStartLevel());
     }
     private IEnumerator playStartLevel()
     {
+        ScreenSaver.Instance.HideScreen();
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("Gameplay");
     }

@@ -71,7 +71,7 @@ public class InputControl : MonoBehaviour
     void Update()
     {        
         if (!gm.IsGameStarted || Globals.IsOptions) return;
-       
+
         if (Globals.IsMobile)
         {
             forMobile();

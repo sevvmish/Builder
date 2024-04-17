@@ -39,9 +39,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button BuildingModeButton;
     [SerializeField] private GameObject BuildingModeCloseSign;
 
+    [Header("Main buttons for building mode TRANSLATE")]
+    [SerializeField] private TextMeshProUGUI buildCurrentBlockButtonText;
+    [SerializeField] private TextMeshProUGUI deleteCurrentBlockButtonText;
+    [SerializeField] private TextMeshProUGUI rotateCurrentBlockButtonText;
+    [SerializeField] private TextMeshProUGUI cancelLastBlockButtonText;
+    [SerializeField] private TextMeshProUGUI toDeleteRegimeText;
+    [SerializeField] private TextMeshProUGUI toBuildRegimeText;
 
-    [Header("Options")]
-    [SerializeField] private Button optionsButton;
+    [SerializeField] private TextMeshProUGUI playerBodyInformer;
+    private bool isPlayerInformerActive;
 
     [Header("BlocksMenu")]
     [SerializeField] private BlockMenuUI blockMenuUI;
@@ -76,10 +83,18 @@ public class UIManager : MonoBehaviour
         rotateCurrentBlockButton.gameObject.SetActive(false);
 
         if (!Globals.IsMobile)
-        {
-            optionsButton.transform.localScale = Vector3.one * 0.7f;
-            callBlocksButton.transform.localScale = Vector3.one * 0.7f;
+        {            
+            callBlocksButton.transform.localScale = Vector3.one * 0.6f;
             BuildingModeButton.transform.localScale = Vector3.one * 0.7f;
+        }
+        else
+        {
+            buildCurrentBlockButtonText.text = Globals.Language.ToBuild;
+            deleteCurrentBlockButtonText.text = Globals.Language.ToDelete;
+            rotateCurrentBlockButtonText.text = Globals.Language.ToRotate;
+            cancelLastBlockButtonText.text = Globals.Language.ToCancel;
+            toDeleteRegimeText.text = Globals.Language.ToDeleteRegime;
+            toBuildRegimeText.text = Globals.Language.ToBuildRegime;
         }
 
         sounds = SoundUI.Instance;
@@ -110,6 +125,8 @@ public class UIManager : MonoBehaviour
             buildCurrentBlockButton.gameObject.SetActive(false);
             startDestroingBlockButton.gameObject.SetActive(false);
             startBuildingBlockButton.gameObject.SetActive(true);
+            rotateCurrentBlockButton.gameObject.SetActive(false);
+            callBlocksButton.gameObject.SetActive(false);
         });
 
         startBuildingBlockButton.onClick.AddListener(() => 
@@ -293,13 +310,32 @@ public class UIManager : MonoBehaviour
             rotateCurrentBlockButton.gameObject.SetActive(false);
         }
 
-        blockMenuUI.UpdateAdditionalBlockInfo();
+        if (gm.IsWalkthroughGame) blockMenuUI.UpdateAdditionalBlockInfo();
+
+        blockMenuUI.UpdateOutlines();
     }
 
     
     public void PlayerCrossNewBlockError()
     {
+        if (!isPlayerInformerActive) StartCoroutine(playPlayerCross(Globals.Language.PlayerIsObstacle));
+    }
+    private IEnumerator playPlayerCross(string newText)
+    {
+        isPlayerInformerActive = true;
+        playerBodyInformer.gameObject.SetActive(true);
+        playerBodyInformer.color = new Color(1, 1, 0, 1);
+        playerBodyInformer.text = newText;
+        
+        yield return new WaitForSeconds(0.5f);
+        playerBodyInformer.color = new Color(1, 1, 0, 0.66f);
 
+        yield return new WaitForSeconds(0.3f);
+        playerBodyInformer.color = new Color(1, 1, 0, 0.33f);
+
+        yield return new WaitForSeconds(0.1f);
+        playerBodyInformer.gameObject.SetActive(false);
+        isPlayerInformerActive = false;
     }
 
     public void HideBlocksPanel()

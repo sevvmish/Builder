@@ -13,6 +13,7 @@ public class SoundUI : MonoBehaviour
     [SerializeField] private AudioClip Pop;
     [SerializeField] private AudioClip Success1;
     [SerializeField] private AudioClip Success2;
+    [SerializeField] private AudioClip Success3;
     [SerializeField] private AudioClip Cash;
     [SerializeField] private AudioClip WoodBuild;
     [SerializeField] private AudioClip WoodDestroy;
@@ -68,6 +69,16 @@ public class SoundUI : MonoBehaviour
         _audio.Play();
     }
 
+    public void PlayUISound(float delay, SoundsUI _type)
+    {
+        StartCoroutine(playSoundWithDelay(delay, _type));
+    }
+    private IEnumerator playSoundWithDelay(float delay, SoundsUI _type)
+    {
+        yield return new WaitForSeconds(delay);
+        PlayUISound(_type);
+    }
+
     public void PlayUISound(SoundsUI _type)
     {
         _audio.pitch = 1;
@@ -113,6 +124,13 @@ public class SoundUI : MonoBehaviour
                 _audio.Play();
                 break;
 
+            case SoundsUI.success3:
+                _audio.Stop();
+                _audio.pitch = 1f;
+                _audio.clip = Success3;
+                _audio.Play();
+                break;
+
             case SoundsUI.cash:
                 _audio.Stop();
                 _audio.pitch = 1f;
@@ -133,5 +151,6 @@ public enum SoundsUI
     click,
     success1,
     success2,
+    success3,
     cash
 }

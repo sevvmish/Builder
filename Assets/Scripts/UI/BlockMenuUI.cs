@@ -18,6 +18,7 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI missionStage;
     [SerializeField] private Slider missionProgress;
     [SerializeField] private Image missionIcon;
+    [SerializeField] private TextMeshProUGUI stageInformer;
 
     private Stage currentStage;
     private Dictionary<int, BlockPanelUI> panelsForVis = new Dictionary<int, BlockPanelUI>();
@@ -29,6 +30,7 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private Image blockIcon;
     private Block currentBlock;
     private Vector2 blockAdditionalInfoPosition;
+    private bool isFirstStageInform;
 
 
     [Header("BlocksMenu")]    
@@ -63,10 +65,17 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private Image roofsImage;
     [SerializeField] private Image partsImage;
     [SerializeField] private Image othersImage;
+    [SerializeField] private GameObject floorsImageOutline;
+    [SerializeField] private GameObject wallsImageOutline;
+    [SerializeField] private GameObject roofsImageOutline;
+    [SerializeField] private GameObject partsImageOutline;
+    [SerializeField] private GameObject othersImageOutline;
     private int currentIndex = 1;
     private const int MAX_INDEX = 5;
 
     private BlockTypes defaultStartBlock = BlockTypes.floor;
+
+    private Dictionary<int, BlockPanelUI> panelsForNonVis = new Dictionary<int, BlockPanelUI>();
     
     private List<GameObject> floors = new List<GameObject>();
     private List<GameObject> walls = new List<GameObject>();
@@ -105,12 +114,14 @@ public class BlockMenuUI : MonoBehaviour
         }
         blockAdditionalInfo.SetActive(false);
         blockAdditionalInfoPosition = blockAdditionalInfo.GetComponent<RectTransform>().anchoredPosition;
+        
 
         createBlocksPanel();
         resetIcons();
         floorsImage.color = Color.yellow;
         floorsImage.transform.localScale = Vector3.one;
         currentIndex = 1;
+        floorsImageOutline.SetActive(true);
 
         if (Globals.IsMobile)
         {
@@ -138,7 +149,7 @@ public class BlockMenuUI : MonoBehaviour
             gridLayoutGroup.cellSize = cellSizePC;
             gridLayoutGroup.spacing = spacingPC;
 
-            blocksPanel.transform.localScale = Vector3.one * 0.9f;
+            blocksPanel.transform.localScale = Vector3.one * 0.7f;
 
             gridLayoutGroupForVis.padding.left = leftPC;
             gridLayoutGroupForVis.padding.top = topPC;
@@ -146,7 +157,13 @@ public class BlockMenuUI : MonoBehaviour
             gridLayoutGroupForVis.cellSize = cellSizePC;
             gridLayoutGroupForVis.spacing = spacingPC;
 
-            blocksPanelForVis.transform.localScale = Vector3.one * 0.9f;
+            blocksPanelForVis.transform.localScale = Vector3.one * 0.7f;
+
+            floorsFilterButton.transform.localScale = Vector3.one * 0.9f;
+            wallsFilterButton.transform.localScale = Vector3.one * 0.9f;
+            roofsFilterButton.transform.localScale = Vector3.one * 0.9f;
+            partsFilterButton.transform.localScale = Vector3.one * 0.9f;
+            othersFilterButton.transform.localScale = Vector3.one * 0.9f;
         }
         
 
@@ -176,6 +193,40 @@ public class BlockMenuUI : MonoBehaviour
         });
     }
 
+    public void UpdateOutlines()
+    {
+        if (bm.CurrentActiveBlock == null) return;
+
+        if (gm.IsWalkthroughGame)
+        {            
+            foreach (int key in panelsForVis.Keys)
+            {
+                if (bm.CurrentActiveBlock.ID.ID != key && panelsForVis[key].GetOutline)
+                {
+                    panelsForVis[key].SetOutline(false);
+                }
+                else if (bm.CurrentActiveBlock.ID.ID == key && !panelsForVis[key].GetOutline)
+                {
+                    panelsForVis[key].SetOutline(true);
+                }
+            }
+        }
+        else
+        {            
+            foreach (int key in panelsForNonVis.Keys)
+            {
+                if (bm.CurrentActiveBlock.ID.ID != key && panelsForNonVis[key].GetOutline)
+                {
+                    panelsForNonVis[key].SetOutline(false);
+                }
+                else if (bm.CurrentActiveBlock.ID.ID == key && !panelsForNonVis[key].GetOutline)
+                {
+                    panelsForNonVis[key].SetOutline(true);
+                }
+            }
+        }
+    }
+
     private void activateFloors()
     {
         if (defaultStartBlock == BlockTypes.floor) return;
@@ -189,6 +240,7 @@ public class BlockMenuUI : MonoBehaviour
         sounds.PlayUISound(SoundsUI.click);
         defaultStartBlock = BlockTypes.floor;
         filterBlocksPanel();
+        floorsImageOutline.SetActive(true);
     }
 
     private void activateWalls()
@@ -204,6 +256,7 @@ public class BlockMenuUI : MonoBehaviour
         sounds.PlayUISound(SoundsUI.click);
         defaultStartBlock = BlockTypes.wall;
         filterBlocksPanel();
+        wallsImageOutline.SetActive(true);
     }
 
     private void activateRoofs()
@@ -219,6 +272,7 @@ public class BlockMenuUI : MonoBehaviour
         sounds.PlayUISound(SoundsUI.click);
         defaultStartBlock = BlockTypes.roof;
         filterBlocksPanel();
+        roofsImageOutline.SetActive(true);
     }
 
     private void activateParts()
@@ -234,6 +288,7 @@ public class BlockMenuUI : MonoBehaviour
         sounds.PlayUISound(SoundsUI.click);
         defaultStartBlock = BlockTypes.parts;
         filterBlocksPanel();
+        partsImageOutline.SetActive(true);
     }
 
     private void activateOthers()
@@ -249,13 +304,39 @@ public class BlockMenuUI : MonoBehaviour
         sounds.PlayUISound(SoundsUI.click);
         defaultStartBlock = BlockTypes.others;
         filterBlocksPanel();
+        othersImageOutline.SetActive(true);
+    }
+
+    private IEnumerator showAdditionalInfo()
+    {
+        blockAdditionalInfo.gameObject.SetActive(true);
+
+        RectTransform r = blockAdditionalInfo.GetComponent<RectTransform>();
+        r.anchoredPosition = blockAdditionalInfoPosition + new Vector2(1000, 0);
+        r.DOAnchorPos(blockAdditionalInfoPosition, 0.1f).SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.1f);        
+    }
+    private IEnumerator hideAdditionalInfo()
+    {
+        RectTransform r = blockAdditionalInfo.GetComponent<RectTransform>();        
+        r.DOAnchorPos(blockAdditionalInfoPosition + new Vector2(1000, 0), 0.1f).SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.1f);
+        blockAdditionalInfo.gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        if (!gm.IsBuildMode && blockAdditionalInfo.activeSelf)
+        if (gm.IsWalkthroughGame && !gm.IsBuildMode && blockAdditionalInfo.activeSelf)
         {
-            blockAdditionalInfo.SetActive(false);
+            //blockAdditionalInfo.SetActive(false);
+            StartCoroutine(hideAdditionalInfo());
+        }
+
+        if (!isFirstStageInform && gm.IsWalkthroughGame && gm.IsBuildMode)
+        {
+            isFirstStageInform = true;
+            sounds.PlayUISound(1f, SoundsUI.success3);
+            StartCoroutine(changeRegimeText(1f, $"{Globals.Language.Stage}: {lc.CurrentStageNumber()} {Globals.Language.StageFrom} {lc.StagesAmount}"));
         }
 
         if (Input.GetKeyDown(KeyCode.Tab) && gm.PointerClickedCount <= 0 && !IsPanelOpened)
@@ -363,8 +444,7 @@ public class BlockMenuUI : MonoBehaviour
                 {
                     panelsForVis[currentStage.Blocks[i].ID.ID].Amount++;
                 }                
-            }
-            
+            }            
             return;
         }
 
@@ -374,6 +454,8 @@ public class BlockMenuUI : MonoBehaviour
             {
                 Destroy(panelsForVis[key].gameObject);
             }
+            sounds.PlayUISound(0.1f, SoundsUI.success3);
+            StartCoroutine(changeRegimeText(0, $"{Globals.Language.Stage}: {lc.CurrentStageNumber()} {Globals.Language.StageFrom} {lc.StagesAmount}"));
         }
 
         currentStage = stage;
@@ -410,12 +492,17 @@ public class BlockMenuUI : MonoBehaviour
         Block block = bm.CurrentActiveBlock;
         if (block == null)
         {
-            blockAdditionalInfo.SetActive(false);
+            //blockAdditionalInfo.SetActive(false);
+            StartCoroutine(hideAdditionalInfo());
             return;
         }
         else
         {
-            blockAdditionalInfo.SetActive(true);
+            if (!blockAdditionalInfo.activeSelf)
+            {
+                //blockAdditionalInfo.SetActive(true);
+                StartCoroutine(showAdditionalInfo());
+            }            
         }
 
         if (currentBlock != null && currentBlock.ID.ID != block.ID.ID)
@@ -423,6 +510,10 @@ public class BlockMenuUI : MonoBehaviour
             currentBlock = block;
             StartCoroutine(playChangeAdditionalInfo(blockAdditionalInfo.transform, block));
             return;
+        }
+        else if (currentBlock != null && currentBlock.ID.ID == block.ID.ID)
+        {
+            blockAdditionalInfo.transform.DOPunchPosition(new Vector3(UnityEngine.Random.Range(-10,10), UnityEngine.Random.Range(-10, 10), 1), 0.3f, 30).SetEase(Ease.InOutQuad);
         }
 
         currentBlock = block;
@@ -454,6 +545,9 @@ public class BlockMenuUI : MonoBehaviour
 
         amountLeftText.text = "x" + left;
         progressLeft.value = (float)done / overall;
+
+        
+
     }
     private IEnumerator playChangeAdditionalInfo(Transform t, Block b)
     {        
@@ -529,6 +623,7 @@ public class BlockMenuUI : MonoBehaviour
 
                 g.GetComponent<BlockPanelUI>().SetData(sourceIDs[i], blockManager);
                 sourceGameobjects.Add(g);
+                if (!panelsForNonVis.ContainsKey(sourceIDs[i])) panelsForNonVis.Add(sourceIDs[i], g.GetComponent<BlockPanelUI>());
             }
         }
     }
@@ -585,8 +680,8 @@ public class BlockMenuUI : MonoBehaviour
 
         RectTransform r = t.GetComponent<RectTransform>();
         r.anchoredPosition = new Vector2 (-1200, 0);
-        r.DOAnchorPos(new Vector2(0, 0), 0.25f).SetEase(Ease.InOutQuad);
-        yield return new WaitForSeconds(0.25f);
+        r.DOAnchorPos(new Vector2(0, 0), 0.2f).SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.2f);
         
     }
 
@@ -645,8 +740,8 @@ public class BlockMenuUI : MonoBehaviour
     private IEnumerator playHide(Transform t)
     {
         RectTransform r = t.GetComponent<RectTransform>();
-        r.DOAnchorPos(new Vector2(-1200, 0), 0.25f).SetEase(Ease.InOutQuad);
-        yield return new WaitForSeconds(0.25f);
+        r.DOAnchorPos(new Vector2(-1200, 0), 0.1f).SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.1f);
         t.gameObject.SetActive(false);
     }
 
@@ -655,19 +750,25 @@ public class BlockMenuUI : MonoBehaviour
         if (gm.IsWalkthroughGame) return;
 
         floorsImage.color = new Color(1, 1, 1, 0.8f);
-        floorsImage.transform.localScale = Vector3.one * 0.75f;
+        floorsImage.transform.localScale = Vector3.one * 0.8f;
 
         wallsImage.color = new Color(1, 1, 1, 0.8f);
-        wallsImage.transform.localScale = Vector3.one * 0.75f;
+        wallsImage.transform.localScale = Vector3.one * 0.8f;
 
         roofsImage.color = new Color(1, 1, 1, 0.8f);
-        roofsImage.transform.localScale = Vector3.one * 0.75f;
+        roofsImage.transform.localScale = Vector3.one * 0.8f;
 
         partsImage.color = new Color(1, 1, 1, 0.8f);
-        partsImage.transform.localScale = Vector3.one * 0.75f;
+        partsImage.transform.localScale = Vector3.one * 0.8f;
 
         othersImage.color = new Color(1, 1, 1, 0.8f);
-        othersImage.transform.localScale = Vector3.one * 0.75f;
+        othersImage.transform.localScale = Vector3.one * 0.8f;
+
+        floorsImageOutline.SetActive(false);
+        wallsImageOutline.SetActive(false);
+        roofsImageOutline.SetActive(false);
+        partsImageOutline.SetActive(false);
+        othersImageOutline.SetActive(false);
     }
 
     private static string getMissionName(int level)
@@ -686,5 +787,37 @@ public class BlockMenuUI : MonoBehaviour
 
         return "";
     }
-        
+
+    private IEnumerator changeRegimeText(float delay, string newText)
+    {        
+        yield return new WaitForSeconds(delay);
+        stageInformer.gameObject.SetActive(true);
+        stageInformer.color = new Color(1, 1, 0, 1);
+        stageInformer.text = newText;
+        //stageInformer.transform.localScale = Vector3.zero;
+        //stageInformer.transform.DOScale(Vector3.one, 0.15f).SetEase(Ease.Linear);
+        RectTransform r = stageInformer.GetComponent<RectTransform>();
+        Vector2 pos = new Vector2(0, -200);
+        r.anchoredPosition = pos + new Vector2(-1500,0);
+        r.DOAnchorPos(pos, 0.25f).SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.25f);
+
+        stageInformer.transform.DOShakeScale(0.2f, 1, 30).SetEase(Ease.InOutBounce);
+        yield return new WaitForSeconds(2.5f);
+
+        r.DOAnchorPos(pos + new Vector2(1500, 0), 0.25f).SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.25f);
+        stageInformer.gameObject.SetActive(false);
+        /*
+        yield return new WaitForSeconds(1.5f);
+        stageInformer.color = new Color(1, 1, 0, 0.66f);
+
+        yield return new WaitForSeconds(0.5f);
+        stageInformer.color = new Color(1, 1, 0, 0.33f);
+
+        yield return new WaitForSeconds(0.5f);
+        stageInformer.gameObject.SetActive(false);
+        */
+    }
+
 }

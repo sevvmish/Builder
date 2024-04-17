@@ -12,6 +12,7 @@ public class BlockPanelUI : MonoBehaviour
     [SerializeField] private Sprite full;
     [SerializeField] private Sprite empty;
     [SerializeField] private TextMeshProUGUI amountText;
+    [SerializeField] private GameObject outline;
 
     private int id;
     private BlockManager blockManager;
@@ -47,7 +48,10 @@ public class BlockPanelUI : MonoBehaviour
         }
     }
     private int amount = 1;
-        
+
+    public void SetOutline(bool isActive) => outline.SetActive(isActive);
+    public bool GetOutline => outline.activeSelf;
+           
 
     public void SetData(int id, BlockManager bm)
     {
@@ -56,6 +60,8 @@ public class BlockPanelUI : MonoBehaviour
 
         this.id = id;
         block = assets.GetBlockDataByID(id);
+
+        outline.SetActive(false);
 
         //SIZE
         sizes[0].sprite = empty;
@@ -85,7 +91,7 @@ public class BlockPanelUI : MonoBehaviour
         iconImage.sprite = block.BlockIcon;
         activateButton.onClick.AddListener(() => 
         {
-
+            SoundUI.Instance.PlayUISound(SoundsUI.click);
             if (bm.CurrentActiveBlock != null && bm.CurrentActiveBlock.gameObject.GetComponent<Identificator>().ID == this.id) 
             {
                 gm.GetUI.HideBlocksPanel();

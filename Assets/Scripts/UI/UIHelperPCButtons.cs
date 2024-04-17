@@ -67,9 +67,9 @@ public class UIHelperPCButtons : MonoBehaviour
 
             buildingBlocks.SetActive(true);
             setBlockText.gameObject.SetActive(true);
-            if (!gm.IsWalkthroughGame) rotateBlockText.gameObject.SetActive(true);
-            if (!gm.IsWalkthroughGame) cancelBlockText.gameObject.SetActive(true);
-            if (!gm.IsWalkthroughGame) howToDelBlocksText.gameObject.SetActive(true);
+            rotateBlockText.gameObject.SetActive(!gm.IsWalkthroughGame);
+            cancelBlockText.gameObject.SetActive(!gm.IsWalkthroughGame);
+            howToDelBlocksText.gameObject.SetActive(!gm.IsWalkthroughGame);
             setBlockText.text = Globals.Language.SetBlockHelper;
             rotateBlockText.text = Globals.Language.RotateBlockHelper;
             cancelBlockText.text = Globals.Language.CancelBlockHelper;
@@ -136,7 +136,7 @@ public class UIHelperPCButtons : MonoBehaviour
             }
         }
 
-        if (gm.IsBuildMode)
+        if (gm.IsBuildMode && !gm.IsWalkthroughGame)
         {
             if (isBuildingInBuilding != bm.IsBuildingBlocks)
             {
