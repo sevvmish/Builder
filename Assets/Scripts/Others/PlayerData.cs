@@ -14,6 +14,8 @@ public class PlayerData
     public float Zoom;
     public bool IsZoomCorrected;
 
+    public bool IsLowFPS;
+
     public int Level;
 
     public PlayerData()
@@ -25,6 +27,7 @@ public class PlayerData
         Zoom = 50; //camera zoom
         IsZoomCorrected = false;
         Level = 0;
+        IsLowFPS = false;
 
         Debug.Log("created PlayerData instance");
     }

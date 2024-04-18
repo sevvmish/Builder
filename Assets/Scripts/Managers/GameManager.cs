@@ -65,11 +65,11 @@ public class GameManager : MonoBehaviour
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
                
-        /*
+        
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
         Globals.IsInitiated = true;
-        Globals.IsMobile = false;
+        Globals.IsMobile = true;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse("ru").GetCurrentTranslation();
@@ -81,14 +81,23 @@ public class GameManager : MonoBehaviour
         else
         {
             Globals.MainPlayerData.Zoom = 60;
-        }*/
+        }
         //===========================
 
         if (Globals.IsMobile)
         {
             QualitySettings.antiAliasing = 2;
-            QualitySettings.shadows = ShadowQuality.HardOnly;
-            QualitySettings.shadowResolution = ShadowResolution.Medium;
+
+            if (Globals.IsLowFPS)
+            {
+                QualitySettings.shadows = ShadowQuality.Disable;
+            }
+            else
+            {
+                QualitySettings.shadows = ShadowQuality.HardOnly;
+                QualitySettings.shadowResolution = ShadowResolution.Medium;
+            }                        
+            
         }
         else
         {

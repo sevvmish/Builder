@@ -51,6 +51,7 @@ public class MainMenuUI : MonoBehaviour
             print("language set to: " + Globals.CurrentLanguage);
 
             Globals.IsMobile = Globals.IsMobileChecker();//= YandexGame.EnvironmentData.isMobile;
+            Globals.IsLowFPS = Globals.MainPlayerData.IsLowFPS;
                         
             print("platform mobile: " + Globals.IsMobile);
 
