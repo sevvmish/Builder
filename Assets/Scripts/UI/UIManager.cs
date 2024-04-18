@@ -84,8 +84,9 @@ public class UIManager : MonoBehaviour
 
         if (!Globals.IsMobile)
         {            
-            callBlocksButton.transform.localScale = Vector3.one * 0.6f;
+            callBlocksButton.transform.localScale = Vector3.one * 0.7f;
             BuildingModeButton.transform.localScale = Vector3.one * 0.7f;
+            BuildingModeButton.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 80);
         }
         else
         {

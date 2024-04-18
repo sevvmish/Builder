@@ -48,16 +48,20 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private Button othersFilterButton;
 
     [Header("FOR PC")]
-    [SerializeField] private int leftPC = 30;
-    [SerializeField] private int topPC = 50;
-    [SerializeField] private Vector2 cellSizePC = new Vector2(160, 230);
-    [SerializeField] private Vector2 spacingPC = new Vector2(50, 50);
+    private int leftPC = 50;
+    private int topPC = 50;
+    private int botomPC = 50;
+    private Vector2 cellSizePC = new Vector2(160, 230);
+    private Vector2 cellSizePCver2 = new Vector2(150, 220);
+    private Vector2 spacingPC = new Vector2(55, 60);
 
-    [Header("FOR Mob")]
-    [SerializeField] private int leftM = 60;
-    [SerializeField] private int topM = 70;
-    [SerializeField] private Vector2 cellSizeM = new Vector2(192, 276);
-    [SerializeField] private Vector2 spacingM = new Vector2(80, 120);
+    //[Header("FOR Mob")]
+    private int leftM = 70;
+    private int topM = 70;
+    private int botomM = 70;
+    private Vector2 cellSizeM = new Vector2(190, 270);
+    private Vector2 cellSizeMver2 = new Vector2(175, 250);
+    private Vector2 spacingM = new Vector2(100, 120);
 
     [Header("Icons")]
     [SerializeField] private Image floorsImage;
@@ -99,6 +103,53 @@ public class BlockMenuUI : MonoBehaviour
         lc = gm.LevelControl;
         bm = gm.BlockManager;
         assets = gm.Assets;
+
+        if (Globals.IsMobile)
+        {
+            gridLayoutGroup.padding.left = leftM;
+            gridLayoutGroup.padding.top = topM;
+            gridLayoutGroup.padding.bottom = botomM;
+
+            gridLayoutGroup.cellSize = cellSizeM;
+            gridLayoutGroup.spacing = spacingM;
+
+            blocksPanel.transform.localScale = Vector3.one * 0.8f;
+
+            gridLayoutGroupForVis.padding.left = leftM;
+            gridLayoutGroupForVis.padding.top = topM;
+            gridLayoutGroupForVis.padding.bottom = botomM;
+
+            gridLayoutGroupForVis.cellSize = cellSizeM;
+            gridLayoutGroupForVis.spacing = spacingM;
+
+            blocksPanelForVis.transform.localScale = Vector3.one * 0.8f;
+        }
+        else
+        {
+            gridLayoutGroup.padding.left = leftPC;
+            gridLayoutGroup.padding.top = topPC;
+            gridLayoutGroup.padding.bottom = botomPC;
+
+            gridLayoutGroup.cellSize = cellSizePC;
+            gridLayoutGroup.spacing = spacingPC;
+
+            blocksPanel.transform.localScale = Vector3.one * 0.7f;
+
+            gridLayoutGroupForVis.padding.left = leftPC;
+            gridLayoutGroupForVis.padding.top = topPC;
+            gridLayoutGroupForVis.padding.bottom = botomPC;
+
+            gridLayoutGroupForVis.cellSize = cellSizePC;
+            gridLayoutGroupForVis.spacing = spacingPC;
+
+            blocksPanelForVis.transform.localScale = Vector3.one * 0.7f;
+
+            floorsFilterButton.transform.localScale = Vector3.one * 0.9f;
+            wallsFilterButton.transform.localScale = Vector3.one * 0.9f;
+            roofsFilterButton.transform.localScale = Vector3.one * 0.9f;
+            partsFilterButton.transform.localScale = Vector3.one * 0.9f;
+            othersFilterButton.transform.localScale = Vector3.one * 0.9f;
+        }
     }
 
     // Start is called before the first frame update
@@ -122,50 +173,6 @@ public class BlockMenuUI : MonoBehaviour
         floorsImage.transform.localScale = Vector3.one;
         currentIndex = 1;
         floorsImageOutline.SetActive(true);
-
-        if (Globals.IsMobile)
-        {
-            gridLayoutGroup.padding.left = leftM;
-            gridLayoutGroup.padding.top = topM;
-
-            gridLayoutGroup.cellSize = cellSizeM;
-            gridLayoutGroup.spacing = spacingM;
-
-            blocksPanel.transform.localScale = Vector3.one * 0.8f;
-
-            gridLayoutGroupForVis.padding.left = leftM;
-            gridLayoutGroupForVis.padding.top = topM;
-
-            gridLayoutGroupForVis.cellSize = cellSizeM;
-            gridLayoutGroupForVis.spacing = spacingM;
-
-            blocksPanelForVis.transform.localScale = Vector3.one * 0.8f;
-        }
-        else
-        {
-            gridLayoutGroup.padding.left = leftPC;
-            gridLayoutGroup.padding.top = topPC;
-
-            gridLayoutGroup.cellSize = cellSizePC;
-            gridLayoutGroup.spacing = spacingPC;
-
-            blocksPanel.transform.localScale = Vector3.one * 0.7f;
-
-            gridLayoutGroupForVis.padding.left = leftPC;
-            gridLayoutGroupForVis.padding.top = topPC;
-
-            gridLayoutGroupForVis.cellSize = cellSizePC;
-            gridLayoutGroupForVis.spacing = spacingPC;
-
-            blocksPanelForVis.transform.localScale = Vector3.one * 0.7f;
-
-            floorsFilterButton.transform.localScale = Vector3.one * 0.9f;
-            wallsFilterButton.transform.localScale = Vector3.one * 0.9f;
-            roofsFilterButton.transform.localScale = Vector3.one * 0.9f;
-            partsFilterButton.transform.localScale = Vector3.one * 0.9f;
-            othersFilterButton.transform.localScale = Vector3.one * 0.9f;
-        }
-        
 
         floorsFilterButton.onClick.AddListener(() =>
         {
@@ -431,6 +438,8 @@ public class BlockMenuUI : MonoBehaviour
 
     public void UpdateIconsForVis(Stage stage)
     {        
+        
+
         if (currentStage != null && currentStage.Equals(stage))
         {
             foreach (int b in panelsForVis.Keys)
@@ -444,7 +453,8 @@ public class BlockMenuUI : MonoBehaviour
                 {
                     panelsForVis[currentStage.Blocks[i].ID.ID].Amount++;
                 }                
-            }            
+            }
+            checkCellSize();
             return;
         }
 
@@ -482,7 +492,37 @@ public class BlockMenuUI : MonoBehaviour
             }
         }
 
-        
+        checkCellSize();
+    }
+    private void checkCellSize()
+    {
+        int leftBlocks = 0;
+
+        foreach (int key in panelsForVis.Keys)
+        {
+            if (panelsForVis[key].gameObject.activeSelf)
+            {
+                leftBlocks++;
+            }
+        }
+
+        if (gm.IsWalkthroughGame && !Globals.IsMobile && leftBlocks > 8)
+        {
+            gridLayoutGroupForVis.cellSize = cellSizePCver2;
+        }
+        else if (gm.IsWalkthroughGame && !Globals.IsMobile && leftBlocks <= 8)
+        {
+            gridLayoutGroupForVis.cellSize = cellSizePC;
+        }
+
+        if (gm.IsWalkthroughGame && Globals.IsMobile && leftBlocks > 6)
+        {
+            gridLayoutGroupForVis.cellSize = cellSizeMver2;
+        }
+        else if (gm.IsWalkthroughGame && Globals.IsMobile && leftBlocks <= 6)
+        {
+            gridLayoutGroupForVis.cellSize = cellSizeM;
+        }
     }
 
     public void UpdateAdditionalBlockInfo()
