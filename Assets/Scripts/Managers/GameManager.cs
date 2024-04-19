@@ -64,16 +64,18 @@ public class GameManager : MonoBehaviour
         }
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
-               
+        Globals.CurrentLevel = Globals.MainPlayerData.Level;
+
         /*
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
         Globals.IsInitiated = true;
-        Globals.IsMobile = true;
+        Globals.IsMobile = false;
         Globals.IsSoundOn = true;
         Globals.IsMusicOn = true;
         Globals.Language = Localization.GetInstanse("ru").GetCurrentTranslation();
         Globals.CurrentLevel = Globals.MainPlayerData.Level;
+        Globals.IsWalkthroughEnabled = true;
         if (Globals.IsMobile)
         {
             Globals.MainPlayerData.Zoom = 50;
@@ -132,9 +134,24 @@ public class GameManager : MonoBehaviour
     
     public void WinGameWithVisualization()
     {
-        IsBuildMode = false;
-        blockManager.StopBuilding();
-        IsWinWalkthroughGame = true;
+        if (IsGameStarted)
+        {
+            IsGameStarted = false;
+            IsBuildMode = false;
+            blockManager.StopBuilding();
+            IsWinWalkthroughGame = true;
+
+            Globals.MainPlayerData.Level++;
+            SaveLoadManager.Save();
+            StartCoroutine(playStartLevel());
+        }
+        
+    }
+    private IEnumerator playStartLevel()
+    {
+        ScreenSaver.Instance.HideScreen();
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("Gameplay");
     }
 
     public void SetBuildingMode(bool isActive)

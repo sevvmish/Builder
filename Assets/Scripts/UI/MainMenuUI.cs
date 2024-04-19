@@ -40,6 +40,13 @@ public class MainMenuUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Globals.MainPlayerData = new PlayerData();
+            SaveLoadManager.Save();
+            SceneManager.LoadScene("MainMenu");
+        }
+
         if (YandexGame.SDKEnabled && !Globals.IsInitiated)
         {
             Globals.IsInitiated = true;
@@ -50,8 +57,9 @@ public class MainMenuUI : MonoBehaviour
             Globals.CurrentLanguage = YandexGame.EnvironmentData.language;
             print("language set to: " + Globals.CurrentLanguage);
 
-            Globals.IsMobile = true;// Globals.IsMobileChecker();
+            Globals.IsMobile = Globals.IsMobileChecker();
             Globals.IsLowFPS = Globals.MainPlayerData.IsLowFPS;
+            Globals.CurrentLevel = Globals.MainPlayerData.Level;
                         
             print("platform mobile: " + Globals.IsMobile);
 

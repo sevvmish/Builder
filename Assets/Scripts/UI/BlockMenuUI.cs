@@ -466,6 +466,7 @@ public class BlockMenuUI : MonoBehaviour
             }
             sounds.PlayUISound(0.1f, SoundsUI.success3);
             StartCoroutine(changeRegimeText(0, $"{Globals.Language.Stage}: {lc.CurrentStageNumber()} {Globals.Language.StageFrom} {lc.StagesAmount}"));
+            gm.MainPlayerControl.CheckUnstuck();
         }
 
         currentStage = stage;
@@ -813,19 +814,27 @@ public class BlockMenuUI : MonoBehaviour
 
     private static string getMissionName(int level)
     {
+        return Globals.Language.MissionName[level];
+        /*
         switch (level)
         {
             case 0:
-                return Globals.Language.MissionName0;
+                return Globals.Language.MissionName[level];
 
             case 1:
                 return Globals.Language.MissionName1;
 
             case 2:
                 return Globals.Language.MissionName2;
+
+            case 3:
+                return Globals.Language.MissionName3;
+
+            case 4:
+                return Globals.Language.MissionName4;
         }
 
-        return "";
+        return "";*/
     }
 
     private IEnumerator changeRegimeText(float delay, string newText)

@@ -46,6 +46,9 @@ MonoBehaviour:
   HowToBuildHelper: 'TO BUILD BLOCKS:       button "Q"'
   Stage: Stage
   StageFrom: of
-  MissionName0: Tutorial
-  MissionName1: First mission
-  MissionName2: Second mission
+  MissionName:
+  - Tutorial
+  - Simple house
+  - Complex house
+  - House with furniture
+  - Corner house

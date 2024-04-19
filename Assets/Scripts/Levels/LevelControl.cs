@@ -20,6 +20,8 @@ public class LevelControl : MonoBehaviour
         gm = GameManager.Instance;
 
         stagesLocation = gm.Assets.Levels[Globals.CurrentLevel];
+        print(stagesLocation.gameObject.name + " !!!!!!!!!!!!");
+        print(Globals.MainPlayerData.Level + " = " + Globals.CurrentLevel);
         levelData = stagesLocation.GetComponent<LevelData>();
         stages = new Stage[stagesLocation.childCount];
 

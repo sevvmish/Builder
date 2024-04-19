@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -32,6 +33,9 @@ public class PlayerControl : MonoBehaviour
     private bool isJumpUp;
     private bool isJumpDown;
     private bool isForward;
+    private bool isChekingCollision;
+    private bool isCollisionON;
+    private bool isSolidPlayerBodyON;
 
 
     //SPEED
@@ -68,6 +72,7 @@ public class PlayerControl : MonoBehaviour
     private LayerMask ignoreMask;
 
     private WaitForSeconds ZeroOne = new WaitForSeconds(0.1f);
+    private WaitForSeconds FixedOne = new WaitForSeconds(0.02f);
 
     // Start is called before the first frame update
     void Start()
@@ -89,8 +94,53 @@ public class PlayerControl : MonoBehaviour
         IsCanAct = true;
         IsCanJump = true;
         IsCanWalk = true;
-        
+
+        if (gm.IsWalkthroughGame)
+        {
+            _rigidbody.MovePosition(gm.LevelControl.GetLevelData.Position);
+        }
     }
+
+    public void CheckUnstuck()
+    {
+        StartCoroutine(checkingUnstuck());
+    }
+    private IEnumerator checkingUnstuck()
+    {
+        print("started checking");
+        isChekingCollision = true;
+        
+        yield return FixedOne;
+
+        if (isCollisionON)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                if (!isCollisionON) break;
+                _rigidbody.MovePosition(_transform.position + Vector3.up);
+                yield return FixedOne;
+            }
+        }
+
+        isChekingCollision = false;
+        isCollisionON = false;
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        if (!isChekingCollision) return;
+
+        if (collision.gameObject.TryGetComponent(out Block b))
+        {
+            isCollisionON = true;
+            print("yesss!!!!!!!!!");
+        }
+        else
+        {
+            isCollisionON = false;
+            print("noooooo!!!!!!!!!");
+        }
+    }
+
 
     public void SetEffectControl(EffectsControl ef) => effectsControl = ef;
 
@@ -180,6 +230,20 @@ public class PlayerControl : MonoBehaviour
         {
             _rigidbody.velocity = Vector3.zero;
             return;
+        }
+
+        if (gm.IsWalkthroughGame && gm.IsBuildMode && !isSolidPlayerBodyON)
+        {
+            isSolidPlayerBodyON = true;
+            GetComponent<CapsuleCollider>().isTrigger = true;
+            GetComponent<SphereCollider>().isTrigger = true;
+        }
+        else if (gm.IsWalkthroughGame && !gm.IsBuildMode && isSolidPlayerBodyON)
+        {
+            isSolidPlayerBodyON = false;
+            GetComponent<CapsuleCollider>().isTrigger = false;
+            GetComponent<SphereCollider>().isTrigger = false;
+            CheckUnstuck();
         }
 
         if (jumpCooldown > 0) jumpCooldown -= Time.deltaTime;
@@ -434,6 +498,11 @@ public class PlayerControl : MonoBehaviour
                 _rigidbody.velocity = Vector3.zero;
             }
 
+        }
+
+        if (isSolidPlayerBodyON && _transform.position.y < 0.1f)
+        {
+            _rigidbody.MovePosition(new Vector3(_transform.position.x, 0.15f, _transform.position.z));
         }
     }
 

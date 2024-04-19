@@ -196,8 +196,9 @@ public class CameraControl : MonoBehaviour
 
 
 
-        Vector3 newVector = Vector3.Lerp(new Vector3(0, 1f, 0.7f), baseCameraBodyPosition, currentCameraDistance);
-        mainCamera.DOLocalMove(newVector, 0.05f).SetEase(Ease.Linear);
+        //Vector3 newVector = Vector3.Lerp(new Vector3(0, 1f, 0.7f), baseCameraBodyPosition, currentCameraDistance);
+        Vector3 newVector = Vector3.Lerp(new Vector3(0,0,defaultCameraDistance), Vector3.zero, currentCameraDistance);
+        mainCamTransformForRaycast.DOLocalMove(newVector, 0.05f).SetEase(Ease.Linear);
     }
 
     // Update is called once per frame
@@ -245,19 +246,6 @@ public class CameraControl : MonoBehaviour
 
 
         if (!isUpdate || !gm.IsGameStarted) return;
-
-        /*
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            changeCurrentCameraDistance(0.075f);
-            print(currentCameraDistance);
-        }
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            changeCurrentCameraDistance(-0.075f);
-            print(currentCameraDistance);
-        }*/
     }
 
     private void FixedUpdate()
@@ -284,28 +272,12 @@ public class CameraControl : MonoBehaviour
 
         Vector3 playerPoint = mainPlayerPoint;
 
-        if (Physics.Raycast(playerPoint + Vector3.up * 0.5f, (mainCamTransformForRaycast.position - playerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(playerPoint + Vector3.up * 0.5f, (mainCamera.position - playerPoint).normalized, out hit, defaultCameraDistance, ~ignoreMask, QueryTriggerInteraction.Ignore))
         {
             float distToBarrier = (playerPoint - hit.point).magnitude;
 
             float distKoeff = distToBarrier / defaultCameraDistance;
             setCurrentCameraDistance(distKoeff);
-
-            /*
-            float distToBarrier = (playerPoint - hit.point).magnitude;
-
-            print((MathF.Abs(distToBarrier - previousDistance) < 1) + " = " + (distToBarrier > 2));
-
-            if (MathF.Abs(distToBarrier - previousDistance) < 1 && distToBarrier > 2) return;
-
-            if (distToBarrier < defaultCameraDistance * 0.9f) distToBarrier *= 0.9f;
-
-            float distKoeff = distToBarrier / defaultCameraDistance;
-
-            if ((currentCameraDistance <= 0.1f && distKoeff <= 0.1f) || (currentCameraDistance - distKoeff) < -0.1f) return;
-            
-            setCurrentCameraDistance(distKoeff);
-            previousDistance = distToBarrier;*/
         }
         else
         {
