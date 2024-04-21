@@ -81,7 +81,6 @@ MonoBehaviour:
   materialType: 1
   volume: {x: 4, y: 4, z: 0}
   visualRenderers:
-  - {fileID: 6972167347121013067}
   - {fileID: 2694303604577803590}
   visualMaterial: {fileID: 0}
 --- !u!65 &1887568086964551267

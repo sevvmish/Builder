@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -97,6 +98,8 @@ public class AssetManager : MonoBehaviour
         return linkIDtoAsset[ID].GetComponent<Block>();
     }
 
+    List<int> ids = new List<int>();
+
     private void initAssetsLink(Transform location)
     {
         for (int i = 0; i < location.childCount; i++)
@@ -109,6 +112,7 @@ public class AssetManager : MonoBehaviour
             }
             else
             {
+                ids.Add(id);
                 linkIDtoAsset.Add(id, location.GetChild(i).gameObject);
 
                 switch(location.GetChild(i).GetComponent<Block>().BlockType)
@@ -147,5 +151,7 @@ public class AssetManager : MonoBehaviour
                 }
             }
         }
+
+        print("Last ID is " + ids.Max());
     }
 }

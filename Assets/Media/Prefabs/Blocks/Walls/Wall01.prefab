@@ -395,7 +395,6 @@ MonoBehaviour:
   materialType: 1
   volume: {x: 2, y: 4, z: 0}
   visualRenderers:
-  - {fileID: 6131449896584035307}
   - {fileID: 1911133011147168373}
   visualMaterial: {fileID: 0}
 --- !u!65 &1849835029864226919

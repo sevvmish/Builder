@@ -157,6 +157,31 @@ public class Block : MonoBehaviour
         IsFinalized = true;
         SetVisualization(false);
         SetColliders(true);
+        StartCoroutine(playVFX());
+    }
+    private IEnumerator playVFX()
+    {
+        buildVFX.SetActive(false);
+        buildVFX.SetActive(true);
+        yield return new WaitForSeconds(1);
+        buildVFX.SetActive(false);
+
+        /*
+        switch(BlockType)
+        {
+            case BlockTypes.furniture:
+                transform.DORotate(transform.eulerAngles + new Vector3(0, 360 * 3, 0), 0.3f, RotateMode.FastBeyond360).SetEase(Ease.OutElastic);
+                break;
+
+            default:
+                buildVFX.SetActive(false);
+                buildVFX.SetActive(true);
+                yield return new WaitForSeconds(1);
+                buildVFX.SetActive(false);
+                break;
+        }
+        */
+
     }
 
     public bool Rotate(ref Vector3 endRotationVector)
