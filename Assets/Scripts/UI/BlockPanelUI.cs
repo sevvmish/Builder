@@ -97,7 +97,7 @@ public class BlockPanelUI : MonoBehaviour
                 gm.GetUI.HideBlocksPanel();
                 return;
             }
-
+            //gm.GetUI.BlockMenuUI.SaveLastSpot();
             blockManager.OnChangeCurrentBlock?.Invoke(this.id);
         });
 

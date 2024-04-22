@@ -894,6 +894,10 @@ MonoBehaviour:
   Cash: {fileID: 8300000, guid: 1c7e83669784eb945bde96893117bea5, type: 3}
   WoodBuild: {fileID: 8300000, guid: cfd1d627ef028454c991de637aa9749c, type: 3}
   WoodDestroy: {fileID: 8300000, guid: 0a14e6bce6bb3e942bc48a9248b6ed78, type: 3}
+  StoneBuild: {fileID: 8300000, guid: 3eb61261e0f27ff47aaa67b4899c54fc, type: 3}
+  StoneDestroy: {fileID: 8300000, guid: a57586be89032864eafff1681fb9aa37, type: 3}
+  FantasyBuild: {fileID: 8300000, guid: c412b5aa1139a244b91e1f06a0565bd8, type: 3}
+  FantasyDestroy: {fileID: 8300000, guid: b99eee189797d7a4fb678d23befcb15a, type: 3}
 --- !u!1 &48070152
 GameObject:
   m_ObjectHideFlags: 0
@@ -17827,6 +17831,7 @@ MonoBehaviour:
   blocksPanel: {fileID: 1872826640}
   blocksPanelExample: {fileID: 1126811180}
   blockMenuContainer: {fileID: 312060465}
+  rectContainer: {fileID: 312060465}
   gridLayoutGroup: {fileID: 312060467}
   backCkick: {fileID: 1546139068}
   floorsFilterButton: {fileID: 935473138}

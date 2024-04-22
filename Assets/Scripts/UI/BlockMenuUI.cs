@@ -20,6 +20,7 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private Image missionIcon;
     [SerializeField] private TextMeshProUGUI stageInformer;
 
+
     private Stage currentStage;
     private Dictionary<int, BlockPanelUI> panelsForVis = new Dictionary<int, BlockPanelUI>();
 
@@ -37,8 +38,15 @@ public class BlockMenuUI : MonoBehaviour
     [SerializeField] private GameObject blocksPanel;
     [SerializeField] private GameObject blocksPanelExample;
     [SerializeField] private Transform blockMenuContainer;
+    [SerializeField] private RectTransform rectContainer;
     [SerializeField] private GridLayoutGroup gridLayoutGroup;
     [SerializeField] private PointerDownOnly backCkick;
+
+    private float YcoordInFloorsNonVis;
+    private float YcoordInWallsNonVis;
+    private float YcoordInRoofsNonVis;
+    private float YcoordInPartsNonVis;
+    private float YcoordInOthersNonVis;
 
     [Header("Buttons")]
     [SerializeField] private Button floorsFilterButton;
@@ -234,6 +242,71 @@ public class BlockMenuUI : MonoBehaviour
         }
     }
 
+    
+    private void getLastSpot()
+    {
+        StartCoroutine(playGetLastSlot());
+    }    
+    private IEnumerator playGetLastSlot()
+    {
+        yield return new WaitForSeconds(Time.deltaTime);
+
+        switch (defaultStartBlock)
+        {
+            case BlockTypes.floor:
+                rectContainer.anchoredPosition = new Vector2(0, YcoordInFloorsNonVis);
+                break;
+
+            case BlockTypes.wall:
+                rectContainer.anchoredPosition = new Vector2(0, YcoordInWallsNonVis);
+                break;
+
+            case BlockTypes.roof:
+                rectContainer.anchoredPosition = new Vector2(0, YcoordInRoofsNonVis);
+                break;
+
+            case BlockTypes.parts:
+                rectContainer.anchoredPosition = new Vector2(0, YcoordInPartsNonVis);
+                break;
+
+            case BlockTypes.others:
+                rectContainer.anchoredPosition = new Vector2(0, YcoordInOthersNonVis);
+                break;
+        }
+    }
+
+    private void saveLastSpot()
+    {
+        saveLastSpotForNonVis(rectContainer.anchoredPosition.y);
+    }
+
+    private void saveLastSpotForNonVis(float rectY)
+    {
+        switch(defaultStartBlock)
+        {
+            case BlockTypes.floor:
+                YcoordInFloorsNonVis = rectY;
+                break;
+
+            case BlockTypes.wall:
+                YcoordInWallsNonVis = rectY;
+                break;
+
+            case BlockTypes.roof:
+                YcoordInRoofsNonVis = rectY;
+                break;
+
+            case BlockTypes.parts:
+                YcoordInPartsNonVis = rectY;
+                break;
+
+            case BlockTypes.others:
+                YcoordInOthersNonVis = rectY;
+                break;
+        }
+    }
+
+
     private void activateFloors()
     {
         if (defaultStartBlock == BlockTypes.floor) return;
@@ -301,6 +374,7 @@ public class BlockMenuUI : MonoBehaviour
     private void activateOthers()
     {
         if (defaultStartBlock == BlockTypes.others) return;
+        
 
         resetIcons();
         othersImage.color = Color.yellow;
@@ -333,6 +407,11 @@ public class BlockMenuUI : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            rectContainer.anchoredPosition = new Vector2(0, 388.1f);
+        }
+
         if (gm.IsWalkthroughGame && !gm.IsBuildMode && blockAdditionalInfo.activeSelf)
         {
             //blockAdditionalInfo.SetActive(false);
@@ -368,7 +447,7 @@ public class BlockMenuUI : MonoBehaviour
         {
             HideAllPanel();
         }
-
+        /*
         if (Input.GetKeyDown(KeyCode.D) && blocksPanel.activeSelf)
         {
             currentIndex++;
@@ -428,7 +507,7 @@ public class BlockMenuUI : MonoBehaviour
                     break;
             }
         }
-
+        */
 
         if (backCkick.IsPressed || backCkickForVis.IsPressed)
         {
@@ -712,7 +791,7 @@ public class BlockMenuUI : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
         }
-
+                
         blockManager.StartChoosing();
     }
     private IEnumerator playShow(Transform t)
@@ -753,10 +832,14 @@ public class BlockMenuUI : MonoBehaviour
                 break;
             
         }
+
+        getLastSpot();
     }
 
     public void HideAllPanel()
     {
+        saveLastSpot();
+
         if (gm.IsWalkthroughGame)
         {
             //blocksPanelForVis.SetActive(false);

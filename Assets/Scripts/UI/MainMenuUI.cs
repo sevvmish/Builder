@@ -10,6 +10,7 @@ public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] private Button walkthrough;
     [SerializeField] private Button custom;
+    [SerializeField] private Button reset;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,13 @@ public class MainMenuUI : MonoBehaviour
             walkthrough.interactable = false;
             Globals.IsWalkthroughEnabled = true;
             StartCoroutine(playStartLevel());
+        });
+
+        reset.onClick.AddListener(() =>
+        {
+            Globals.MainPlayerData = new PlayerData();
+            SaveLoadManager.Save();
+            SceneManager.LoadScene("MainMenu");
         });
 
         custom.onClick.AddListener(() =>

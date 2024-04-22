@@ -120,6 +120,7 @@ public class UIManager : MonoBehaviour
 
         startDestroingBlockButton.onClick.AddListener(() => 
         {
+            if (blockManager.IsChoosingBlocks) return;
             blockManager.StartDestroying();
             cancelLastBlockButton.gameObject.SetActive(false);
             deleteCurrentBlockButton.gameObject.SetActive(true);

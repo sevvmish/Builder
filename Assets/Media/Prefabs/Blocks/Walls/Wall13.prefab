@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.5, y: 0, z: -2.03}
-  m_LocalScale: {x: 3, y: 0.29999998, z: 0.19999999}
+  m_LocalScale: {x: 3, y: 0.29999998, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2445227870953103753}
@@ -359,7 +359,7 @@ MonoBehaviour:
   colliders:
   - {fileID: 6716859404259721977}
   blockSize: 1
-  materialType: 1
+  materialType: 3
   volume: {x: 3, y: 3, z: 0}
   visualRenderers:
   - {fileID: 9102300071784199979}
@@ -446,7 +446,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1, y: 1.35, z: -2.03}
-  m_LocalScale: {x: 0.3, y: 3, z: 0.199}
+  m_LocalScale: {x: 0.3, y: 3, z: 0.25001}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2445227870953103753}

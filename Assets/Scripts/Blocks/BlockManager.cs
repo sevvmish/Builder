@@ -231,7 +231,7 @@ public class BlockManager : MonoBehaviour
 
     public void StartDestroying()
     {
-        if (IsDestroingBlocks) return;
+        if (IsDestroingBlocks || IsChoosingBlocks) return;
 
         if (CurrentActiveBlock != null)
         {
