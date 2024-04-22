@@ -49,6 +49,8 @@ public class Translation : ScriptableObject
 
     public string Stage;
     public string StageFrom;
+    public string StagesAmount;
+    public string CurrentStage;
 
     public string[] MissionName;
 

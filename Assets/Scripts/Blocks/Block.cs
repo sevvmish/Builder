@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -57,6 +58,12 @@ public class Block : MonoBehaviour
     private void OnEnable()
     {
         _transform = transform;
+
+        if (GameManager.Instance == null)
+        {
+            print("NO GM!!!");
+            return;
+        }
         gm = GameManager.Instance;
         blockManager = gm.BlockManager;
         id = GetComponent<Identificator>();

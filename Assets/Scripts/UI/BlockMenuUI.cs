@@ -895,29 +895,9 @@ public class BlockMenuUI : MonoBehaviour
         othersImageOutline.SetActive(false);
     }
 
-    private static string getMissionName(int level)
+    private string getMissionName(int level)
     {
-        return Globals.Language.MissionName[level];
-        /*
-        switch (level)
-        {
-            case 0:
-                return Globals.Language.MissionName[level];
-
-            case 1:
-                return Globals.Language.MissionName1;
-
-            case 2:
-                return Globals.Language.MissionName2;
-
-            case 3:
-                return Globals.Language.MissionName3;
-
-            case 4:
-                return Globals.Language.MissionName4;
-        }
-
-        return "";*/
+        return Globals.Language.MissionName[level];        
     }
 
     private IEnumerator changeRegimeText(float delay, string newText)

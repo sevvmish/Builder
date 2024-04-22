@@ -46,6 +46,8 @@ MonoBehaviour:
   HowToBuildHelper: 'TO BUILD BLOCKS:       button "Q"'
   Stage: Stage
   StageFrom: of
+  StagesAmount: Stages amount
+  CurrentStage: Current level
   MissionName:
   - Tutorial
   - Simple house
