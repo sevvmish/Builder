@@ -240,7 +240,7 @@ public class Block : MonoBehaviour
                     break;
 
                 case BlockTypes.fence:
-                    assessBlockStatusStandartSurface();
+                    assessBlockStatusFence();
                     break;
 
                 case BlockTypes.beam:
@@ -253,6 +253,10 @@ public class Block : MonoBehaviour
 
                 case BlockTypes.furniture:
                     assessBlockStatusFurniture();
+                    break;
+
+                default:
+                    assessBlockStatusStandartSurface();
                     break;
             }
 
@@ -403,6 +407,97 @@ public class Block : MonoBehaviour
         }
     }
 
+    private void assessBlockStatusFence()
+    {
+        Collider[] colliders = Physics.OverlapBox(_transform.position + Vector3.up, getBoxForBlockCheck(), _transform.rotation);
+
+        bool isBad = false;
+
+        if (colliders.Length > 0)
+        {
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].gameObject.layer == 3)
+                {
+                    isBad = true;
+                    gm.GetUI.PlayerCrossNewBlockError();
+                    break;
+                }
+                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && BlockType == b.blockType)
+                {
+                    Vector3 dir = (_transform.position - b.transform.position);
+                    int sign = 0;
+
+                    if (Mathf.Abs(dir.x) > Mathf.Abs(dir.z) && Mathf.Abs(dir.x) > 0)
+                    {
+                        if (dir.x > 0)
+                        {
+                            sign = 1;
+                            dir = new Vector3(1, 0, 0);
+                        }
+                        else
+                        {
+                            sign = -1;
+                            dir = new Vector3(1, 0, 0);
+
+                        }
+                    }
+                    else
+                    {
+                        if (dir.z > 0)
+                        {
+                            sign = 1;
+                            dir = new Vector3(0, 0, 1);
+                        }
+                        else
+                        {
+                            sign = -1;
+                            dir = new Vector3(0, 0, 1);
+
+                        }
+                    }
+
+                    bool result = pushBlockToGoodPlace(b, dir, sign);
+
+                    if (result)
+                    {
+
+                        colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
+                        if (!isCertainBlockTypeInArray(colliders, BlockTypes.fence))
+                        {
+                            isBad = false;
+                            break;
+                        }
+                        else
+                        {
+                            isBad = true;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        isBad = true;
+                        break;
+                    }
+                }
+            }
+
+        }
+        else
+        {
+            //isBad = true;
+        }
+
+        if (isBad)
+        {
+            MakeColorBad();
+        }
+        else
+        {
+            MakeColorGood();
+        }
+    }
+
     private void assessBlockStatusStandartSurface()
     {
         Collider[] colliders = Physics.OverlapBox(_transform.position, getBoxForBlockCheck(), _transform.rotation);
@@ -419,7 +514,7 @@ public class Block : MonoBehaviour
                     gm.GetUI.PlayerCrossNewBlockError();
                     break;
                 }
-                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && BlockType == b.blockType)
+                else if (colliders[i].gameObject.layer == 7 && colliders[i].TryGetComponent(out Block b) && !b.Equals(this) && BlockType == b.blockType && this.ID.ID == b.ID.ID)
                 {
                     isBad = true;
                     break;

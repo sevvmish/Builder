@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class RandomY90 : MonoBehaviour
 {
+    [SerializeField] private float delta = 90;
+    [SerializeField] private int amount = 4;
+
     private void OnEnable()
     {
-        int rnd = UnityEngine.Random.Range(0, 4);
-
-        switch(rnd)
+        int rnd = UnityEngine.Random.Range(0, amount);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, rnd*delta, transform.localEulerAngles.z);
+        /*
+        switch (rnd)
         {
             case 0:
                 transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0, transform.localEulerAngles.z);
@@ -25,6 +29,6 @@ public class RandomY90 : MonoBehaviour
             case 3:
                 transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 270, transform.localEulerAngles.z);
                 break;
-        }
+        }*/
     }
 }

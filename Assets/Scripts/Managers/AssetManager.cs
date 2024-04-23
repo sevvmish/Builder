@@ -148,6 +148,14 @@ public class AssetManager : MonoBehaviour
                     case BlockTypes.furniture:
                         othersIDs.Add(id);
                         break;
+
+                    case BlockTypes.others:
+                        othersIDs.Add(id);
+                        break;
+
+                    case BlockTypes.parts:
+                        partsIDs.Add(id);
+                        break;
                 }
             }
         }
