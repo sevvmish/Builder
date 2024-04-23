@@ -89,14 +89,17 @@ public class SoundUI : MonoBehaviour
         _audio.Play();
     }
 
-    public void PlayUISound(float delay, SoundsUI _type)
+    public void PlayUISoundSuccess3(float delay)
     {
-        StartCoroutine(playSoundWithDelay(delay, _type));
+        StartCoroutine(playSoundWithDelay(delay));
     }
-    private IEnumerator playSoundWithDelay(float delay, SoundsUI _type)
+    private IEnumerator playSoundWithDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        PlayUISound(_type);
+        _audio.Stop();
+        _audio.pitch = 1f;
+        _audio.clip = Success3;
+        _audio.Play();
     }
 
     public void PlayUISound(SoundsUI _type)

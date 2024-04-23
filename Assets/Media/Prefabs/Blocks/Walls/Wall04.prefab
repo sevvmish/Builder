@@ -5654,7 +5654,10 @@ MonoBehaviour:
   deltaStep: 1
   rotationAngle: 90
   isRotatable: 1
-  colliders: []
+  colliders:
+  - {fileID: 4294229425911341746}
+  - {fileID: 4681885156524205433}
+  - {fileID: 8897169799237556516}
   blockSize: 2
   materialType: 1
   volume: {x: 6, y: 4, z: 0}

@@ -203,7 +203,8 @@ public class CameraControl : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {        
+    {
+        
         if (gm.IsBuildMode && !isBuildRegimeCorrected)
         {
             isBuildRegimeCorrected = true;
@@ -223,7 +224,7 @@ public class CameraControl : MonoBehaviour
             baseCameraBodyPosition = Globals.BasePosition;
             previousDistance = 0;
         }
-        
+
 
         if (zoomTimer > 10)
         {
@@ -246,6 +247,8 @@ public class CameraControl : MonoBehaviour
 
 
         if (!isUpdate || !gm.IsGameStarted) return;
+        
+        
     }
 
     private void FixedUpdate()

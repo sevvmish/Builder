@@ -11,6 +11,7 @@ public class LevelPreviewUI : MonoBehaviour
     [SerializeField] private Transform mainCamera;
     [SerializeField] private Transform levels;
 
+    [SerializeField] private RectTransform textsPlace;
     [SerializeField] private TextMeshProUGUI levelName;
     [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private TextMeshProUGUI levelStagesAmount;
@@ -105,6 +106,16 @@ public class LevelPreviewUI : MonoBehaviour
         {
             isReady = true;
             CurrentLevelNumber = Globals.CurrentLevel;
+
+            if (Globals.IsMobile)
+            {
+                textsPlace.anchoredPosition = new Vector2 (0, 0);
+            }
+            else
+            {
+                textsPlace.anchoredPosition = new Vector2(0, 100);
+            }
+
             resetAll();
             showLevel(CurrentLevelNumber);
         }

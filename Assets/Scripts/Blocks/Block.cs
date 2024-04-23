@@ -2,10 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Net.NetworkInformation;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Block : MonoBehaviour
 {
@@ -61,7 +58,7 @@ public class Block : MonoBehaviour
 
         if (GameManager.Instance == null)
         {
-            print("NO GM!!!");
+            
             return;
         }
         gm = GameManager.Instance;

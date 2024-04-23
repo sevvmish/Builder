@@ -105,7 +105,7 @@ public class UIHelperPCButtons : MonoBehaviour
     }
 
     private void Update()
-    {
+    {        
         if (Globals.IsMobile) return;
 
         if (gm.IsWinWalkthroughGame && !isWinWalkthrough)
@@ -126,7 +126,7 @@ public class UIHelperPCButtons : MonoBehaviour
                 buildingBlocks.SetActive(true);
                 deletingBlocks.SetActive(false);
             }
-            else if(!isBuildMode)
+            else if (!isBuildMode)
             {
                 jumpText.gameObject.SetActive(true);
                 jumpUpText.gameObject.SetActive(false);
@@ -154,6 +154,8 @@ public class UIHelperPCButtons : MonoBehaviour
                 }
             }
         }
+        
+        
         
     }
 

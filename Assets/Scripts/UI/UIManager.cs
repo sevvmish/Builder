@@ -181,6 +181,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        
         if (BuildingModeButton.interactable && gm.IsWinWalkthroughGame)
         {
             BuildingModeButton.interactable = false;
@@ -227,16 +228,16 @@ public class UIManager : MonoBehaviour
                     JumpUP.SetActive(false);
                     JumpDOWN.SetActive(false);
                     startNonbuildingPrefs();
-                }                
+                }
             }
             else
             {
                 if (gm.IsBuildMode)
-                {                    
+                {
                     startbuildingPrefs();
                 }
                 else
-                {                    
+                {
                     startNonbuildingPrefs();
                 }
 
@@ -245,7 +246,9 @@ public class UIManager : MonoBehaviour
                 JumpDOWN.SetActive(false);
                 Joystick.SetActive(false);
             }
-        }
+        }        
+
+        
     }
 
 

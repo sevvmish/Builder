@@ -72,6 +72,8 @@ public class InputControl : MonoBehaviour
     {        
         if (!gm.IsGameStarted || Globals.IsOptions) return;
 
+        
+
         if (Globals.IsMobile)
         {
             forMobile();
@@ -80,14 +82,14 @@ public class InputControl : MonoBehaviour
         {
             forPC();
         }
-        
-       
+
+
         if (gm.IsBuildMode)
         {
             if (blockManager.IsBuildingBlocks && gm.IsWalkthroughGame)
             {
                 if (Physics.Raycast(mainPlayer.position + Vector3.up * 2, _camera.transform.forward, out hit, 50f, blockMask)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
-                {                    
+                {
                     if (hit.collider.TryGetComponent(out Block bl) && !bl.IsFinalized)
                     {
                         markerAim = bl;
@@ -102,19 +104,19 @@ public class InputControl : MonoBehaviour
                     markerAim = null;
                 }
             }
-            
+
 
             if (blockManager.IsBuildingBlocks)
             {
-                if (Physics.Raycast(mainPlayer.position + Vector3.up*2, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
-                {                    
+                if (Physics.Raycast(mainPlayer.position + Vector3.up * 2, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
+                {
                     markerPosition = hit.point;
                 }
-            }            
+            }
             else if (blockManager.IsDestroingBlocks)
             {
                 if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask)) //_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask
-                {                    
+                {
                     if (hit.collider.TryGetComponent(out Block b) && b.IsFinalized)
                     {
                         if (blockManager.CurrentBlockToDelete != null && blockManager.CurrentBlockToDelete.Equals(b))
@@ -131,7 +133,7 @@ public class InputControl : MonoBehaviour
                             blockManager.CurrentBlockToDelete = b;
                             b.MakeColorBadForDelete(true);
                         }
-                    }                    
+                    }
                 }
                 else
                 {
@@ -146,11 +148,11 @@ public class InputControl : MonoBehaviour
                         markerPosition = hit.point;
                     }
                 }
-            
 
-            }            
+
+            }
         }
-        
+                
     }
 
 

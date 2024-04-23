@@ -95,7 +95,7 @@ public class BlockMenuUI : MonoBehaviour
     private List<GameObject> parts = new List<GameObject>();
     private List<GameObject> others = new List<GameObject>();
 
-    private SoundUI sounds;
+    //private SoundUI sounds;
     private GameManager gm;
     private LevelControl lc;
     private BlockManager bm;
@@ -106,7 +106,7 @@ public class BlockMenuUI : MonoBehaviour
 
     private void Awake()
     {
-        sounds = SoundUI.Instance;
+        //sounds = SoundUI.Instance;
         gm = GameManager.Instance;
         lc = gm.LevelControl;
         bm = gm.BlockManager;
@@ -317,7 +317,8 @@ public class BlockMenuUI : MonoBehaviour
 
         currentIndex = 1;
 
-        sounds.PlayUISound(SoundsUI.click);
+        //sounds.PlayUISound(SoundsUI.click);
+        SoundUI.Instance.PlayUISound(SoundsUI.click);
         defaultStartBlock = BlockTypes.floor;
         filterBlocksPanel();
         floorsImageOutline.SetActive(true);
@@ -333,7 +334,8 @@ public class BlockMenuUI : MonoBehaviour
 
         currentIndex = 2;
 
-        sounds.PlayUISound(SoundsUI.click);
+        SoundUI.Instance.PlayUISound(SoundsUI.click);
+        //sounds.PlayUISound(SoundsUI.click);
         defaultStartBlock = BlockTypes.wall;
         filterBlocksPanel();
         wallsImageOutline.SetActive(true);
@@ -349,7 +351,8 @@ public class BlockMenuUI : MonoBehaviour
 
         currentIndex = 3;
 
-        sounds.PlayUISound(SoundsUI.click);
+        //sounds.PlayUISound(SoundsUI.click);
+        SoundUI.Instance.PlayUISound(SoundsUI.click);
         defaultStartBlock = BlockTypes.roof;
         filterBlocksPanel();
         roofsImageOutline.SetActive(true);
@@ -365,7 +368,8 @@ public class BlockMenuUI : MonoBehaviour
 
         currentIndex = 4;
 
-        sounds.PlayUISound(SoundsUI.click);
+        //sounds.PlayUISound(SoundsUI.click);
+        SoundUI.Instance.PlayUISound(SoundsUI.click);
         defaultStartBlock = BlockTypes.parts;
         filterBlocksPanel();
         partsImageOutline.SetActive(true);
@@ -382,7 +386,8 @@ public class BlockMenuUI : MonoBehaviour
 
         currentIndex = 5;
 
-        sounds.PlayUISound(SoundsUI.click);
+        //sounds.PlayUISound(SoundsUI.click);
+        SoundUI.Instance.PlayUISound(SoundsUI.click);
         defaultStartBlock = BlockTypes.others;
         filterBlocksPanel();
         othersImageOutline.SetActive(true);
@@ -406,11 +411,7 @@ public class BlockMenuUI : MonoBehaviour
     }
 
     private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            rectContainer.anchoredPosition = new Vector2(0, 388.1f);
-        }
+    {        
 
         if (gm.IsWalkthroughGame && !gm.IsBuildMode && blockAdditionalInfo.activeSelf)
         {
@@ -418,12 +419,16 @@ public class BlockMenuUI : MonoBehaviour
             StartCoroutine(hideAdditionalInfo());
         }
 
+        
         if (!isFirstStageInform && gm.IsWalkthroughGame && gm.IsBuildMode)
         {
             isFirstStageInform = true;
-            sounds.PlayUISound(1f, SoundsUI.success3);
+
+            SoundUI.Instance.PlayUISoundSuccess3(1f);
+
             StartCoroutine(changeRegimeText(1f, $"{Globals.Language.Stage}: {lc.CurrentStageNumber()} {Globals.Language.StageFrom} {lc.StagesAmount}"));
         }
+
 
         if (Input.GetKeyDown(KeyCode.Tab) && gm.PointerClickedCount <= 0 && !IsPanelOpened)
         {
@@ -440,79 +445,27 @@ public class BlockMenuUI : MonoBehaviour
                     gm.PointerClickedCount = 0.1f;
                 }
 
-                
+
             }
         }
         else if (Input.GetKeyDown(KeyCode.Tab) && blocksPanel.activeSelf)
         {
             HideAllPanel();
         }
-        /*
-        if (Input.GetKeyDown(KeyCode.D) && blocksPanel.activeSelf)
+
+
+
+        if (Input.GetKeyDown(KeyCode.J))
         {
-            currentIndex++;
-
-            if (currentIndex > MAX_INDEX) currentIndex = 1;
-
-            switch (currentIndex)
-            {
-                case 1:
-                    activateFloors();
-                    break;
-
-                case 2:
-                    activateWalls();
-                    break;
-
-                case 3:
-                    activateRoofs();
-                    break;
-
-                case 4:
-                    activateParts();
-                    break;
-
-                case 5:
-                    activateOthers();
-                    break;
-            }
+            rectContainer.anchoredPosition = new Vector2(0, 388.1f);
         }
 
-        if (Input.GetKeyDown(KeyCode.A) && blocksPanel.activeSelf)
-        {
-            currentIndex--;
-
-            if (currentIndex < 1) currentIndex = MAX_INDEX;
-
-            switch (currentIndex)
-            {
-                case 1:
-                    activateFloors();
-                    break;
-
-                case 2:
-                    activateWalls();
-                    break;
-
-                case 3:
-                    activateRoofs();
-                    break;
-
-                case 4:
-                    activateParts();
-                    break;
-
-                case 5:
-                    activateOthers();
-                    break;
-            }
-        }
-        */
 
         if (backCkick.IsPressed || backCkickForVis.IsPressed)
         {
             gm.GetUI.HideBlocksPanel();
         }
+
     }
 
     public void UpdateIconsForVis(Stage stage)
@@ -543,7 +496,7 @@ public class BlockMenuUI : MonoBehaviour
             {
                 Destroy(panelsForVis[key].gameObject);
             }
-            sounds.PlayUISound(0.1f, SoundsUI.success3);
+            SoundUI.Instance.PlayUISoundSuccess3(0.1f);
             StartCoroutine(changeRegimeText(0, $"{Globals.Language.Stage}: {lc.CurrentStageNumber()} {Globals.Language.StageFrom} {lc.StagesAmount}"));
             gm.MainPlayerControl.CheckUnstuck();
         }
@@ -759,7 +712,8 @@ public class BlockMenuUI : MonoBehaviour
 
     public void ShowBlocksPanel()
     {
-        sounds.PlayUISound(SoundsUI.click);
+        //sounds.PlayUISound(SoundsUI.click);
+        SoundUI.Instance.PlayUISound(SoundsUI.click);
 
         if (gm.IsWalkthroughGame)
         {
@@ -770,8 +724,18 @@ public class BlockMenuUI : MonoBehaviour
             }
 
             //blocksPanelForVis.SetActive(true);
-            StartCoroutine(playShow(blocksPanelForVis.transform));
-            updateMissionInfo();            
+
+            try
+            {
+                StartCoroutine(playShow(blocksPanelForVis.transform));
+                updateMissionInfo();
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(ex + " 331");
+            }
+
+                     
         }
         else
         {
@@ -905,9 +869,7 @@ public class BlockMenuUI : MonoBehaviour
         yield return new WaitForSeconds(delay);
         stageInformer.gameObject.SetActive(true);
         stageInformer.color = new Color(1, 1, 0, 1);
-        stageInformer.text = newText;
-        //stageInformer.transform.localScale = Vector3.zero;
-        //stageInformer.transform.DOScale(Vector3.one, 0.15f).SetEase(Ease.Linear);
+        stageInformer.text = newText;        
         RectTransform r = stageInformer.GetComponent<RectTransform>();
         Vector2 pos = new Vector2(0, -200);
         r.anchoredPosition = pos + new Vector2(-1500,0);
@@ -920,16 +882,7 @@ public class BlockMenuUI : MonoBehaviour
         r.DOAnchorPos(pos + new Vector2(1500, 0), 0.25f).SetEase(Ease.InOutQuad);
         yield return new WaitForSeconds(0.25f);
         stageInformer.gameObject.SetActive(false);
-        /*
-        yield return new WaitForSeconds(1.5f);
-        stageInformer.color = new Color(1, 1, 0, 0.66f);
-
-        yield return new WaitForSeconds(0.5f);
-        stageInformer.color = new Color(1, 1, 0, 0.33f);
-
-        yield return new WaitForSeconds(0.5f);
-        stageInformer.gameObject.SetActive(false);
-        */
+      
     }
 
 }
