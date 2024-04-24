@@ -54,5 +54,12 @@ public class Translation : ScriptableObject
 
     public string[] MissionName;
 
+    public string Play;
+    public string PlayAgain;
+    public string CustomGame;
+    
+    public string Level;
+    public string Curr;
+
     public Translation() { }
 }

@@ -38,7 +38,7 @@ public class FPSController : MonoBehaviour
 
     private void Update()
     {
-        if (Globals.IsLowFPS) return;
+        if (!Globals.IsInitiated || Globals.IsLowFPS) return;
 
         if (_timer > 0.1f)
         {

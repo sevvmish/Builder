@@ -45,13 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81521f985f7dd04f8b4a4ed0aaa5a9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelIntro: {fileID: 0}
-  loopMelody1: {fileID: 0}
-  loopMelody2: {fileID: 0}
-  loopMelody3: {fileID: 0}
-  loopMelody4: {fileID: 0}
-  loopMelody5: {fileID: 0}
-  forest: {fileID: 0}
+  forest: {fileID: 8300000, guid: b273ca7d7f5b4194ba46d33da2c35b7e, type: 3}
 --- !u!82 &1628768349984424293
 AudioSource:
   m_ObjectHideFlags: 0

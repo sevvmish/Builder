@@ -18,6 +18,8 @@ public class PlayerData
 
     public int Level;
 
+    public bool AdvOff;
+
     public PlayerData()
     {        
         L = ""; //prefered language
@@ -28,6 +30,7 @@ public class PlayerData
         IsZoomCorrected = false;
         Level = 0;
         IsLowFPS = false;
+        AdvOff = false;
 
         Debug.Log("created PlayerData instance");
     }

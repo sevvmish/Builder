@@ -54,3 +54,8 @@ MonoBehaviour:
   - Complex house
   - House with furniture
   - Corner house
+  Play: PLAY
+  PlayAgain: PLAY AGAIN
+  CustomGame: CUSTOM GAME
+  Level: level
+  Curr: current

@@ -64,8 +64,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
-        Globals.CurrentLevel = Globals.MainPlayerData.Level;
-
+        
         /*
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
@@ -141,8 +140,13 @@ public class GameManager : MonoBehaviour
             blockManager.StopBuilding();
             IsWinWalkthroughGame = true;
 
-            Globals.MainPlayerData.Level++;
-            SaveLoadManager.Save();
+            if (Globals.CurrentLevel == Globals.MainPlayerData.Level)
+            {
+                Globals.MainPlayerData.Level++;
+                SaveLoadManager.Save();
+            }
+
+            Globals.CurrentLevel++;
             StartCoroutine(playStartLevel());
         }
         
