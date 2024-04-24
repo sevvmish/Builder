@@ -196,7 +196,7 @@ MonoBehaviour:
   materialType: 1
   volume: {x: 1, y: 1, z: 1}
   visualRenderers:
-  - {fileID: 0}
+  - {fileID: 7784271841535363513}
   visualMaterial: {fileID: 0}
 --- !u!65 &8460985212360930083
 BoxCollider:
@@ -5342,6 +5342,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02d7c254a30c335409b6d5b680b08a64, type: 3}
+--- !u!23 &7784271841535363513 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 02d7c254a30c335409b6d5b680b08a64, type: 3}
+  m_PrefabInstance: {fileID: 8919058412355458365}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8956644962378019542 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 02d7c254a30c335409b6d5b680b08a64, type: 3}

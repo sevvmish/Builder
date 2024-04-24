@@ -5377,7 +5377,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: aa56050c25af86e448060f3f004eb299, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: aa56050c25af86e448060f3f004eb299, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5423,6 +5423,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9c5fd652d7854f24f92233c5d2d600dd, type: 2}
+    - target: {fileID: -5754084199372789682, guid: aa56050c25af86e448060f3f004eb299, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 6000089983548789606, guid: ab717d337f474a0468cb912ed0119d81, type: 3}
     - target: {fileID: 919132149155446097, guid: aa56050c25af86e448060f3f004eb299, type: 3}
       propertyPath: m_Name
       value: stone wall with window

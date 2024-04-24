@@ -32,6 +32,8 @@ public class BlockSides : MonoBehaviour
 
     public void CheckBorders()
     {
+        if (sides.Length <= 0 || sides == null) return;
+
         List<Block> blocks = new List<Block>();
 
         for (int i = 0; i < bm.ReadyBlocks.Count; i++)

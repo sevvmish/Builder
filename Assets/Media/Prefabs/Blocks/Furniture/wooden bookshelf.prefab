@@ -5313,7 +5313,7 @@ MonoBehaviour:
   isRotatable: 1
   colliders:
   - {fileID: 2384314164331067692}
-  blockSize: 0
+  blockSize: 1
   materialType: 1
   volume: {x: 1.5, y: 3, z: 0.5}
   visualRenderers:

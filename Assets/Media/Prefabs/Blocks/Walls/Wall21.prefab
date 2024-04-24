@@ -142,7 +142,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.2965416, w: 0.95501995}
   m_LocalPosition: {x: 0.799, y: 2.244, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.8, z: 0.399}
+  m_LocalScale: {x: 0.3, y: 0.8, z: 0.44}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4169226319368606114}
@@ -308,7 +308,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.808, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.45}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.48}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4169226319368606114}
@@ -5347,7 +5347,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 1.6, z: 0.35}
+  m_Size: {x: 2, y: 1.26, z: 0.35}
   m_Center: {x: 0, y: 3.38, z: 0}
 --- !u!1 &4346806252435367724
 GameObject:
@@ -5460,7 +5460,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.5359004, w: 0.8442812}
   m_LocalPosition: {x: 0.317, y: 2.669, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.7, z: 0.398}
+  m_LocalScale: {x: 0.3, y: 0.7, z: 0.45}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4169226319368606114}
@@ -5690,7 +5690,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.5359004, w: 0.8442812}
   m_LocalPosition: {x: -0.317, y: 2.669, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.7, z: 0.4}
+  m_LocalScale: {x: 0.3, y: 0.7, z: 0.45}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4169226319368606114}
@@ -5845,7 +5845,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.29654148, w: 0.95502}
   m_LocalPosition: {x: -0.799, y: 2.244, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.8, z: 0.399}
+  m_LocalScale: {x: 0.3, y: 0.8, z: 0.44}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4169226319368606114}
@@ -5910,7 +5910,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 8cda7a3dbaff4e7498e4346f8af14c66, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8cda7a3dbaff4e7498e4346f8af14c66, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5960,6 +5960,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9c5fd652d7854f24f92233c5d2d600dd, type: 2}
+    - target: {fileID: -5754084199372789682, guid: 8cda7a3dbaff4e7498e4346f8af14c66, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -5731115006819590144, guid: d9d1e81f66c24ca4a964432ae4c3aa74, type: 3}
     - target: {fileID: 919132149155446097, guid: 8cda7a3dbaff4e7498e4346f8af14c66, type: 3}
       propertyPath: m_Name
       value: stone wall with door
