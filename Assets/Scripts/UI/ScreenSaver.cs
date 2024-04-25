@@ -23,6 +23,7 @@ public class ScreenSaver : MonoBehaviour
         }
 
         screen.anchoredPosition = Vector2.zero;
+        screen.gameObject.SetActive(true);
     }
 
     public void HideScreen()

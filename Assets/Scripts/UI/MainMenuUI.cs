@@ -19,7 +19,9 @@ public class MainMenuUI : MonoBehaviour
     [Header("levels")]
     [SerializeField] private LevelPreviewUI levelPreview;
     [SerializeField] private Button leftButton;
+    [SerializeField] private Button leftButtonScroll;
     [SerializeField] private Button rightButton;
+    [SerializeField] private Button rightButtonScroll;
     [SerializeField] private GameObject lockedIcon;
     [SerializeField] private GameObject doneIcon;
     [SerializeField] private Sprite yellow;
@@ -34,7 +36,7 @@ public class MainMenuUI : MonoBehaviour
     private SoundUI sounds;
 
     private void Awake()
-    {
+    {   
         if (Globals.IsMobile)
         {
             QualitySettings.antiAliasing = 2;
@@ -56,6 +58,9 @@ public class MainMenuUI : MonoBehaviour
             QualitySettings.shadows = ShadowQuality.All;
             QualitySettings.shadowResolution = ShadowResolution.Medium;
         }
+
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
     }
 
     // Start is called before the first frame update
@@ -63,13 +68,32 @@ public class MainMenuUI : MonoBehaviour
     {
         sounds = SoundUI.Instance;
         lockedIcon.SetActive(false);
-        doneIcon.SetActive(false);        
-                
+        doneIcon.SetActive(false);
+
+        rightButtonScroll.gameObject.SetActive(false);
+        leftButtonScroll.gameObject.SetActive(false);
+
         leftButton.onClick.AddListener(() =>
         {
             if (levelPreview.CurrentLevelNumber < 1) return;
             sounds.PlayUISound(SoundsUI.click);
             levelPreview.CurrentLevelMinus();
+            updateLevelInfo();
+        });
+
+        leftButtonScroll.onClick.AddListener(() =>
+        {
+            if (levelPreview.CurrentLevelNumber == Globals.MainPlayerData.Level) return;
+            sounds.PlayUISound(SoundsUI.click);
+            levelPreview.ScrollToCurrent();
+            updateLevelInfo();
+        });
+
+        rightButtonScroll.onClick.AddListener(() =>
+        {
+            if (levelPreview.CurrentLevelNumber == Globals.MainPlayerData.Level) return;
+            sounds.PlayUISound(SoundsUI.click);
+            levelPreview.ScrollToCurrent();
             updateLevelInfo();
         });
 
@@ -80,9 +104,7 @@ public class MainMenuUI : MonoBehaviour
             levelPreview.CurrentLevelPlus();
             updateLevelInfo();
         });
-
-        ScreenSaver.Instance.ShowScreen();
-
+                
         if (Globals.IsInitiated)
         {
             localize();
@@ -92,6 +114,7 @@ public class MainMenuUI : MonoBehaviour
 
         walkthrough.onClick.AddListener(() =>
         {
+            sounds.PlayUISound(SoundsUI.success3);
             Globals.CurrentLevel = levelPreview.CurrentLevelNumber;
             walkthrough.interactable = false;
             Globals.IsWalkthroughEnabled = true;
@@ -107,6 +130,7 @@ public class MainMenuUI : MonoBehaviour
 
         custom.onClick.AddListener(() =>
         {
+            sounds.PlayUISound(SoundsUI.success3);
             custom.interactable = false;
             Globals.IsWalkthroughEnabled = false;
             StartCoroutine(playStartLevel());
@@ -136,7 +160,9 @@ public class MainMenuUI : MonoBehaviour
         if (levelPreview.CurrentLevelNumber > Globals.MainPlayerData.Level)
         {
             lockedIcon.SetActive(true);
-            
+            rightButtonScroll.gameObject.SetActive(false);
+            leftButtonScroll.gameObject.SetActive(true);
+
             blockLevelText.gameObject.SetActive(true);
             blockLevelText.text = levelPreview.CurrentLevelNumber + " " + Globals.Language.Level;
 
@@ -149,6 +175,9 @@ public class MainMenuUI : MonoBehaviour
         else if (levelPreview.CurrentLevelNumber < Globals.MainPlayerData.Level)
         {
             lockedIcon.SetActive(false);
+            rightButtonScroll.gameObject.SetActive(true);
+            leftButtonScroll.gameObject.SetActive(false);
+
             blockLevelText.gameObject.SetActive(false);
             doneIcon.SetActive(true);
 
@@ -159,6 +188,9 @@ public class MainMenuUI : MonoBehaviour
         else if (levelPreview.CurrentLevelNumber == Globals.MainPlayerData.Level)
         {
             lockedIcon.SetActive(false);
+            rightButtonScroll.gameObject.SetActive(false);
+            leftButtonScroll.gameObject.SetActive(false);
+
             blockLevelText.gameObject.SetActive(false);
             doneIcon.SetActive(false);
 
@@ -216,6 +248,8 @@ public class MainMenuUI : MonoBehaviour
 
             print("sound is: " + Globals.IsSoundOn);
 
+            YandexGame.StickyAdActivity(!Globals.MainPlayerData.AdvOff);
+
             if (Globals.TimeWhenStartedPlaying == DateTime.MinValue)
             {
                 Globals.TimeWhenStartedPlaying = DateTime.Now;
@@ -233,6 +267,17 @@ public class MainMenuUI : MonoBehaviour
 
     private void playWhenInitialized()
     {
+        if (Globals.MainPlayerData.Level == 0)
+        {
+            Globals.IsWalkthroughEnabled = true;
+            SceneManager.LoadScene("Gameplay");
+            return;
+        }
+
+
+        ScreenSaver.Instance.ShowScreen();
+
+
         AmbientMusic.Instance.PlayScenario1();
 
         if (!Globals.MainPlayerData.IsZoomCorrected)

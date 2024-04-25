@@ -60,6 +60,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private BlockManager blockManager;
 
     private bool isSetupOnMode;
+    private bool isNextLevelStarted;
+
+
+    [Header("Intro")]
+    [SerializeField] private IntroUI introUI;
+    [SerializeField] private Button continuePlay;
+    [SerializeField] private TextMeshProUGUI continuePlayText;
+    [SerializeField] private TextMeshProUGUI continuePlayTextHelper;
+    [SerializeField] private GameObject fireWorks;
 
     private void Awake()
     {
@@ -75,12 +84,24 @@ public class UIManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        //startbuildingPrefs();
+    {   
+
         blockText.text = Globals.Language.Blocks;
         buildText.text = Globals.Language.Build;
 
         rotateCurrentBlockButton.gameObject.SetActive(false);
+        continuePlay.gameObject.SetActive(false);
+        continuePlayText.text = Globals.Language.ContinuePlay;
+        if (Globals.IsMobile)
+        {
+            continuePlayTextHelper.gameObject.SetActive(false);
+        }
+        else
+        {
+            continuePlayTextHelper.gameObject.SetActive(true);
+            continuePlayTextHelper.text = Globals.Language.ContinuePlayHelper;
+        }        
+        fireWorks.SetActive(false);
 
         if (!Globals.IsMobile)
         {            
@@ -102,6 +123,18 @@ public class UIManager : MonoBehaviour
         gm = GameManager.Instance;
         assets = gm.Assets;
 
+        if (gm.IsWalkthroughGame)
+        {
+            StartCoroutine(showIntro());
+        }
+
+        continuePlay.onClick.AddListener(() =>
+        {
+            if (isNextLevelStarted) return;
+            SoundUI.Instance.PlayUISound(SoundsUI.click);
+            isNextLevelStarted = true;
+            gm.ToNextLevel();
+        });
 
         buildCurrentBlockButton.onClick.AddListener(()=> 
         {
@@ -176,12 +209,33 @@ public class UIManager : MonoBehaviour
 
         isSetupOnMode = !gm.IsBuildMode;
     }
+    private IEnumerator showIntro()
+    {
+        yield return new WaitForSeconds(1.2f);
+        introUI.ShowIntro(false);
+    }
 
-    
+
+    public void GameWin()
+    {
+        fireWorks.SetActive(true);
+        introUI.ShowIntro(true);
+        StartCoroutine(playGameWin());
+    }
+    private IEnumerator playGameWin()
+    {
+        yield return new WaitForSeconds(3);
+        continuePlay.gameObject.SetActive(true);
+    }
 
     private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.E) && continuePlay.gameObject.activeSelf && !isNextLevelStarted)
+        {
+            isNextLevelStarted = true;
+            gm.ToNextLevel();
+        }
+
         if (BuildingModeButton.interactable && gm.IsWinWalkthroughGame)
         {
             BuildingModeButton.interactable = false;

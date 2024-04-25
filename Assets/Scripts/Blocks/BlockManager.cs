@@ -29,7 +29,7 @@ public class BlockManager : MonoBehaviour
     private int currentID;
     private Vector3 currentRotation = Vector3.zero;
 
-    
+    private HashSet<Block> forDestro = new HashSet<Block> ();
 
     // Start is called before the first frame update
     void Start()
@@ -259,10 +259,11 @@ public class BlockManager : MonoBehaviour
         }
                 
         Block b = ReadyBlocks[ReadyBlocks.Count - 1];
-        sounds.PlayDestroy(b);
+        
         ReadyBlocks.Remove(b);
-        b.gameObject.SetActive(false);
-        Destroy(b);
+        //b.gameObject.SetActive(false);
+        //Destroy(b);
+        StartCoroutine(playDestroy(b));
     }
 
     public void BuildCurrentBlockCall()
@@ -324,12 +325,24 @@ public class BlockManager : MonoBehaviour
                 }
             }
 
-            sounds.PlayDestroy(CurrentBlockToDelete);
-            CurrentBlockToDelete.gameObject.SetActive(false);
-            Destroy(CurrentBlockToDelete.gameObject);
+            //sounds.PlayDestroy(CurrentBlockToDelete);
+            //CurrentBlockToDelete.gameObject.SetActive(false);
+            //Destroy(CurrentBlockToDelete.gameObject);
+
+            StartCoroutine(playDestroy(CurrentBlockToDelete));
             CurrentBlockToDelete = null;
-        }
-        
+        }        
+    }
+    private IEnumerator playDestroy(Block b)
+    {
+        if (forDestro.Contains(b)) yield break;
+        forDestro.Add(b);
+        sounds.PlayDestroy(b);
+        b.ShowDestroyVFX();
+        yield return new WaitForSeconds(0.5f);
+        forDestro.Remove(b);
+        b.gameObject.SetActive(false);
+        Destroy(b);
     }
 
     private void changeCurrentBlockCall(int val)

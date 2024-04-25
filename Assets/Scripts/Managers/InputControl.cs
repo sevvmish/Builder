@@ -53,6 +53,7 @@ public class InputControl : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;       
             Cursor.visible = false;
             gm.GetUI.Mover.SetActive(false);
+            Globals.WORKING_DISTANCE = 30;
         }
         else
         {
@@ -60,7 +61,8 @@ public class InputControl : MonoBehaviour
             jump = gm.GetUI.JumpMain.GetComponent<PointerDownOnly>();
             jumpUp = gm.GetUI.JumpUP.GetComponent<PointerDownOnly>();
             jumpDown = gm.GetUI.JumpDOWN.GetComponent<PointerDownOnly>();
-            mover = gm.GetUI.Mover.GetComponent<PointerMoveOnly>();            
+            mover = gm.GetUI.Mover.GetComponent<PointerMoveOnly>();
+            Globals.WORKING_DISTANCE = 20;
         }
 
         mainPlayer = gm.GetMainPlayerTransform();
@@ -88,7 +90,7 @@ public class InputControl : MonoBehaviour
         {
             if (blockManager.IsBuildingBlocks && gm.IsWalkthroughGame)
             {
-                if (Physics.Raycast(mainPlayer.position + Vector3.up * 2, _camera.transform.forward, out hit, 50f, blockMask)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
+                if (Physics.Raycast(mainPlayer.position + Vector3.up * 2, _camera.transform.forward, out hit, Globals.WORKING_DISTANCE, blockMask)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
                 {
                     if (hit.collider.TryGetComponent(out Block bl) && !bl.IsFinalized)
                     {
@@ -108,14 +110,14 @@ public class InputControl : MonoBehaviour
 
             if (blockManager.IsBuildingBlocks)
             {
-                if (Physics.Raycast(mainPlayer.position + Vector3.up * 2, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
+                if (Physics.Raycast(mainPlayer.position + Vector3.up * 2, _camera.transform.forward, out hit, Globals.WORKING_DISTANCE, ~ignoreMask, QueryTriggerInteraction.Ignore)) //Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore
                 {
                     markerPosition = hit.point;
                 }
             }
             else if (blockManager.IsDestroingBlocks)
             {
-                if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask)) //_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask
+                if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, Globals.WORKING_DISTANCE, blockMask)) //_camera.transform.position, _camera.transform.forward, out hit, 50f, blockMask
                 {
                     if (hit.collider.TryGetComponent(out Block b) && b.IsFinalized)
                     {
@@ -143,7 +145,7 @@ public class InputControl : MonoBehaviour
                         blockManager.CurrentBlockToDelete = null;
                     }
 
-                    if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 50f, ~ignoreMask, QueryTriggerInteraction.Ignore))
+                    if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, Globals.WORKING_DISTANCE, ~ignoreMask, QueryTriggerInteraction.Ignore))
                     {
                         markerPosition = hit.point;
                     }

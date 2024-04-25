@@ -23,6 +23,8 @@ public class Globals : MonoBehaviour
     public const float REWARDED_COOLDOWN = 120;
     public const float INTERSTITIAL_COOLDOWN = 70;
 
+    public static float WORKING_DISTANCE = 20;
+
     public const int MAX_RESPAWN_POINTS = 25;
 
     public static bool IsDontShowIntro;

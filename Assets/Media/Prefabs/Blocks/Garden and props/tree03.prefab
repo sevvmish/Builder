@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7605076137889869610}
   - component: {fileID: 8634226283074292922}
   - component: {fileID: 5515172150769411485}
+  - component: {fileID: 1278797244298583510}
   m_Layer: 0
   m_Name: TreePine_01 (1)
   m_TagString: Untagged
@@ -98,6 +99,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delta: 45
   amount: 8
+--- !u!114 &1278797244298583510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2361250354603376791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4c349d24e574443afec851ede7b120, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deltaX: 4
+  deltaOnX: 0.3
+  deltaY: 0
+  deltaOnY: 0
+  deltaZ: 2
+  deltaOnZ: 0.2
+  _time: 3.5
+  _ease: 4
 --- !u!1 &3041614113952608196
 GameObject:
   m_ObjectHideFlags: 0

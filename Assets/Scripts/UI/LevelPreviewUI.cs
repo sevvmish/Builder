@@ -20,9 +20,10 @@ public class LevelPreviewUI : MonoBehaviour
             
     private Vector3 cameraLvl5 = new Vector3 (-7.5f, 20, -15);
 
-    private void Start()
+    public void ScrollToCurrent()
     {
-        
+        CurrentLevelNumber = Globals.MainPlayerData.Level;
+        ShowLevel(CurrentLevelNumber);
     }
 
     public void CurrentLevelMinus()

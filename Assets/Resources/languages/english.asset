@@ -59,3 +59,6 @@ MonoBehaviour:
   CustomGame: CUSTOM GAME
   Level: level
   Curr: current
+  BuildingCompleted: Building completed!
+  ContinuePlay: Continue game
+  ContinuePlayHelper: button "E"

@@ -20,6 +20,9 @@ public class PlayerData
 
     public bool AdvOff;
 
+    public bool IsTutWalk;
+    public bool IsTutCustom;
+
     public PlayerData()
     {        
         L = ""; //prefered language
@@ -29,8 +32,13 @@ public class PlayerData
         Zoom = 50; //camera zoom
         IsZoomCorrected = false;
         Level = 0;
+
         IsLowFPS = false;
+        
         AdvOff = false;
+
+        IsTutWalk = false;
+        IsTutCustom = false;
 
         Debug.Log("created PlayerData instance");
     }

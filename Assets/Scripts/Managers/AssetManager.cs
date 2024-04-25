@@ -13,6 +13,7 @@ public class AssetManager : MonoBehaviour
     public Material Brown { get => brown; }
     public Material Black { get => black; }
     public Material Carpet { get => carpet; }
+    public Material Destro { get => destro; }
 
     [Header("Materials")]
     [SerializeField] private Material mainAtlas;
@@ -20,6 +21,7 @@ public class AssetManager : MonoBehaviour
     [SerializeField] private Material black; 
     [SerializeField] private Material carpet;
     [SerializeField] private Material visualizationMaterial;
+    [SerializeField] private Material destro;
 
     [Header("Locations")]
     [SerializeField] private Transform blockLocation;

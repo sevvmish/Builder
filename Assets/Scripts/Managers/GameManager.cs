@@ -5,6 +5,7 @@ using TMPro;
 using YG;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
+using System;
 
 [DefaultExecutionOrder(-2)]
 public class GameManager : MonoBehaviour
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BlockManager blockManager;
     [SerializeField] private TextMeshProUGUI texter;
     [SerializeField] private LevelControl levelControl;
+    [SerializeField] private Interstitial interstitial;
+    
     private InputControl playerInput;
 
     public PlayerControl MainPlayerControl { get; private set; }
@@ -63,8 +66,10 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(true);
+        if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(!Globals.MainPlayerData.AdvOff);
+
         
+
         /*
         //TODEL======================
         Globals.MainPlayerData = new PlayerData();        
@@ -123,6 +128,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        AmbientMusic.Instance.PlayScenario1();
         ScreenSaver.Instance.ShowScreen();
 
         if (IsWalkthroughGame)
@@ -135,7 +141,7 @@ public class GameManager : MonoBehaviour
     {
         if (IsGameStarted)
         {
-            IsGameStarted = false;
+            //IsGameStarted = false;
             IsBuildMode = false;
             blockManager.StopBuilding();
             IsWinWalkthroughGame = true;
@@ -143,13 +149,48 @@ public class GameManager : MonoBehaviour
             if (Globals.CurrentLevel == Globals.MainPlayerData.Level)
             {
                 Globals.MainPlayerData.Level++;
+                YandexGame.NewLeaderboardScores("lider", Globals.MainPlayerData.Level);
+                YandexMetrica.Send("level" + Globals.MainPlayerData.Level);
                 SaveLoadManager.Save();
             }
 
             Globals.CurrentLevel++;
-            StartCoroutine(playStartLevel());
+            UI.GameWin();
+        }        
+    }
+
+    public void ToNextLevel()
+    {
+        if (!Globals.MainPlayerData.AdvOff && (DateTime.Now - Globals.TimeWhenLastInterstitialWas).TotalSeconds >= Globals.INTERSTITIAL_COOLDOWN)
+        {
+            startInterstitial();
         }
-        
+        else
+        {
+            startLevel();
+        }
+    }
+
+    private void startInterstitial()
+    {
+        StartCoroutine(playInterstitial());
+    }
+    private IEnumerator playInterstitial()
+    {
+        ScreenSaver.Instance.HideScreen();
+        yield return new WaitForSeconds(1);
+        interstitial.OnEnded = fastStart;
+        interstitial.ShowInterstitialVideo();
+    }
+
+    private void fastStart()
+    {
+        SceneManager.LoadScene("Gameplay");
+    }
+
+    private void startLevel()
+    {
+        StartCoroutine(playStartLevel());
     }
     private IEnumerator playStartLevel()
     {
@@ -224,7 +265,7 @@ public class GameManager : MonoBehaviour
         g.GetComponent<PlayerControl>().SetEffectControl(vfx.GetComponent<EffectsControl>());
 
         //player
-        GameObject skin = Instantiate(Resources.Load<GameObject>("skin1"));
+        GameObject skin = Instantiate(Resources.Load<GameObject>("skin2"));
         skin.transform.parent = g.transform;
         skin.transform.localPosition = Vector3.zero;
         skin.transform.localEulerAngles = Vector3.zero;

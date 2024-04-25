@@ -61,5 +61,9 @@ public class Translation : ScriptableObject
     public string Level;
     public string Curr;
 
+    public string BuildingCompleted;
+    public string ContinuePlay;
+    public string ContinuePlayHelper;
+
     public Translation() { }
 }

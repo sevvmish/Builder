@@ -5292,6 +5292,7 @@ GameObject:
   - component: {fileID: 7336508304740817761}
   - component: {fileID: 5365269527557449320}
   - component: {fileID: 1972596137626144034}
+  - component: {fileID: 1467952081893974337}
   m_Layer: 0
   m_Name: leaf_tree_1
   m_TagString: Untagged
@@ -5378,3 +5379,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delta: 45
   amount: 8
+--- !u!114 &1467952081893974337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7952137164506604816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4c349d24e574443afec851ede7b120, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deltaX: 4
+  deltaOnX: 0.3
+  deltaY: 0
+  deltaOnY: 0
+  deltaZ: 2
+  deltaOnZ: 0.2
+  _time: 5
+  _ease: 4

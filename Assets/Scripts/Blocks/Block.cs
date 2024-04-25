@@ -169,23 +169,15 @@ public class Block : MonoBehaviour
         buildVFX.SetActive(true);
         yield return new WaitForSeconds(1);
         buildVFX.SetActive(false);
+    }
 
-        /*
-        switch(BlockType)
+    public void ShowDestroyVFX()
+    {
+        for (int i = 0; i < visualRenderers.Length; i++)
         {
-            case BlockTypes.furniture:
-                transform.DORotate(transform.eulerAngles + new Vector3(0, 360 * 3, 0), 0.3f, RotateMode.FastBeyond360).SetEase(Ease.OutElastic);
-                break;
-
-            default:
-                buildVFX.SetActive(false);
-                buildVFX.SetActive(true);
-                yield return new WaitForSeconds(1);
-                buildVFX.SetActive(false);
-                break;
+            visualRenderers[i].sharedMaterial = gm.Assets.Destro;
         }
-        */
-
+        StartCoroutine(playVFX());
     }
 
     public bool Rotate(ref Vector3 endRotationVector)

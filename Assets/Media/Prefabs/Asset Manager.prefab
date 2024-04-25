@@ -315,6 +315,7 @@ MonoBehaviour:
   black: {fileID: 2100000, guid: 4f285aae0fa84234d904437e4633df68, type: 2}
   carpet: {fileID: 2100000, guid: 77ad876ddc209f34ea2205a99abf82df, type: 2}
   visualizationMaterial: {fileID: 2100000, guid: 2c047ea75dfe84549b885a9de82b0257, type: 2}
+  destro: {fileID: 2100000, guid: d7ad36331fb694247accd61a40a27af5, type: 2}
   blockLocation: {fileID: 0}
   floorsLocation: {fileID: 5812147534268027454}
   wallsLocation: {fileID: 3441778858488472774}
