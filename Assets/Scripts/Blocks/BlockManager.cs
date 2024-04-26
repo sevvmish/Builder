@@ -283,7 +283,8 @@ public class BlockManager : MonoBehaviour
                     int newBlockID = lc.GetFirstID();
                     if (currentID != newBlockID) currentID = newBlockID;
                 }
-                
+
+                ReadyBlocks.Add(gm.blockForMarker);
                 getNewBlock(currentID, pos);
                 lc.UpdateProgress();
             }

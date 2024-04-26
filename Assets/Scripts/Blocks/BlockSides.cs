@@ -15,6 +15,12 @@ public class BlockSides : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (GameManager.Instance == null)
+        {
+            this.enabled = false;
+            return;
+        }
+
         gm = GameManager.Instance;
         bm = gm.BlockManager;
         block = GetComponent<Block>();
@@ -23,6 +29,7 @@ public class BlockSides : MonoBehaviour
 
     private void Update()
     {
+
         if (!isFinalized && block.IsFinalized)
         {
             isFinalized = true;

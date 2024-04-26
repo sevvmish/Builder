@@ -123,9 +123,7 @@ public class MainMenuUI : MonoBehaviour
 
         reset.onClick.AddListener(() =>
         {
-            Globals.MainPlayerData = new PlayerData();
-            SaveLoadManager.Save();
-            SceneManager.LoadScene("MainMenu");
+            resetData();
         });
 
         custom.onClick.AddListener(() =>
@@ -135,6 +133,14 @@ public class MainMenuUI : MonoBehaviour
             Globals.IsWalkthroughEnabled = false;
             StartCoroutine(playStartLevel());
         });
+    }
+
+    private void resetData()
+    {
+        Globals.MainPlayerData = new PlayerData();
+        SaveLoadManager.Save();
+        Globals.CurrentLevel = 0;
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void updateLevelInfo()
@@ -205,9 +211,7 @@ public class MainMenuUI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Globals.MainPlayerData = new PlayerData();
-            SaveLoadManager.Save();
-            SceneManager.LoadScene("MainMenu");
+            resetData();
         }
 
         if (YandexGame.SDKEnabled && !Globals.IsInitiated)

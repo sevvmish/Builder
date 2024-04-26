@@ -58,7 +58,7 @@ public class Block : MonoBehaviour
 
         if (GameManager.Instance == null)
         {
-            
+            this.enabled = false;
             return;
         }
         gm = GameManager.Instance;

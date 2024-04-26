@@ -597,7 +597,7 @@ public class BlockMenuUI : MonoBehaviour
         int left = 0;
         int done = 0;
 
-        Stage s = lc.CurrentStage();
+        Stage s = lc.GetCurrentStage();
 
         for (int i = 0; i < s.Blocks.Count; i++)
         {
@@ -634,7 +634,7 @@ public class BlockMenuUI : MonoBehaviour
         int left = 0;
         int done = 0;
 
-        Stage s = lc.CurrentStage();
+        Stage s = lc.GetCurrentStage();
 
         for (int i = 0; i < s.Blocks.Count; i++)
         {

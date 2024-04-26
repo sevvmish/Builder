@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Mime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ public class InputControl : MonoBehaviour
     
     private GameManager gm;
     private BlockManager blockManager;
+    private LevelControl lc;
     
     private Ray ray;
     private RaycastHit hit;
@@ -40,6 +42,7 @@ public class InputControl : MonoBehaviour
     {
         gm = GameManager.Instance;
         blockManager = gm.BlockManager;
+        lc = gm.LevelControl;
         _camera = gm.GetCamera();
         
         cameraControl = GameManager.Instance.GetCameraControl();
@@ -67,6 +70,77 @@ public class InputControl : MonoBehaviour
 
         mainPlayer = gm.GetMainPlayerTransform();
         
+    }
+
+    private void getCloseBlockByType()
+    {
+
+        if (blockManager.CurrentActiveBlock == null) return;
+        Stage s = lc.GetCurrentStage();
+        if (s == null) return;
+
+        float minDistance = 1000;
+        Block b = default;
+
+        for (int i = 0; i < s.Blocks.Count; i++)
+        {
+            if (blockManager.CurrentActiveBlock.BlockType == s.Blocks[i].BlockType && !s.Blocks[i].IsFinalized)
+            {
+                float distance = (markerPosition - s.Blocks[i].transform.position).magnitude;
+
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    b = s.Blocks[i];
+                }
+
+            }
+        }
+
+        if (b != null)
+        {
+            switch(b.BlockSize)
+            {
+                case BlockSizes.small:
+                    if (minDistance <= 5)
+                    {
+                        markerAim = b;
+                    }
+                    else
+                    {
+                        markerAim = null;
+                    }
+                    break;
+
+                case BlockSizes.medium:
+                    if (minDistance <= 4)
+                    {
+                        markerAim = b;
+                    }
+                    else
+                    {
+                        markerAim = null;
+                    }
+                    break;
+
+                case BlockSizes.large:
+                    if (minDistance <= 3)
+                    {
+                        markerAim = b;
+                    }
+                    else
+                    {
+                        markerAim = null;
+                    }
+                    break;
+            }
+
+            //print(b.gameObject.name + " = " + minDistance);
+        }
+        else
+        {
+            markerAim = null;
+        }
     }
 
     // Update is called once per frame
@@ -98,12 +172,14 @@ public class InputControl : MonoBehaviour
                     }
                     else
                     {
-                        markerAim = null;
+                        getCloseBlockByType();
+                        //markerAim = null;
                     }
                 }
                 else
                 {
-                    markerAim = null;
+                    getCloseBlockByType();
+                    //markerAim = null;
                 }
             }
 

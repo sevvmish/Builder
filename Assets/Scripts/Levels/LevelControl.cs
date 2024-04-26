@@ -19,6 +19,8 @@ public class LevelControl : MonoBehaviour
     {
         gm = GameManager.Instance;
 
+        print("Level: " + Globals.CurrentLevel + " = " + Globals.MainPlayerData.Level);
+
         stagesLocation = gm.Assets.Levels[Globals.CurrentLevel];
         print(stagesLocation.gameObject.name + " !!!!!!!!!!!!");
         print(Globals.MainPlayerData.Level + " = " + Globals.CurrentLevel);
@@ -65,7 +67,7 @@ public class LevelControl : MonoBehaviour
             }
         }
 
-        if (CurrentStage() == null)
+        if (GetCurrentStage() == null)
         {
             Debug.Log("GAME WIN!!!");
         }
@@ -76,7 +78,7 @@ public class LevelControl : MonoBehaviour
     }
     public int GetFirstID()
     {
-        Stage s = CurrentStage();
+        Stage s = GetCurrentStage();
 
         if (s == null )
         {
@@ -104,7 +106,7 @@ public class LevelControl : MonoBehaviour
 
     public bool IsIDForBlockOK(int id)
     {
-        Stage s = CurrentStage();
+        Stage s = GetCurrentStage();
 
         if (s == null)
         {
@@ -149,7 +151,7 @@ public class LevelControl : MonoBehaviour
         return result+1;
     }
 
-    public Stage CurrentStage()
+    public Stage GetCurrentStage()
     {        
         for (int i = 0; i < stages.Length; i++)
         {
@@ -170,7 +172,7 @@ public class LevelControl : MonoBehaviour
 
     public void SetVisible(bool isVisible)
     {
-        Stage s = CurrentStage();
+        Stage s = GetCurrentStage();
         if (s == null)
         {
             return;
@@ -200,7 +202,7 @@ public class LevelControl : MonoBehaviour
 
     private void updateBlocks()
     {
-        Stage s = CurrentStage();
+        Stage s = GetCurrentStage();
         
         for (int i = 0; i < s.Blocks.Count; i++)
         {

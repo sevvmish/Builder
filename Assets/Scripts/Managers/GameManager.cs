@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     private Transform mainPlayer;    
     private float cameraShakeCooldown;
+    private bool isWalkthroughtDone;
    
     public TextMeshProUGUI Texter => texter;
     public Vector3 pointForMarker => playerInput.GetMarkerPosition;
@@ -139,9 +140,9 @@ public class GameManager : MonoBehaviour
     
     public void WinGameWithVisualization()
     {
-        if (IsGameStarted)
+        if (!isWalkthroughtDone)
         {
-            //IsGameStarted = false;
+            isWalkthroughtDone = true;
             IsBuildMode = false;
             blockManager.StopBuilding();
             IsWinWalkthroughGame = true;
@@ -161,6 +162,8 @@ public class GameManager : MonoBehaviour
 
     public void ToNextLevel()
     {
+        print("Level: " + Globals.CurrentLevel + " = " + Globals.MainPlayerData.Level);
+
         if (!Globals.MainPlayerData.AdvOff && (DateTime.Now - Globals.TimeWhenLastInterstitialWas).TotalSeconds >= Globals.INTERSTITIAL_COOLDOWN)
         {
             startInterstitial();
