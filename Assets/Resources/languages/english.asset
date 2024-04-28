@@ -36,7 +36,7 @@ MonoBehaviour:
   Music: music
   PlayerIsObstacle: Your character is in the way
   BlockArrow: button "TAB"
-  BuildRegimeArrow: TURN ON/OFF      button "B"
+  BuildRegimeArrow: TURN ON/OFF      button "E"
   OptionsArrow: button "ESC"
   SetBlockHelper: 'BUILD BLOCK:       left mouse button'
   RotateBlockHelper: 'ROTATE BLOCK:    button "R"'
@@ -56,6 +56,7 @@ MonoBehaviour:
   - Corner house
   - Big house
   - House with flowers
+  - House with terrace
   Play: PLAY
   PlayAgain: PLAY AGAIN
   CustomGame: CUSTOM GAME

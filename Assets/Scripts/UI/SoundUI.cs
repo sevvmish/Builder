@@ -21,6 +21,8 @@ public class SoundUI : MonoBehaviour
     [SerializeField] private AudioClip StoneDestroy;
     [SerializeField] private AudioClip FantasyBuild;
     [SerializeField] private AudioClip FantasyDestroy;
+    [SerializeField] private AudioClip Digging;
+    [SerializeField] private AudioClip Undigging;
 
     // Start is called before the first frame update
     void Awake()
@@ -53,6 +55,10 @@ public class SoundUI : MonoBehaviour
                 _audio.clip = FantasyBuild;
                 break;
 
+            case MaterialTypes.garden:
+                _audio.clip = Digging;
+                break;
+
             default:
                 _audio.clip = WoodBuild;
                 break;
@@ -77,6 +83,10 @@ public class SoundUI : MonoBehaviour
 
             case MaterialTypes.concrete:
                 _audio.clip = FantasyDestroy;
+                break;
+
+            case MaterialTypes.garden:
+                _audio.clip = Undigging;
                 break;
 
             default:

@@ -149,6 +149,14 @@ public class Block : MonoBehaviour
         prototypeViewBad.SetActive(true);
     }
 
+    public void MakeNoColor()
+    {
+        hideAll();
+        SetColliders(false);
+        prototypeViewGood.SetActive(false);
+        prototypeViewBad.SetActive(false);
+    }
+
     public void MakeColorBadForDelete(bool isActive)
     {        
         prototypeViewBad.SetActive(isActive);
@@ -1401,7 +1409,8 @@ public enum MaterialTypes
     none,
     wood,
     stone,
-    concrete
+    concrete,
+    garden
 }
 
 

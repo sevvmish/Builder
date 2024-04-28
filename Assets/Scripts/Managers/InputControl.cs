@@ -334,7 +334,7 @@ public class InputControl : MonoBehaviour
         {
             playerControl.SetJumpDOWN();
         }
-        else if (Input.GetKeyDown(KeyCode.B))
+        else if (Input.GetKeyDown(KeyCode.E))
         {
             gm.SetBuildingMode(!gm.IsBuildMode);
         }

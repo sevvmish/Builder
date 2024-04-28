@@ -210,7 +210,7 @@ MonoBehaviour:
   colliders:
   - {fileID: 1307130743927261538}
   blockSize: 0
-  materialType: 1
+  materialType: 4
   volume: {x: 2, y: 0, z: 2}
   visualRenderers:
   - {fileID: 4093396549008419958}
@@ -5882,3 +5882,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f7194cee6677be4baae7e98f7cf7e37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delta: 90
+  amount: 4

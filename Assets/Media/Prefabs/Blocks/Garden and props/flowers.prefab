@@ -5253,7 +5253,7 @@ MonoBehaviour:
   colliders:
   - {fileID: 6427559956712037317}
   blockSize: 0
-  materialType: 3
+  materialType: 4
   volume: {x: 2, y: 0, z: 2}
   visualRenderers:
   - {fileID: 3462105160790897873}

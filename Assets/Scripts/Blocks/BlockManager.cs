@@ -370,11 +370,17 @@ public class BlockManager : MonoBehaviour
                 CurrentActiveBlock.transform.eulerAngles = gm.blockForMarker.transform.eulerAngles;
                 CurrentActiveBlock.MakeColorGood();
             }
-            else
+            else if(gm.blockForMarker != null && CurrentActiveBlock.ID.ID != gm.blockForMarker.ID.ID)
             {
                 CurrentActiveBlock.transform.position = gm.pointForMarker;
                 CurrentActiveBlock.transform.eulerAngles = Vector3.zero;
                 CurrentActiveBlock.MakeColorBad();
+            }
+            else
+            {
+                CurrentActiveBlock.transform.position = gm.pointForMarker;
+                CurrentActiveBlock.transform.eulerAngles = Vector3.zero;
+                CurrentActiveBlock.MakeNoColor();
             }
             
         }

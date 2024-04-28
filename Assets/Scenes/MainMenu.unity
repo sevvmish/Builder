@@ -7020,7 +7020,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 159098315500623175, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 329974461613192814, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
       propertyPath: m_IsActive
@@ -7028,11 +7028,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 560247255435857541, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1483001138047700890, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815612352947675937, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4904784913148848349, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5332509042187600301, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
       propertyPath: m_IsActive
@@ -7044,7 +7052,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6527443199807377437, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6888850624342858839, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
       propertyPath: m_IsActive
@@ -7096,11 +7104,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8418899567371875606, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8716683393132729316, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
       propertyPath: m_Name
       value: Asset Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8858646330976076966, guid: 567d7d7c5177d684291b8c2803d3c861, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

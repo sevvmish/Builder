@@ -586,7 +586,14 @@ public class BlockMenuUI : MonoBehaviour
         }
         else if (currentBlock != null && currentBlock.ID.ID == block.ID.ID)
         {
-            blockAdditionalInfo.transform.DOPunchPosition(new Vector3(UnityEngine.Random.Range(-10,10), UnityEngine.Random.Range(-10, 10), 1), 0.3f, 30).SetEase(Ease.InOutQuad);
+            //blockAdditionalInfo.transform.DOPunchPosition(new Vector3(UnityEngine.Random.Range(-20,20), UnityEngine.Random.Range(-10, 10), 1), 0.3f, 30).SetEase(Ease.InOutQuad);
+
+            int rnd = UnityEngine.Random.Range(0, 2);
+            int x1 = rnd == 1 ? 1 : -1;
+            rnd = UnityEngine.Random.Range(0, 2);
+            int x2 = rnd == 1 ? 1 : -1;
+
+            blockAdditionalInfo.transform.DOPunchPosition(new Vector3(25 * x1, 25 * x2, 1), 0.3f, 30).SetEase(Ease.InOutQuad);
         }
 
         currentBlock = block;
