@@ -96,8 +96,14 @@ public class PlayerControl : MonoBehaviour
 
         if (gm.IsWalkthroughGame)
         {
-            _rigidbody.MovePosition(gm.LevelControl.GetLevelData.Position);
+            StartCoroutine(playerPosition());
         }
+    }
+    private IEnumerator playerPosition()
+    {
+        yield return new WaitForSeconds(0.1f);
+        _rigidbody.MovePosition(gm.LevelControl.GetLevelData.Position);
+        _rigidbody.MoveRotation(Quaternion.Euler(gm.LevelControl.GetLevelData.Rotation));
     }
 
     public void CheckUnstuck()

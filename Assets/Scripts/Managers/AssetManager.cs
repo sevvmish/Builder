@@ -31,6 +31,10 @@ public class AssetManager : MonoBehaviour
     [SerializeField] private Transform partsLocation;
     [SerializeField] private Transform othersLocation;
 
+    [Header("Maps")]
+    [SerializeField] private GameObject river;
+    [SerializeField] private GameObject village;
+
     [Header("Levels")]
     [SerializeField] private Transform levelsLocation;
     private Transform[] levels;
@@ -56,9 +60,7 @@ public class AssetManager : MonoBehaviour
     private int indexBuilder = 0;
 
     private void Awake()
-    {
-        
-
+    {   
         initAssetsLink(floorsLocation);
         initAssetsLink(wallsLocation);
         initAssetsLink(roofsLocation);
@@ -163,5 +165,21 @@ public class AssetManager : MonoBehaviour
         }
 
         print("Last ID is " + ids.Max());
+    }
+
+    public void SetLevel(Maps map)
+    {
+        switch(map)
+        {
+            case Maps.river:
+                river.SetActive(true);
+                village.SetActive(false);
+                break;
+
+            case Maps.village:
+                river.SetActive(false);
+                village.SetActive(true);
+                break;
+        }
     }
 }

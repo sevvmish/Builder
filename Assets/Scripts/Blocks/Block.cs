@@ -54,6 +54,7 @@ public class Block : MonoBehaviour
     
     private void OnEnable()
     {
+        buildVFX.SetActive(false);
         _transform = transform;
 
         if (GameManager.Instance == null)

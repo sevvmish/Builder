@@ -6,6 +6,7 @@ using YG;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 using System;
+using System.Net.Http.Headers;
 
 [DefaultExecutionOrder(-2)]
 public class GameManager : MonoBehaviour
@@ -23,7 +24,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI texter;
     [SerializeField] private LevelControl levelControl;
     [SerializeField] private Interstitial interstitial;
-    
+    [SerializeField] private Light mainLight;
+
     private InputControl playerInput;
 
     public PlayerControl MainPlayerControl { get; private set; }
@@ -69,7 +71,7 @@ public class GameManager : MonoBehaviour
 
         if (Globals.MainPlayerData != null) YandexGame.StickyAdActivity(!Globals.MainPlayerData.AdvOff);
 
-        
+        setLevel(Globals.CurrentLevel);
 
         /*
         //TODEL======================
@@ -285,5 +287,23 @@ public class GameManager : MonoBehaviour
         return g;
     }
 
-    
+    private void setLevel(int level)
+    {
+        if (level == 8)
+        {
+            mainLight.intensity = 0.8f;
+            assetManager.SetLevel(Maps.river);
+        }
+        else
+        {
+            mainLight.intensity = 1.15f;
+            assetManager.SetLevel(Maps.village);
+        }
+    }
+}
+
+public enum Maps
+{
+    river,
+    village
 }
