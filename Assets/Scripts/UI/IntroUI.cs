@@ -79,7 +79,7 @@ public class IntroUI : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         textRect.DOAnchorPos(textBasePosition, speedTime).SetEase(Ease.InOutBounce);
         
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
 
         //back

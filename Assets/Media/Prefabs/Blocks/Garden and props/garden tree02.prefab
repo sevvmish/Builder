@@ -227,7 +227,7 @@ MonoBehaviour:
   - {fileID: 8776849890225888004}
   - {fileID: 279917327941153442}
   blockSize: 2
-  materialType: 4
+  materialType: 1
   volume: {x: 3, y: 6, z: 3}
   visualRenderers:
   - {fileID: 3543769641906130267}

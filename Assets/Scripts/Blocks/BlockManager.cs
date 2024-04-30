@@ -424,7 +424,7 @@ public class BlockManager : MonoBehaviour
         }
         
         
-        CurrentActiveBlock.transform.localScale = Vector3.one;
+        //CurrentActiveBlock.transform.localScale = Vector3.one;
 
         CurrentActiveBlock.MakeColorBad();
         if (!gm.IsWalkthroughGame) updateCurrentBlockPosition();

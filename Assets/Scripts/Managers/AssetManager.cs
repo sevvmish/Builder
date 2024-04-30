@@ -34,6 +34,7 @@ public class AssetManager : MonoBehaviour
     [Header("Maps")]
     [SerializeField] private GameObject river;
     [SerializeField] private GameObject village;
+    [SerializeField] private GameObject forest;
 
     [Header("Levels")]
     [SerializeField] private Transform levelsLocation;
@@ -61,6 +62,10 @@ public class AssetManager : MonoBehaviour
 
     private void Awake()
     {   
+        //village.SetActive(false);
+        //forest.SetActive(false);
+        //river.SetActive(false);
+
         initAssetsLink(floorsLocation);
         initAssetsLink(wallsLocation);
         initAssetsLink(roofsLocation);
@@ -172,13 +177,21 @@ public class AssetManager : MonoBehaviour
         switch(map)
         {
             case Maps.river:
+                forest.SetActive(false);
                 river.SetActive(true);
                 village.SetActive(false);
                 break;
 
             case Maps.village:
+                forest.SetActive(false);
                 river.SetActive(false);
                 village.SetActive(true);
+                break;
+
+            case Maps.forest:
+                forest.SetActive(true);
+                river.SetActive(false);
+                village.SetActive(false);
                 break;
         }
     }

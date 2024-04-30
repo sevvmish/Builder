@@ -5090,7 +5090,7 @@ MonoBehaviour:
   - {fileID: 64053081937698688}
   - {fileID: 7205088940713848698}
   blockSize: 2
-  materialType: 4
+  materialType: 1
   volume: {x: 3, y: 6, z: 3}
   visualRenderers:
   - {fileID: 8634226283074292922}

@@ -59,7 +59,7 @@ MonoBehaviour:
   StoneDestroy: {fileID: 8300000, guid: a57586be89032864eafff1681fb9aa37, type: 3}
   FantasyBuild: {fileID: 8300000, guid: c412b5aa1139a244b91e1f06a0565bd8, type: 3}
   FantasyDestroy: {fileID: 8300000, guid: b99eee189797d7a4fb678d23befcb15a, type: 3}
-  Digging: {fileID: 8300000, guid: 1ce49ea57cb24b9409b5fc575ba3b421, type: 3}
+  Digging: {fileID: 8300000, guid: 5f3bd211ad8fb6444b2defb39b5d9c0d, type: 3}
   Undigging: {fileID: 8300000, guid: 134dd85b1d2f07842b5ffb3076820b92, type: 3}
 --- !u!82 &5384328334874311693
 AudioSource:

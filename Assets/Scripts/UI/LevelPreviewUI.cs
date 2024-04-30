@@ -76,6 +76,16 @@ public class LevelPreviewUI : MonoBehaviour
         }
 
         levelName.text = getMissionName(level);
+
+        if (levelName.text.Length > 17)
+        {
+            levelName.fontSize = 30;
+        }
+        else
+        {
+            levelName.fontSize = 50;
+        }
+
         levelStagesAmountText.text = Globals.Language.StagesAmount + ":";
         levelStagesAmount.text = levels.GetChild(level).childCount.ToString();
     }

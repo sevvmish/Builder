@@ -6,7 +6,6 @@ using YG;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 using System;
-using System.Net.Http.Headers;
 
 [DefaultExecutionOrder(-2)]
 public class GameManager : MonoBehaviour
@@ -151,10 +150,13 @@ public class GameManager : MonoBehaviour
 
             if (Globals.CurrentLevel == Globals.MainPlayerData.Level)
             {
-                Globals.MainPlayerData.Level++;
-                YandexGame.NewLeaderboardScores("lider", Globals.MainPlayerData.Level);
-                YandexMetrica.Send("level" + Globals.MainPlayerData.Level);
-                SaveLoadManager.Save();
+                if (Globals.MainPlayerData.Level < (levelControl.MaxLevels -1))
+                {
+                    Globals.MainPlayerData.Level++;
+                    YandexGame.NewLeaderboardScores("lider", Globals.MainPlayerData.Level);
+                    YandexMetrica.Send("level" + Globals.MainPlayerData.Level);
+                    SaveLoadManager.Save();
+                }                
             }
 
             Globals.CurrentLevel++;
@@ -250,6 +252,11 @@ public class GameManager : MonoBehaviour
             SaveLoadManager.Save();
             SceneManager.LoadScene("MainMenu");
         }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            WinGameWithVisualization();
+        }
     }
 
 
@@ -294,6 +301,16 @@ public class GameManager : MonoBehaviour
             mainLight.intensity = 0.8f;
             assetManager.SetLevel(Maps.river);
         }
+        else if (level == 0)
+        {
+            mainLight.intensity = 1.15f;
+            assetManager.SetLevel(Maps.village);
+        }
+        else if (level <= 10)
+        {
+            mainLight.intensity = 1f;
+            assetManager.SetLevel(Maps.forest);
+        }
         else
         {
             mainLight.intensity = 1.15f;
@@ -305,5 +322,6 @@ public class GameManager : MonoBehaviour
 public enum Maps
 {
     river,
-    village
+    village,
+    forest
 }

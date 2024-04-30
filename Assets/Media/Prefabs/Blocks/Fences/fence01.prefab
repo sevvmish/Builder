@@ -5189,7 +5189,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.54700005, z: 0}
-  m_LocalScale: {x: 2.2, y: 1.2, z: 0.45}
+  m_LocalScale: {x: 2.3, y: 1.2, z: 0.45}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4920910141117198965}
@@ -5303,7 +5303,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.54700005, z: 0}
-  m_LocalScale: {x: 2.2, y: 1.2, z: 0.45}
+  m_LocalScale: {x: 2.3, y: 1.2, z: 0.45}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 902939654274931903}

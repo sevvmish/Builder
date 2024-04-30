@@ -8,7 +8,8 @@ public class FPSController : MonoBehaviour
     public static FPSController Instance { get; private set; }
 
     private List<float> fps = new List<float>();
-    private float _timer;
+    private float _timer, _firstTimer;
+    private bool isFirst;
 
     private GameManager gm;
 
@@ -40,6 +41,18 @@ public class FPSController : MonoBehaviour
     {
         if (!Globals.IsInitiated || Globals.IsLowFPS) return;
 
+        if (Globals.IsInitiated && Globals.CurrentLevel == 0 && !isFirst)
+        {
+            isFirst = true;
+            _firstTimer = 2;
+        }
+
+        if (_firstTimer > 0)
+        {
+            _firstTimer-=Time.deltaTime;
+            return;
+        }
+               
         if (_timer > 0.1f)
         {
             _timer = 0;

@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelControl : MonoBehaviour
 {
     public int StagesAmount => Stages.Length;
-
+    public int MaxLevels => gm.Assets.Levels.Length;
     public LevelData GetLevelData { get => levelData; }
     public Stage[] Stages { get => stages; }
 
@@ -39,6 +39,7 @@ public class LevelControl : MonoBehaviour
                     GameObject g = gm.Assets.GetGameObjectByID(id);
                     g.transform.position = b.transform.position;
                     g.transform.eulerAngles = b.transform.eulerAngles;
+                    g.transform.localScale = stagesLocation.GetChild(i).GetChild(j).localScale;
 
                     Block newB = g.GetComponent<Block>();
                     newB.SetVisualization(true);
