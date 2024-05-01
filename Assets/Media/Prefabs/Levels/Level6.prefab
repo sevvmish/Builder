@@ -259,7 +259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Position: {x: 0, y: 0, z: -10}
   Rotation: {x: 0, y: 0, z: 0}
-  MissionIcon: {fileID: 21300000, guid: c591ef2aee42df549a3818a5ed9365a1, type: 3}
+  MissionIcon: {fileID: 21300000, guid: 60df38ca9b59cb849afd9dee4b016f6f, type: 3}
 --- !u!1001 &128911181781929691
 PrefabInstance:
   m_ObjectHideFlags: 0

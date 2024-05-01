@@ -568,6 +568,53 @@ public class BlockMenuUI : MonoBehaviour
         }
     }
 
+    public void UpdateAdditionalBlockInfoNonWalk()
+    {
+        if (!gm.IsBuildMode) return;
+
+        Block block = bm.CurrentActiveBlock;
+        if (block == null)
+        {
+            //blockAdditionalInfo.SetActive(false);
+            StartCoroutine(hideAdditionalInfo());
+            return;
+        }
+        else
+        {
+            if (!blockAdditionalInfo.activeSelf)
+            {
+                //blockAdditionalInfo.SetActive(true);
+                StartCoroutine(showAdditionalInfo());
+            }
+        }
+
+        if (currentBlock != null && currentBlock.ID.ID != block.ID.ID)
+        {
+            currentBlock = block;
+            StartCoroutine(playChangeAdditionalInfo(blockAdditionalInfo.transform, block));
+            return;
+        }
+        else if (currentBlock != null && currentBlock.ID.ID == block.ID.ID)
+        {
+            //blockAdditionalInfo.transform.DOPunchPosition(new Vector3(UnityEngine.Random.Range(-20,20), UnityEngine.Random.Range(-10, 10), 1), 0.3f, 30).SetEase(Ease.InOutQuad);
+
+            int rnd = UnityEngine.Random.Range(0, 2);
+            int x1 = rnd == 1 ? 1 : -1;
+            rnd = UnityEngine.Random.Range(0, 2);
+            int x2 = rnd == 1 ? 1 : -1;
+
+            blockAdditionalInfo.transform.DOPunchPosition(new Vector3(25 * x1, 25 * x2, 1), 0.3f, 30).SetEase(Ease.InOutQuad);
+        }
+
+        currentBlock = block;
+
+        blockIcon.sprite = block.BlockIcon;
+
+        
+        amountLeftText.gameObject.SetActive(false);
+        progressLeft.gameObject.SetActive(false);
+    }
+
     public void UpdateAdditionalBlockInfo()
     {        
         if (!gm.IsBuildMode) return;
@@ -647,31 +694,39 @@ public class BlockMenuUI : MonoBehaviour
 
         blockIcon.sprite = b.BlockIcon;
 
-        int overall = 0;
-        int left = 0;
-        int done = 0;
-
-        Stage s = lc.GetCurrentStage();
-
-        for (int i = 0; i < s.Blocks.Count; i++)
+        if (gm.IsWalkthroughGame)
         {
-            if (s.Blocks[i].ID.ID == b.ID.ID)
+            int overall = 0;
+            int left = 0;
+            int done = 0;
+
+            Stage s = lc.GetCurrentStage();
+
+            for (int i = 0; i < s.Blocks.Count; i++)
             {
-                if (s.Blocks[i].IsFinalized)
+                if (s.Blocks[i].ID.ID == b.ID.ID)
                 {
-                    done++;
-                }
-                else
-                {
-                    left++;
-                }
+                    if (s.Blocks[i].IsFinalized)
+                    {
+                        done++;
+                    }
+                    else
+                    {
+                        left++;
+                    }
 
-                overall++;
+                    overall++;
+                }
             }
-        }
 
-        amountLeftText.text = "x" + left;
-        progressLeft.value = (float)done / overall;
+            amountLeftText.text = "x" + left;
+            progressLeft.value = (float)done / overall;
+        }
+        else
+        {
+            amountLeftText.gameObject.SetActive(false);
+            progressLeft.gameObject.SetActive(false);
+        }
 
         r.DOAnchorPos(blockAdditionalInfoPosition, 0.1f).SetEase(Ease.InOutQuad);
     }

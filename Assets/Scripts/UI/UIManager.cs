@@ -369,7 +369,15 @@ public class UIManager : MonoBehaviour
             rotateCurrentBlockButton.gameObject.SetActive(false);
         }
 
-        if (gm.IsWalkthroughGame) blockMenuUI.UpdateAdditionalBlockInfo();
+        if (gm.IsWalkthroughGame)
+        {
+            blockMenuUI.UpdateAdditionalBlockInfo();
+        }
+        else
+        {
+            blockMenuUI.UpdateAdditionalBlockInfoNonWalk();
+        }
+            
 
         blockMenuUI.UpdateOutlines();
     }

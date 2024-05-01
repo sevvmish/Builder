@@ -6,7 +6,7 @@ using UnityEngine;
 public class EffectsControl : MonoBehaviour
 {
         
-    [SerializeField] private GameObject fastEffect;
+    
     [SerializeField] private GameObject walkSmoke;
     [SerializeField] private GameObject jumpEffect;
     private AudioSource jumpSound;
@@ -33,7 +33,6 @@ public class EffectsControl : MonoBehaviour
         jumpEffect.SetActive(true);
         jumpSound = jumpEffect.GetComponent<AudioSource>();
 
-        fastEffect.SetActive(false);
         walkSmoke.SetActive(false);
     }
 
@@ -56,12 +55,6 @@ public class EffectsControl : MonoBehaviour
     }
 
     public void WalkSmoke(bool isActive) => walkSmoke.SetActive(isActive);
-
-    public void MakeFastEffect(float duration)
-    {        
-        StartCoroutine(playEffectBreakable(duration, fastEffect));
-    }
-
 
     
     public void MakeLandEffect()

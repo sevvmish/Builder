@@ -120,7 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Position: {x: 0, y: 0, z: -3}
   Rotation: {x: 0, y: 0, z: 0}
-  MissionIcon: {fileID: 21300000, guid: c591ef2aee42df549a3818a5ed9365a1, type: 3}
+  MissionIcon: {fileID: 21300000, guid: c655af28843f6f54f9b5da3f807a2e78, type: 3}
 --- !u!1 &5292275818219605377
 GameObject:
   m_ObjectHideFlags: 0

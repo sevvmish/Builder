@@ -65,7 +65,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockType: 2
-  blockIcon: {fileID: 21300000, guid: 7696f9af47ae0a04e95006604a9e7e2f, type: 3}
+  blockIcon: {fileID: 21300000, guid: 0d133a48f629aa94788403f9708195b5, type: 3}
   realView: {fileID: 2463793249159815164}
   prototypeViewGood: {fileID: 6006277795359946906}
   prototypeViewBad: {fileID: 4215966898693817052}

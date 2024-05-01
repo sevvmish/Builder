@@ -190,6 +190,13 @@ public class Tutorial : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
+        movementHintPC.SetActive(false);
+        movementHintMob.SetActive(false);
+        jumpHintMob.SetActive(false);
+        jumpHintPC.SetActive(false);
+        cameraHintMob.SetActive(false);
+        cameraHintPC.SetActive(false);
+
         SoundUI.Instance.PlayUISound(SoundsUI.pop);
         if (Globals.IsMobile)
         {
