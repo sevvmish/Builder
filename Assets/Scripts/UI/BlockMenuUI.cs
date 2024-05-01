@@ -169,6 +169,16 @@ public class BlockMenuUI : MonoBehaviour
         if (gm.IsWalkthroughGame)
         {
             missionName.text = getMissionName(Globals.CurrentLevel);
+
+            if (missionName.text.Length <= 14)
+            {
+                missionName.fontSize = 50;
+            }
+            else
+            {
+                missionName.fontSize = 40;
+            }
+
             missionIcon.sprite = lc.GetLevelData.MissionIcon;
         }
         blockAdditionalInfo.SetActive(false);

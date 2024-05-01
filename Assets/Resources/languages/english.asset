@@ -59,6 +59,7 @@ MonoBehaviour:
   - House with terrace
   - Wooden bridge
   - Watcher tower
+  - Gazebo
   Play: PLAY
   PlayAgain: PLAY AGAIN
   CustomGame: CUSTOM GAME
@@ -67,3 +68,23 @@ MonoBehaviour:
   BuildingCompleted: Building completed!
   ContinuePlay: Continue game
   ContinuePlayHelper: button "E"
+  MovementHintPCText: For movement use buttons "W" "A" "S" "D"
+  MovementHintMobText: For movement use joystick
+  JumpHintPCText: For jump up use SPACE
+  JumpHintMobText: For jump up use button
+  RegimeHintPCText: For switching to building mode press button "E"
+  RegimeHintMobText: For switching to building mode press button
+  CameraHintPCText: For camera rotation use mouse
+  CameraHintMobText: For camera rotation swipe finger on the screen
+  JumpHintInBuildingText: In building mode you can fly up and down
+  CurrentBlockChosenText: Image of current chosen block. The block itself is in the
+    center of the screen
+  BuildBlockPCText: If chosen block is green, you can build it by pressing left mouse
+    button
+  BuildBlockMobText: If chosen block is green, you can build it by pressing button
+  ChooseBlockPCText: If you want to choose another block (if it exists), press button
+    "TAB"
+  ChooseBlockMobText: If you want to choose another block (if it exists), press button
+  EndGameWalkText: For win you need to build all blocks! Good luck!!!
+  CustomGameHintText: You have access to all blocks and can build anything you want.
+  WalkGameHintText: Continue walkthrough by building ready buildings.

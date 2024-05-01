@@ -79,7 +79,7 @@ public class LevelPreviewUI : MonoBehaviour
 
         if (levelName.text.Length > 17)
         {
-            levelName.fontSize = 30;
+            levelName.fontSize = 40;
         }
         else
         {

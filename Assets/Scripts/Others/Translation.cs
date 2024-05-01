@@ -65,5 +65,31 @@ public class Translation : ScriptableObject
     public string ContinuePlay;
     public string ContinuePlayHelper;
 
+    public string MovementHintPCText;
+    public string MovementHintMobText;
+
+    public string JumpHintPCText;
+    public string JumpHintMobText;
+
+    public string RegimeHintPCText;
+    public string RegimeHintMobText;
+
+    public string CameraHintPCText;
+    public string CameraHintMobText;
+
+    public string JumpHintInBuildingText;
+    public string CurrentBlockChosenText;
+
+    public string BuildBlockPCText;
+    public string BuildBlockMobText;
+
+    public string ChooseBlockPCText;
+    public string ChooseBlockMobText;
+
+    public string EndGameWalkText;
+
+    public string CustomGameHintText;
+    public string WalkGameHintText;
+
     public Translation() { }
 }

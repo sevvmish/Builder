@@ -33,6 +33,12 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI currText;
     [SerializeField] private TextMeshProUGUI lvlText;
 
+    [Header("tutorial")]
+    [SerializeField] private GameObject customGameHint;
+    [SerializeField] private TextMeshProUGUI customGameHintText;
+    [SerializeField] private GameObject walkGameHint;
+    [SerializeField] private TextMeshProUGUI walkGameHintText;
+
     private SoundUI sounds;
 
     private void Awake()
@@ -72,6 +78,9 @@ public class MainMenuUI : MonoBehaviour
 
         rightButtonScroll.gameObject.SetActive(false);
         leftButtonScroll.gameObject.SetActive(false);
+
+        customGameHint.SetActive(false);
+        walkGameHint.SetActive(false);
 
         leftButton.onClick.AddListener(() =>
         {
@@ -140,6 +149,7 @@ public class MainMenuUI : MonoBehaviour
         Globals.MainPlayerData = new PlayerData();
         SaveLoadManager.Save();
         Globals.CurrentLevel = 0;
+        Globals.IsMainMenuTutorial = false;
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -266,7 +276,28 @@ public class MainMenuUI : MonoBehaviour
 
             localize();
             playWhenInitialized();
+
+            
         }        
+    }
+
+    private IEnumerator playTutorial()
+    {
+        yield return new WaitForSeconds(2f);
+
+        customGameHintText.text = Globals.Language.CustomGameHintText;
+        walkGameHintText.text = Globals.Language.WalkGameHintText;
+
+        sounds.PlayUISound(SoundsUI.pop);
+        walkGameHint.SetActive(true);
+        yield return new WaitForSeconds(3f);
+
+        sounds.PlayUISound(SoundsUI.pop);
+        customGameHint.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        walkGameHint.SetActive(false);
+        yield return new WaitForSeconds(5f);
+        customGameHint.SetActive(false);
     }
 
     private void playWhenInitialized()
@@ -281,6 +312,11 @@ public class MainMenuUI : MonoBehaviour
 
         ScreenSaver.Instance.ShowScreen();
 
+        if (Globals.MainPlayerData.Level == 1 && !Globals.IsMainMenuTutorial)
+        {
+            Globals.IsMainMenuTutorial = true;
+            StartCoroutine(playTutorial());
+        }
 
         AmbientMusic.Instance.PlayScenario1();
 

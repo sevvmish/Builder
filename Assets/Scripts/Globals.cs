@@ -11,6 +11,7 @@ public class Globals : MonoBehaviour
     public static bool IsSoundOn;
     public static bool IsMusicOn;
     public static bool IsInitiated;
+    public static bool IsMainMenuTutorial;
     public static string CurrentLanguage;
     public static Translation Language;
 

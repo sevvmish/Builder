@@ -49,7 +49,8 @@ public class GameManager : MonoBehaviour
     private Transform mainPlayer;    
     private float cameraShakeCooldown;
     private bool isWalkthroughtDone;
-   
+    private bool isLastLevelEnded;
+
     public TextMeshProUGUI Texter => texter;
     public Vector3 pointForMarker => playerInput.GetMarkerPosition;
     public Block blockForMarker => playerInput.GetMarkerAim;
@@ -159,7 +160,16 @@ public class GameManager : MonoBehaviour
                 }                
             }
 
-            Globals.CurrentLevel++;
+            if (Globals.CurrentLevel < (levelControl.MaxLevels - 1))
+            {
+                Globals.CurrentLevel++;
+                if (Globals.CurrentLevel == 1) isLastLevelEnded = true;
+            }
+            else
+            {
+                isLastLevelEnded = true;
+            }
+            
             UI.GameWin();
         }        
     }
@@ -192,7 +202,14 @@ public class GameManager : MonoBehaviour
 
     private void fastStart()
     {
-        SceneManager.LoadScene("Gameplay");
+        if (isLastLevelEnded)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+        else
+        {
+            SceneManager.LoadScene("Gameplay");
+        }        
     }
 
     private void startLevel()
@@ -203,7 +220,15 @@ public class GameManager : MonoBehaviour
     {
         ScreenSaver.Instance.HideScreen();
         yield return new WaitForSeconds(1);
-        SceneManager.LoadScene("Gameplay");
+        
+        if (isLastLevelEnded)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+        else
+        {
+            SceneManager.LoadScene("Gameplay");
+        }
     }
 
     public void SetBuildingMode(bool isActive)
