@@ -331,7 +331,7 @@ public class GameManager : MonoBehaviour
             mainLight.intensity = 1.15f;
             assetManager.SetLevel(Maps.village);
         }
-        else if (level <= 10)
+        else if (level <= 100)
         {
             mainLight.intensity = 1f;
             assetManager.SetLevel(Maps.forest);
