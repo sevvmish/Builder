@@ -1,5 +1,5 @@
 {
-  "idSave": 419,
+  "idSave": 423,
   "isFirstSession": false,
   "language": "ru",
   "promptDone": false,
@@ -10,5 +10,5 @@
     true,
     false
   ],
-  "MainSave1": "{\"L\":\"ru\",\"M\":0,\"S\":1,\"Mus\":1,\"Zoom\":60.0,\"IsZoomCorrected\":true,\"IsLowFPS\":false,\"Level\":1,\"AdvOff\":false,\"IsTutWalk\":true,\"IsTutCustom\":false}"
+  "MainSave1": "{\"L\":\"ru\",\"M\":0,\"S\":1,\"Mus\":1,\"Zoom\":60.0,\"IsZoomCorrected\":true,\"IsLowFPS\":false,\"Level\":5,\"AdvOff\":false,\"IsTutWalk\":true,\"IsTutCustom\":false}"
 }

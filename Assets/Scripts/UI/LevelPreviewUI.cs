@@ -20,6 +20,7 @@ public class LevelPreviewUI : MonoBehaviour
             
     private Vector3 cameraLvl5 = new Vector3 (-7.5f, 20, -15);
 
+
     public void ScrollToCurrent()
     {
         CurrentLevelNumber = Globals.MainPlayerData.Level;
@@ -57,6 +58,16 @@ public class LevelPreviewUI : MonoBehaviour
         
         levels.GetChild(level).gameObject.SetActive(true);
 
+        //SCALE
+
+        if (level < 19)
+        {
+            levels.localScale = Vector3.one * 0.75f;
+        }
+        else
+        {
+            levels.localScale = Vector3.one;
+        }
         
 
         if (level < 5)
