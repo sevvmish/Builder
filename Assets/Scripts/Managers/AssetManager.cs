@@ -40,6 +40,8 @@ public class AssetManager : MonoBehaviour
     [SerializeField] private Transform levelsLocation;
     private Transform[] levels;
 
+    public Maps CurrentMap { get; private set; }
+
     private Dictionary<int, GameObject> linkIDtoAsset = new Dictionary<int, GameObject>();
 
     //TYPES
@@ -174,7 +176,9 @@ public class AssetManager : MonoBehaviour
 
     public void SetLevel(Maps map)
     {
-        switch(map)
+        CurrentMap = map;
+
+        switch (map)
         {
             case Maps.river:
                 forest.SetActive(false);

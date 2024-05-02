@@ -188,7 +188,20 @@ public class MainMenuUI : MonoBehaviour
             walkthrough.GetComponent<Image>().sprite = grey;
             walkthroughText.text = Globals.Language.Play;
         }
-        else if (levelPreview.CurrentLevelNumber < Globals.MainPlayerData.Level)
+        else if ((Globals.MainPlayerData.Level == levelPreview.MaxLevels))
+        {
+            lockedIcon.SetActive(false);
+            rightButtonScroll.gameObject.SetActive(false);
+            leftButtonScroll.gameObject.SetActive(false);
+
+            blockLevelText.gameObject.SetActive(false);
+            doneIcon.SetActive(true);
+
+            walkthrough.interactable = true;
+            walkthrough.GetComponent<Image>().sprite = yellow;
+            walkthroughText.text = Globals.Language.PlayAgain;
+        }
+        else if ((levelPreview.CurrentLevelNumber < Globals.MainPlayerData.Level))
         {
             lockedIcon.SetActive(false);
             rightButtonScroll.gameObject.SetActive(true);

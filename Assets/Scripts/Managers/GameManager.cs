@@ -157,7 +157,15 @@ public class GameManager : MonoBehaviour
                     YandexGame.NewLeaderboardScores("lider", Globals.MainPlayerData.Level);
                     YandexMetrica.Send("level" + Globals.MainPlayerData.Level);
                     SaveLoadManager.Save();
-                }                
+                }  
+                else if (Globals.MainPlayerData.Level == (levelControl.MaxLevels - 1))
+                {
+                    Globals.MainPlayerData.Level++;
+                    YandexGame.NewLeaderboardScores("lider", Globals.MainPlayerData.Level);
+                    YandexMetrica.Send("level" + Globals.MainPlayerData.Level);
+                    SaveLoadManager.Save();
+                    isLastLevelEnded = true;
+                }
             }
 
             if (Globals.CurrentLevel < (levelControl.MaxLevels - 1))
@@ -174,9 +182,19 @@ public class GameManager : MonoBehaviour
         }        
     }
 
+    public void SaveGame()
+    {
+        if (!IsWalkthroughGame)
+        {
+            GetComponent<CustomGameData>().SaveData();
+        }
+    }
+
     public void ToNextLevel()
     {
         print("Level: " + Globals.CurrentLevel + " = " + Globals.MainPlayerData.Level);
+
+        
 
         if (!Globals.MainPlayerData.AdvOff && (DateTime.Now - Globals.TimeWhenLastInterstitialWas).TotalSeconds >= Globals.INTERSTITIAL_COOLDOWN)
         {
@@ -321,7 +339,7 @@ public class GameManager : MonoBehaviour
 
     private void setLevel(int level)
     {
-        if (level == 8)
+        if (level == 8 || level == 12)
         {
             mainLight.intensity = 0.8f;
             assetManager.SetLevel(Maps.river);

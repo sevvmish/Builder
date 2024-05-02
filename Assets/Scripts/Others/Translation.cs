@@ -91,5 +91,12 @@ public class Translation : ScriptableObject
     public string CustomGameHintText;
     public string WalkGameHintText;
 
+    public string ChooseMapText;
+    public string ForestText;
+    public string RiverText;
+
+    public string ResetCustomGameText;
+    public string InfoPanelResetText;
+
     public Translation() { }
 }

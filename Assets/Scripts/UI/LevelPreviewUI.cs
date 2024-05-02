@@ -53,7 +53,11 @@ public class LevelPreviewUI : MonoBehaviour
 
         
 
-        if (level >= levels.childCount) return;
+        if (level >= levels.childCount)
+        {
+            level = levels.childCount - 1;
+            //return;
+        }
 
         
         levels.GetChild(level).gameObject.SetActive(true);
@@ -70,7 +74,7 @@ public class LevelPreviewUI : MonoBehaviour
         }
         
 
-        if (level < 5)
+        if (level < 50)
         {
             mainCamera.position = cameraLvl5;
         }
@@ -104,6 +108,11 @@ public class LevelPreviewUI : MonoBehaviour
     public void UpdateData()
     {
         CurrentLevelNumber = Globals.MainPlayerData.Level;
+
+        if (Globals.MainPlayerData.Level == MaxLevels)
+        {
+            CurrentLevelNumber = MaxLevels - 1;
+        }
         /*
         if (Globals.IsMobile)
         {

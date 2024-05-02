@@ -61,6 +61,7 @@ MonoBehaviour:
   - Watcher tower
   - Gazebo
   - Two-storey house
+  - Pier
   Play: PLAY
   PlayAgain: PLAY AGAIN
   CustomGame: CUSTOM GAME
@@ -89,3 +90,8 @@ MonoBehaviour:
   EndGameWalkText: For win you need to build all blocks! Good luck!!!
   CustomGameHintText: You have access to all blocks and can build anything you want.
   WalkGameHintText: Continue walkthrough by building ready buildings.
+  ChooseMapText: 'Choose map:'
+  ForestText: Forest
+  RiverText: River
+  ResetCustomGameText: reset
+  InfoPanelResetText: Do you really want to reset all progress of custom game?

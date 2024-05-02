@@ -24,6 +24,14 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI soundText;
     [SerializeField] private TextMeshProUGUI musicText;
 
+    [SerializeField] private Button resetCustomGame;
+    [SerializeField] private GameObject resetCustomGameAllButton;
+    [SerializeField] private TextMeshProUGUI resetCustomGameText;
+    [SerializeField] private GameObject infoPanelReset;
+    [SerializeField] private TextMeshProUGUI infoPanelResetText;
+    [SerializeField] private Button makeReset;
+    [SerializeField] private Button noReset;
+
     private Vector2 position;
     private RectTransform optionsRect;
 
@@ -37,6 +45,36 @@ public class OptionsUI : MonoBehaviour
         exitText.text = Globals.Language.Exit;
         soundText.text = Globals.Language.Sound;
         musicText.text = Globals.Language.Music;
+
+        if (!GameManager.Instance.IsWalkthroughGame)
+        {
+            resetCustomGameAllButton.SetActive(true);
+            resetCustomGameText.text = Globals.Language.ResetCustomGameText;
+            infoPanelResetText.text = Globals.Language.InfoPanelResetText;
+        }
+        else
+        {
+            resetCustomGameAllButton.SetActive(false);
+        }
+
+        resetCustomGame.onClick.AddListener(() =>
+        {
+            SoundUI.Instance.PlayUISound(SoundsUI.click);
+            infoPanelReset.gameObject.SetActive(true);
+        });
+
+        makeReset.onClick.AddListener(() =>
+        {
+            SoundUI.Instance.PlayUISound(SoundsUI.click);
+            infoPanelReset.gameObject.SetActive(false);
+            StartCoroutine(playReset());
+        });
+
+        noReset.onClick.AddListener(() =>
+        {
+            SoundUI.Instance.PlayUISound(SoundsUI.click);
+            infoPanelReset.gameObject.SetActive(false);
+        });
 
         if (!Globals.IsMobile)
         {
@@ -169,9 +207,19 @@ public class OptionsUI : MonoBehaviour
 
     private IEnumerator playStartLevel()
     {
+        GameManager.Instance.SaveGame();
         ScreenSaver.Instance.HideScreen();
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("MainMenu");
+    }
+
+    private IEnumerator playReset()
+    {
+        Globals.MainPlayerData.CustomGameBlocks = new float[0];
+        SaveLoadManager.Save();
+        ScreenSaver.Instance.HideScreen();
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("Gameplay");
     }
 
     public void OpenPanel()

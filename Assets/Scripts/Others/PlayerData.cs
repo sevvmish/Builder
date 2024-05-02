@@ -23,6 +23,8 @@ public class PlayerData
     public bool IsTutWalk;
     public bool IsTutCustom;
 
+    public float[] CustomGameBlocks;
+
     public PlayerData()
     {        
         L = ""; //prefered language
@@ -39,6 +41,8 @@ public class PlayerData
 
         IsTutWalk = false;
         IsTutCustom = false;
+
+        CustomGameBlocks = new float[0];
 
         Debug.Log("created PlayerData instance");
     }
