@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DefaultExecutionOrder(2)]
 public class CustomGameData : MonoBehaviour
 {
     [SerializeField] private Transform blocksLocation;
@@ -98,13 +99,19 @@ public class CustomGameData : MonoBehaviour
         int arrLength = Globals.MainPlayerData.CustomGameBlocks.Length;
 
         int amount = (arrLength - 1);
+        List<Block> blocks = new List<Block>();
 
         for (int i = 1; i < amount; i+=5)
         {
             GameObject b = assets.GetGameObjectByID((int)currentData[i]);
+            Block block = b.GetComponent<Block>();
+            block.MakeFinalView();
+            blocks.Add(block);
             b.transform.position = new Vector3(currentData[i + 1], currentData[i + 2], currentData[i + 3]);
             b.transform.eulerAngles = new Vector3(0, currentData[i + 4], 0);
         }
+
+        gm.BlockManager.AddToReadyBlocks(blocks);
     }
 
     public void SaveData()

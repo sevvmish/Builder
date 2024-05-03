@@ -423,7 +423,7 @@ public class BlockMenuUI : MonoBehaviour
     private void Update()
     {        
 
-        if (gm.IsWalkthroughGame && !gm.IsBuildMode && blockAdditionalInfo.activeSelf)
+        if (!gm.IsBuildMode && blockAdditionalInfo.activeSelf)
         {
             //blockAdditionalInfo.SetActive(false);
             StartCoroutine(hideAdditionalInfo());

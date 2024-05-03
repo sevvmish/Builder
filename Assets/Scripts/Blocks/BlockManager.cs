@@ -31,6 +31,11 @@ public class BlockManager : MonoBehaviour
 
     private HashSet<Block> forDestro = new HashSet<Block> ();
 
+    private void Awake()
+    {
+        ReadyBlocks = new List<Block>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,7 +47,7 @@ public class BlockManager : MonoBehaviour
         marker = assets.GetMarker;
         //markerDestroyer = assets.GetMarkerDestroyer;
 
-        ReadyBlocks = new List<Block>();
+        
 
         //actions        
         OnChangeCurrentBlock = changeCurrentBlockCall;
@@ -73,7 +78,13 @@ public class BlockManager : MonoBehaviour
         }
     }
     
-    
+    public void AddToReadyBlocks(List<Block> blocksToAdd)
+    {
+        for (int i = 0; i < blocksToAdd.Count; i++)
+        {            
+            ReadyBlocks.Add(blocksToAdd[i]);
+        }
+    }
 
     // Update is called once per frame
     void Update()
