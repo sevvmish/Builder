@@ -28,6 +28,8 @@ public class Globals : MonoBehaviour
 
     public const int MAX_RESPAWN_POINTS = 25;
 
+    public const int LEVEL_LOCK_CUSTOM_GAME = 3;
+
     public static bool IsDontShowIntro;
     public static bool IsShowArrowNotificatorOnPlay;
 

@@ -298,6 +298,7 @@ public class BlockManager : MonoBehaviour
                 ReadyBlocks.Add(gm.blockForMarker);
                 getNewBlock(currentID, pos);
                 lc.UpdateProgress();
+                //lc.MakeShakeEffectByBlockType(CurrentActiveBlock.ID.ID);
             }
             else
             {
@@ -365,6 +366,7 @@ public class BlockManager : MonoBehaviour
             return;
         }
 
+        if (gm.IsWalkthroughGame) lc.ResetShake();
         gm.GetUI.HideBlocksPanel();
         Destroy(CurrentActiveBlock.gameObject);
         currentID = val;
@@ -412,6 +414,7 @@ public class BlockManager : MonoBehaviour
 
     private void getNewBlock(int id, Vector3 position)
     {        
+
         if (id == -1 && gm.IsWalkthroughGame)
         {
             id = lc.GetFirstID();
@@ -419,6 +422,7 @@ public class BlockManager : MonoBehaviour
 
         if (gm.IsWinWalkthroughGame) return;
 
+        
         GameObject newBlock = assets.GetGameObjectByID(id);
         CurrentActiveBlock = newBlock.GetComponent<Block>();
         CurrentActiveBlock.gameObject.SetActive(true);
@@ -433,7 +437,8 @@ public class BlockManager : MonoBehaviour
             CurrentActiveBlock.transform.eulerAngles = Vector3.zero;
             currentRotation = Vector3.zero;
         }
-        
+
+        //lc.MakeShakeEffectByBlockType(CurrentActiveBlock.ID.ID);
         
         //CurrentActiveBlock.transform.localScale = Vector3.one;
 

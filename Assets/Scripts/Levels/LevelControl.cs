@@ -13,12 +13,19 @@ public class LevelControl : MonoBehaviour
     private LevelData levelData;
     private Stage[] stages;
     private GameManager gm;
+    private BlockManager bm;
+
+    private float cooldown = 5f;
+    private float _timer;
+    private int lastID = -1;
+    private int lastStage = -1;
 
     
     public void SetData()
     {
         gm = GameManager.Instance;
-
+        bm = gm.BlockManager;
+        
         print("Level: " + Globals.CurrentLevel + " = " + Globals.MainPlayerData.Level);
 
         stagesLocation = gm.Assets.Levels[Globals.CurrentLevel];
@@ -54,8 +61,28 @@ public class LevelControl : MonoBehaviour
         UpdateProgress();
     }
 
+    private void Update()
+    {
+        if (gm == null) return;
+
+        if (gm.IsWalkthroughGame && !gm.IsWinWalkthroughGame && gm.IsBuildMode)
+        {            
+            if (_timer > cooldown)
+            {                
+                if (bm.CurrentActiveBlock != null) MakeShakeEffectByBlockType(bm.CurrentActiveBlock.ID.ID);
+            }
+            else
+            {
+                _timer += Time.deltaTime;
+            }
+        }
+    }
+
     public void UpdateProgress()
     {
+        _timer = 0;
+        ResetShake();
+
         for (int i = 0; i < stages.Length; i++)
         {
             if (stages[i].IsStageDone())
@@ -64,6 +91,11 @@ public class LevelControl : MonoBehaviour
             }
             else
             {
+                if (lastStage != i)
+                {
+                    lastID = 0;
+                }
+                lastStage = i;
                 stages[i].Assess();
             }
         }
@@ -152,6 +184,39 @@ public class LevelControl : MonoBehaviour
         return result+1;
     }
 
+    public void MakeShakeEffectByBlockType(int id)
+    {
+        if (lastID == id) return;
+        lastID = id;
+        Stage s = GetCurrentStage();
+        if (s == null) return;
+
+        for (int i = 0; i < s.Blocks.Count; i++)
+        {            
+            if (!s.Blocks[i].IsFinalized && s.Blocks[i].ID.ID == id)
+            {
+                s.Blocks[i].SetShakeEffect(true);
+            }
+            else
+            {
+                s.Blocks[i].SetShakeEffect(false);
+            }
+        }
+    }
+
+    public void ResetShake()
+    {
+        _timer = 0;
+        lastID = -1;
+        Stage s = GetCurrentStage();
+        if (s == null) return;
+
+        for (int i = 0; i < s.Blocks.Count; i++)
+        {
+            s.Blocks[i].SetShakeEffect(false);
+        }
+    }
+
     public Stage GetCurrentStage()
     {        
         for (int i = 0; i < stages.Length; i++)
@@ -169,7 +234,6 @@ public class LevelControl : MonoBehaviour
         return null;
     }
 
-    
 
     public void SetVisible(bool isVisible)
     {
@@ -215,5 +279,6 @@ public class LevelControl : MonoBehaviour
         }
 
         gm.GetUI.BlockMenuUI.UpdateIconsForVis(s);
+        //if (bm.CurrentActiveBlock != null) MakeShakeEffectByBlockType(bm.CurrentActiveBlock.ID.ID);
     }
 }

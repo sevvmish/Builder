@@ -42,18 +42,43 @@ public class Block : MonoBehaviour
     [SerializeField] private Material visualMaterial;
     private Dictionary<MeshRenderer, Material> rendererMaterials = new Dictionary<MeshRenderer, Material>();
 
-
+    private Sequence sequence;
     private Transform _transform;
+    private bool isVisualOn;
     private GameManager gm;
     private BlockManager blockManager;
     private Identificator id;    
     private Anchors anchors;
     private LayerMask anchorMask;
 
+    private Vector3 baseScale;
+
     private Vector3 lastMarkerPosition;
-    
+
+    private void Start()
+    {
+        
+    }
+
     private void OnEnable()
     {
+        float strengthOfShake = 0.3f;
+        if (Globals.IsMobile) strengthOfShake = 0.6f;
+
+        if (volume.x <=2 && volume.y <= 2 && volume.z <= 2)
+        {
+            strengthOfShake = 1f;
+            if (Globals.IsMobile) strengthOfShake = 1.5f;
+        }
+
+        baseScale = transform.localScale;
+        if (sequence != null) sequence.Kill();
+        sequence = DOTween.Sequence();
+        sequence.SetLoops(-1, LoopType.Restart);
+        sequence.Append(_transform.DOShakeScale(0.7f, strengthOfShake, 10).SetEase(Ease.OutSine));
+        sequence.AppendInterval(0.5f);
+        sequence.Pause();
+
         buildVFX.SetActive(false);
         _transform = transform;
 
@@ -95,18 +120,38 @@ public class Block : MonoBehaviour
         }
     }
 
+    public void SetShakeEffect(bool isActive)
+    {
+        if (isActive && !isVisualOn)
+        {
+            isVisualOn = true;
+            sequence.Play();
+        }
+        else if (!isActive && isVisualOn)
+        {
+            isVisualOn = false;
+            sequence.Pause();
+            _transform.localScale = baseScale;
+        }
+    }
+
     public void SetVisualization(bool isActive)
     {
         if (isActive)
         {
+            
             //realView.SetActive(true);
             for (int i = 0; i < visualRenderers.Length; i++)
             {
                 visualRenderers[i].sharedMaterial = visualMaterial;
             }
+
+            
         }
         else
         {
+            
+
             for (int i = 0; i < visualRenderers.Length; i++)
             {                
                 if (rendererMaterials[visualRenderers[i]].name.Contains("main"))
@@ -171,6 +216,8 @@ public class Block : MonoBehaviour
         SetVisualization(false);
         SetColliders(true);
         StartCoroutine(playVFX());
+        sequence.Kill();
+        _transform.localScale = baseScale;
     }
     private IEnumerator playVFX()
     {

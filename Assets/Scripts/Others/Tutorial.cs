@@ -260,6 +260,25 @@ public class Tutorial : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
+        if (gm.IsWinWalkthroughGame)
+        {
+            movementHintPC.SetActive(false);
+            movementHintMob.SetActive(false);
+            jumpHintPC.SetActive(false);
+            jumpHintMob.SetActive(false);
+            regimeHintPC.SetActive(false);
+            regimeHintMob.SetActive(false);
+            cameraHintPC.SetActive(false);
+            cameraHintMob.SetActive(false);
+            jumpHintInBuilding.SetActive(false);
+            currentBlockChosen.SetActive(false);
+            buildBlockPC.SetActive(false);
+            buildBlockMob.SetActive(false);
+            chooseBlockPC.SetActive(false);
+            chooseBlockMob.SetActive(false);
+            endGameWalk.SetActive(false);
+        }
+
 
         SoundUI.Instance.PlayUISound(SoundsUI.pop);
         if (Globals.IsMobile)

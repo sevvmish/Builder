@@ -63,6 +63,7 @@ public class CustomGameData : MonoBehaviour
             }
 
             Globals.IsOptions = false;
+            SoundUI.Instance.PlayUISound(SoundsUI.success1);
 
         });
 
@@ -77,7 +78,7 @@ public class CustomGameData : MonoBehaviour
             }
 
             Globals.IsOptions = false;
-
+            SoundUI.Instance.PlayUISound(SoundsUI.success1);
         });
     }
 

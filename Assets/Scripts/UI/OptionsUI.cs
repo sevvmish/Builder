@@ -209,7 +209,7 @@ public class OptionsUI : MonoBehaviour
     {
         GameManager.Instance.SaveGame();
         ScreenSaver.Instance.HideScreen();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.75f);
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -218,7 +218,7 @@ public class OptionsUI : MonoBehaviour
         Globals.MainPlayerData.CustomGameBlocks = new float[0];
         SaveLoadManager.Save();
         ScreenSaver.Instance.HideScreen();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.75f);
         SceneManager.LoadScene("Gameplay");
     }
 

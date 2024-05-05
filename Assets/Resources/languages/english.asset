@@ -62,10 +62,13 @@ MonoBehaviour:
   - Gazebo
   - Two-storey house
   - Pier
+  - Two-storey house 2
+  - Small two-storey house
   Play: PLAY
   PlayAgain: PLAY AGAIN
   CustomGame: CUSTOM GAME
   Level: level
+  LevelShortly: lvl
   Curr: current
   BuildingCompleted: Building completed!
   ContinuePlay: Continue game
@@ -95,3 +98,4 @@ MonoBehaviour:
   RiverText: River
   ResetCustomGameText: reset
   InfoPanelResetText: Do you really want to reset all progress of custom game?
+  NewLVLModeInformer: You have unlocked a new game mode in main menu!

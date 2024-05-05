@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Interstitial interstitial;
     [SerializeField] private Light mainLight;
 
+    [Header("new mode opened")]
+    [SerializeField] private GameObject newModeInfoPanel;
+    [SerializeField] private TextMeshProUGUI newModeInfoText;
+
+
     private InputControl playerInput;
 
     public PlayerControl MainPlayerControl { get; private set; }
@@ -115,7 +120,7 @@ public class GameManager : MonoBehaviour
             QualitySettings.shadowResolution = ShadowResolution.Medium;
         }
 
-        
+        newModeInfoPanel.SetActive(false);
 
         mainPlayer = AddPlayer(true, Vector3.zero, Vector3.zero).transform;
         mainPlayer.position = new Vector3(0, 0, 0);
@@ -138,6 +143,33 @@ public class GameManager : MonoBehaviour
         {
             levelControl.SetData();
         }
+        else
+        {
+            levelControl.enabled = false;
+        }
+    }
+
+    private void newModeInfo()
+    {
+        StartCoroutine(playNewMode());
+    }
+    private IEnumerator playNewMode()
+    {
+        newModeInfoText.text = Globals.Language.NewLVLModeInformer;
+
+        yield return new WaitForSeconds(1f);
+        
+        newModeInfoPanel.SetActive(true);
+        newModeInfoPanel.transform.localScale = Vector3.zero;
+        newModeInfoPanel.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.InOutQuad);
+        
+        yield return new WaitForSeconds(0.3f);
+        newModeInfoPanel.transform.DOPunchPosition(new Vector3(10, 10, 1), 0.3f, 30).SetEase(Ease.InOutQuad);
+
+        yield return new WaitForSeconds(5f);
+        newModeInfoPanel.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.5f);
+        newModeInfoPanel.SetActive(true);
     }
     
     public void WinGameWithVisualization()
@@ -157,6 +189,11 @@ public class GameManager : MonoBehaviour
                     YandexGame.NewLeaderboardScores("lider", Globals.MainPlayerData.Level);
                     YandexMetrica.Send("level" + Globals.MainPlayerData.Level);
                     SaveLoadManager.Save();
+
+                    if (Globals.MainPlayerData.Level == Globals.LEVEL_LOCK_CUSTOM_GAME)
+                    {
+                        newModeInfo();
+                    }
                 }  
                 else if (Globals.MainPlayerData.Level == (levelControl.MaxLevels - 1))
                 {
@@ -165,6 +202,11 @@ public class GameManager : MonoBehaviour
                     YandexMetrica.Send("level" + Globals.MainPlayerData.Level);
                     SaveLoadManager.Save();
                     isLastLevelEnded = true;
+
+                    if (Globals.MainPlayerData.Level == Globals.LEVEL_LOCK_CUSTOM_GAME)
+                    {
+                        newModeInfo();
+                    }
                 }
             }
 
@@ -213,7 +255,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator playInterstitial()
     {
         ScreenSaver.Instance.HideScreen();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.75f);
         interstitial.OnEnded = fastStart;
         interstitial.ShowInterstitialVideo();
     }
@@ -237,7 +279,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator playStartLevel()
     {
         ScreenSaver.Instance.HideScreen();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.75f);
         
         if (isLastLevelEnded)
         {

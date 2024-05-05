@@ -59,6 +59,7 @@ public class Translation : ScriptableObject
     public string CustomGame;
     
     public string Level;
+    public string LevelShortly;
     public string Curr;
 
     public string BuildingCompleted;
@@ -97,6 +98,8 @@ public class Translation : ScriptableObject
 
     public string ResetCustomGameText;
     public string InfoPanelResetText;
+
+    public string NewLVLModeInformer;
 
     public Translation() { }
 }

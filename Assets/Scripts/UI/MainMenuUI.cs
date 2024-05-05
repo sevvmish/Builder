@@ -39,6 +39,10 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private GameObject walkGameHint;
     [SerializeField] private TextMeshProUGUI walkGameHintText;
 
+    [Header("locked")]
+    [SerializeField] private TextMeshProUGUI lvlLockText;
+    [SerializeField] private GameObject lvlLockPanel;
+
     private SoundUI sounds;
 
     private void Awake()
@@ -81,7 +85,7 @@ public class MainMenuUI : MonoBehaviour
 
         customGameHint.SetActive(false);
         walkGameHint.SetActive(false);
-
+                
         leftButton.onClick.AddListener(() =>
         {
             if (levelPreview.CurrentLevelNumber < 1) return;
@@ -325,6 +329,8 @@ public class MainMenuUI : MonoBehaviour
 
         ScreenSaver.Instance.ShowScreen();
 
+        
+
         if (Globals.MainPlayerData.Level == 1 && !Globals.IsMainMenuTutorial)
         {
             Globals.IsMainMenuTutorial = true;
@@ -362,16 +368,31 @@ public class MainMenuUI : MonoBehaviour
         }
         else
         {
-            custom.interactable = true;
-            custom.GetComponent<Image>().sprite = yellow;
             customText.text = Globals.Language.CustomGame;
+
+            if (Globals.MainPlayerData.Level < Globals.LEVEL_LOCK_CUSTOM_GAME)
+            {
+                custom.GetComponent<Image>().sprite = grey;
+                custom.interactable = false;
+                lvlLockPanel.SetActive(true);
+                lvlLockText.text = Globals.LEVEL_LOCK_CUSTOM_GAME + " " + Globals.Language.LevelShortly;
+            }
+            else
+            {
+                custom.GetComponent<Image>().sprite = yellow;
+                custom.interactable = true;
+                lvlLockPanel.SetActive(false);
+            }
+            //custom.interactable = true;
+            //custom.GetComponent<Image>().sprite = yellow;
+            //customText.text = Globals.Language.CustomGame;
         }
 
     }
     private IEnumerator playStartLevel()
     {
         ScreenSaver.Instance.HideScreen();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.75f);
         SceneManager.LoadScene("Gameplay");
     }
 
