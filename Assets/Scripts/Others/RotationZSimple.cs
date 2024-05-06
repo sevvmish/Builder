@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class RotationZSimple : MonoBehaviour
 {
-    [SerializeField] private float timerForFullCircle = 3;
+    [SerializeField] private float timerForFullCircle = 6;
 
     private void OnEnable()
     {

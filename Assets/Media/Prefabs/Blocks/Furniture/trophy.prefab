@@ -4910,7 +4910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b418f4c6b842aa40ab7d439b8d97516, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 97
+  id: 121
 --- !u!114 &444449703882229388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4940,7 +4940,7 @@ MonoBehaviour:
   materialType: 1
   volume: {x: 1.5, y: 3, z: 0.5}
   visualRenderers:
-  - {fileID: 0}
+  - {fileID: 95752320827393277}
   visualMaterial: {fileID: 0}
 --- !u!65 &4493477122931710910
 BoxCollider:
@@ -5334,6 +5334,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d05d42dde4a49a14dba1bccdb716d56b, type: 3}
+--- !u!23 &95752320827393277 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: d05d42dde4a49a14dba1bccdb716d56b, type: 3}
+  m_PrefabInstance: {fileID: 1627413117710669945}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1233708013299826578 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d05d42dde4a49a14dba1bccdb716d56b, type: 3}

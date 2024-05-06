@@ -383,7 +383,7 @@ public class GameManager : MonoBehaviour
     {
         if (level == 8 || level == 12)
         {
-            mainLight.intensity = 0.8f;
+            mainLight.intensity = 1.0f;
             assetManager.SetLevel(Maps.river);
         }
         else if (level == 0)
@@ -393,7 +393,7 @@ public class GameManager : MonoBehaviour
         }
         else if (level <= 100)
         {
-            mainLight.intensity = 1f;
+            mainLight.intensity = 1.1f;
             assetManager.SetLevel(Maps.forest);
         }
         else

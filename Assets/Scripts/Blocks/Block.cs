@@ -52,13 +52,8 @@ public class Block : MonoBehaviour
     private LayerMask anchorMask;
 
     private Vector3 baseScale;
-
     private Vector3 lastMarkerPosition;
 
-    private void Start()
-    {
-        
-    }
 
     private void OnEnable()
     {

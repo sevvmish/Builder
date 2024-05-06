@@ -12470,6 +12470,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasicCounter
       objectReference: {fileID: 0}
+    - target: {fileID: 1658630890831946, guid: 1177133a709aac84289a7d57c5ea92c3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 114756645675373138, guid: 1177133a709aac84289a7d57c5ea92c3, type: 3}
       propertyPath: m_FontData.m_FontStyle
       value: 1

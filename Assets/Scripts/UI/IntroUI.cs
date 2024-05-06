@@ -43,6 +43,16 @@ public class IntroUI : MonoBehaviour
 
         missionIcon.sprite = lc.GetLevelData.MissionIcon;
         missionName.text = getMissionName(Globals.CurrentLevel);
+
+        if (missionName.text.Length <= 20)
+        {
+            missionName.fontSize = 60;
+        }
+        else
+        {
+            missionName.fontSize = 50;
+        }
+
         missionWin.text = Globals.Language.BuildingCompleted;
     }
 

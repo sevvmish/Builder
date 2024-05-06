@@ -5541,6 +5541,10 @@ MonoBehaviour:
   visualRenderers:
   - {fileID: 1953243098517336158}
   - {fileID: 3931809961660302462}
+  - {fileID: 1166704874865180247}
+  - {fileID: 3905342452742450071}
+  - {fileID: 4498769542837123328}
+  - {fileID: 1363944104471272066}
   visualMaterial: {fileID: 0}
 --- !u!65 &2622912399851253217
 BoxCollider:

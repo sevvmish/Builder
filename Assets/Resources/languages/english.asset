@@ -64,6 +64,8 @@ MonoBehaviour:
   - Pier
   - Two-storey house 2
   - Small two-storey house
+  - Windmill
+  - Mansion
   Play: PLAY
   PlayAgain: PLAY AGAIN
   CustomGame: CUSTOM GAME

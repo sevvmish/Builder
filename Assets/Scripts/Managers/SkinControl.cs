@@ -21,6 +21,22 @@ public class SkinControl : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            if (isActive)
+            {
+                SetSkin(false);
+            }
+            else
+            {
+                SetSkin(true);
+            }
+
+        }
+    }
+
     public void SetSkin(bool isActive)
     {
         if (skins.Length == 0) return;
