@@ -58,7 +58,7 @@ MonoBehaviour:
   - House with flowers
   - House with terrace
   - Wooden bridge
-  - Watcher tower
+  - Observation tower
   - Gazebo
   - Two-storey house
   - Pier
@@ -66,6 +66,9 @@ MonoBehaviour:
   - Small two-storey house
   - Windmill
   - Mansion
+  - Watch tower
+  - Watermill
+  - Stone house
   Play: PLAY
   PlayAgain: PLAY AGAIN
   CustomGame: CUSTOM GAME

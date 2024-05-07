@@ -102,7 +102,7 @@ public class InputControl : MonoBehaviour
             switch(b.BlockSize)
             {
                 case BlockSizes.small:
-                    if (minDistance <= 5)
+                    if (minDistance <= 5) //5
                     {
                         markerAim = b;
                     }
@@ -113,7 +113,7 @@ public class InputControl : MonoBehaviour
                     break;
 
                 case BlockSizes.medium:
-                    if (minDistance <= 4)
+                    if (minDistance <= 5) //4
                     {
                         markerAim = b;
                     }
@@ -124,7 +124,7 @@ public class InputControl : MonoBehaviour
                     break;
 
                 case BlockSizes.large:
-                    if (minDistance <= 3)
+                    if (minDistance <= 5) //3 
                     {
                         markerAim = b;
                     }

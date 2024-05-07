@@ -26,11 +26,11 @@ public class LevelControl : MonoBehaviour
         gm = GameManager.Instance;
         bm = gm.BlockManager;
         
-        print("Level: " + Globals.CurrentLevel + " = " + Globals.MainPlayerData.Level);
+        //print("Level: " + Globals.CurrentLevel + " = " + Globals.MainPlayerData.Level);
 
         stagesLocation = gm.Assets.Levels[Globals.CurrentLevel];
-        print(stagesLocation.gameObject.name + " !!!!!!!!!!!!");
-        print(Globals.MainPlayerData.Level + " = " + Globals.CurrentLevel);
+        //print(stagesLocation.gameObject.name + " !!!!!!!!!!!!");
+        //print(Globals.MainPlayerData.Level + " = " + Globals.CurrentLevel);
         levelData = stagesLocation.GetComponent<LevelData>();
         stages = new Stage[stagesLocation.childCount];
 
@@ -102,7 +102,7 @@ public class LevelControl : MonoBehaviour
 
         if (GetCurrentStage() == null)
         {
-            Debug.Log("GAME WIN!!!");
+            //Debug.Log("GAME WIN!!!");
         }
         else
         {

@@ -331,6 +331,7 @@ public class GameManager : MonoBehaviour
 
         if (cameraShakeCooldown > 0) cameraShakeCooldown -= Time.deltaTime;
               
+        /*
         if (Input.GetKeyDown(KeyCode.P))
         {
             Globals.MainPlayerData = new PlayerData();
@@ -341,7 +342,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             WinGameWithVisualization();
-        }
+        }*/
     }
 
 
@@ -381,7 +382,7 @@ public class GameManager : MonoBehaviour
 
     private void setLevel(int level)
     {
-        if (level == 8 || level == 12)
+        if (level == 8 || level == 12 || level == 17 || level == 18)
         {
             mainLight.intensity = 1.0f;
             assetManager.SetLevel(Maps.river);

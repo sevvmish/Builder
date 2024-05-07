@@ -142,8 +142,8 @@ Transform:
   m_GameObject: {fileID: 2276502985736389476}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.40919998}
-  m_LocalScale: {x: 14, y: 14, z: 1.5}
+  m_LocalPosition: {x: -1.12, y: 0, z: 0.40919998}
+  m_LocalScale: {x: 6.5, y: 14, z: 14}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8523208410541461039}
@@ -257,8 +257,8 @@ Transform:
   m_GameObject: {fileID: 5744022876167068931}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.40919998}
-  m_LocalScale: {x: 14, y: 14, z: 1.5}
+  m_LocalPosition: {x: -1.12, y: 0, z: 0.40919998}
+  m_LocalScale: {x: 6.5, y: 14, z: 14}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3867463409340188694}
@@ -5238,7 +5238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockType: 8
-  blockIcon: {fileID: 21300000, guid: b8efecad69afaf243b7c8e4b48058ccb, type: 3}
+  blockIcon: {fileID: 21300000, guid: d00381efa8029154bb59e32dc418f392, type: 3}
   realView: {fileID: 8826665063605483263}
   prototypeViewGood: {fileID: 2306116095756533431}
   prototypeViewBad: {fileID: 6858673715464210181}

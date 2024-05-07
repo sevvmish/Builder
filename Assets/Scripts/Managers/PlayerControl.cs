@@ -112,7 +112,7 @@ public class PlayerControl : MonoBehaviour
     }
     private IEnumerator checkingUnstuck()
     {
-        print("started checking");
+        //print("started checking");
         isChekingCollision = true;
         
         yield return FixedOne;

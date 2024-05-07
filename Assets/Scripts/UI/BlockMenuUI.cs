@@ -464,11 +464,11 @@ public class BlockMenuUI : MonoBehaviour
         }
 
 
-
+        /*
         if (Input.GetKeyDown(KeyCode.J))
         {
             rectContainer.anchoredPosition = new Vector2(0, 388.1f);
-        }
+        }*/
 
 
         if (backCkick.IsPressed || backCkickForVis.IsPressed)

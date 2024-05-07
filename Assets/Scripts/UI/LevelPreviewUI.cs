@@ -64,7 +64,7 @@ public class LevelPreviewUI : MonoBehaviour
 
         //SCALE
 
-        if (level == 16)
+        if (level == 16 || level == 19)
         {
             levels.localScale = Vector3.one * 0.55f;
         }

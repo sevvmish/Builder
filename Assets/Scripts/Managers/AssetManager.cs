@@ -171,7 +171,7 @@ public class AssetManager : MonoBehaviour
             }
         }
 
-        print("Last ID is " + ids.Max());
+        //print("Last ID is " + ids.Max());
     }
 
     public void SetLevel(Maps map)
